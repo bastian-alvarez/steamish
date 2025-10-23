@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
+import styles from './Home.module.css';
 
 const Home: React.FC = () => {
     return (
@@ -53,6 +54,119 @@ const Home: React.FC = () => {
                                     </div>
                                 </Card.Body>
                             </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </section>
+
+            {/* Featured Games Section */}
+            <section className="py-5" style={{ backgroundColor: '#f8f9fa' }}>
+                <Container>
+                    <Row className="text-center mb-5">
+                        <Col>
+                            <h2 className="display-5 fw-bold text-primary mb-3 animate__animated animate__fadeInDown">
+                                <i className="bi bi-star-fill text-info me-2"></i>
+                                Juegos Destacados
+                            </h2>
+                            <p className="lead text-muted">Los títulos más populares y mejor valorados de nuestra plataforma</p>
+                        </Col>
+                    </Row>
+                    
+                    <Row className="g-4">
+                        <Col lg={4} md={6} className="animate__animated animate__fadeInUp">
+                            <Card className={`h-100 shadow-lg border-0 ${styles.gameCard} position-relative overflow-hidden`}>
+                                <div className="position-relative">
+                                    <div className="bg-primary d-flex align-items-center justify-content-center" 
+                                         style={{ height: '200px' }}>
+                                        <i className="bi bi-controller display-1 text-white"></i>
+                                    </div>
+                                    <Badge bg="info" className="position-absolute top-0 end-0 m-2">
+                                        <i className="bi bi-star-fill me-1"></i>
+                                        4.9
+                                    </Badge>
+                                </div>
+                                <Card.Body className="p-4">
+                                    <Card.Title className="h5 text-primary fw-bold">Cyber Adventure 2077</Card.Title>
+                                    <Card.Text className="text-muted mb-3">
+                                        Un mundo futurista lleno de acción y aventuras épicas que te mantendrán jugando por horas.
+                                    </Card.Text>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <Badge bg="primary" className="me-1">Acción</Badge>
+                                            <Badge bg="info">RPG</Badge>
+                                        </div>
+                                        <span className="fw-bold text-primary fs-5">$59.99</span>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        
+                        <Col lg={4} md={6} className="animate__animated animate__fadeInUp animate__delay-1s">
+                            <Card className={`h-100 shadow-lg border-0 ${styles.gameCard} position-relative overflow-hidden`}>
+                                <div className="position-relative">
+                                    <div className="d-flex align-items-center justify-content-center" 
+                                         style={{ height: '200px', backgroundColor: '#0dcaf0' }}>
+                                        <i className="bi bi-puzzle display-1 text-white"></i>
+                                    </div>
+                                    <Badge bg="info" className="position-absolute top-0 end-0 m-2">
+                                        <i className="bi bi-star-fill me-1"></i>
+                                        4.8
+                                    </Badge>
+                                </div>
+                                <Card.Body className="p-4">
+                                    <Card.Title className="h5 text-primary fw-bold">Mystic Realms</Card.Title>
+                                    <Card.Text className="text-muted mb-3">
+                                        Explora mundos mágicos en este increíble juego de aventuras con gráficos espectaculares.
+                                    </Card.Text>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <Badge bg="primary" className="me-1">Aventura</Badge>
+                                            <Badge bg="info">Magia</Badge>
+                                        </div>
+                                        <span className="fw-bold text-primary fs-5">$49.99</span>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        
+                        <Col lg={4} md={6} className="animate__animated animate__fadeInUp animate__delay-2s">
+                            <Card className={`h-100 shadow-lg border-0 ${styles.gameCard} position-relative overflow-hidden`}>
+                                <div className="position-relative">
+                                    <div className="d-flex align-items-center justify-content-center" 
+                                         style={{ height: '200px', backgroundColor: '#6610f2' }}>
+                                        <i className="bi bi-rocket display-1 text-white"></i>
+                                    </div>
+                                    <Badge bg="info" className="position-absolute top-0 end-0 m-2">
+                                        <i className="bi bi-star-fill me-1"></i>
+                                        4.7
+                                    </Badge>
+                                </div>
+                                <Card.Body className="p-4">
+                                    <Card.Title className="h5 text-primary fw-bold">Space Odyssey</Card.Title>
+                                    <Card.Text className="text-muted mb-3">
+                                        Vive la experiencia definitiva del espacio en este simulador de naves espaciales.
+                                    </Card.Text>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <Badge bg="primary" className="me-1">Simulación</Badge>
+                                            <Badge bg="info">Espacio</Badge>
+                                        </div>
+                                        <span className="fw-bold text-primary fs-5">$39.99</span>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                    
+                    <Row className="mt-5">
+                        <Col className="text-center">
+                            <Link 
+                                to="/productos" 
+                                className="btn btn-primary btn-lg fw-bold px-4 animate__animated animate__pulse animate__infinite animate__slow"
+                            >
+                                <i className="bi bi-collection me-2"></i>
+                                Ver Todos los Juegos
+                            </Link>
                         </Col>
                     </Row>
                 </Container>

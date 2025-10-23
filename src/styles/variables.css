@@ -1,0 +1,31 @@
+:root {
+    /* Paleta de colores original */
+    --color-1: #667eea;
+    --color-2: #764ba2;
+    --color-3: #f093fb;
+    --color-4: #f5576c;
+    --color-5: #4facfe;
+    
+    /* Paleta aplicada a componentes */
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --accent-color: #f093fb;
+    --text-light: #4facfe;
+    --text-muted: #f5576c;
+    
+    /* Colores funcionales */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+
+    --font-family: 'Arial', sans-serif;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-sm: 14px;
+
+    --border-radius: 0.25rem;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}

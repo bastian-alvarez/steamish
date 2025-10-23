@@ -1,0 +1,24 @@
+.header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+}
+
+.admin-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-actions {
+    margin-top: 20px;
+}
+
+.admin-button {
+    margin: 5px;
+}

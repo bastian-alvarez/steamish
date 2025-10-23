@@ -7,8 +7,8 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import GameResults from '../../components/GameResults/GameResults';
 import { Product, SearchResult } from '../../types/Product';
 
+// 🎮 Products Simplificado - Lógica Consolidada
 const Products: React.FC = () => {
-    // 🎯 ESTADOS TIPADOS CON INTERFACES
     const products = useProducts();
     const { add } = useCart();
     const location = useLocation();
@@ -20,37 +20,30 @@ const Products: React.FC = () => {
     });
     const [initialSearchTerm, setInitialSearchTerm] = useState<string>('');
 
-    // 🔍 DETECTAR PARÁMETROS DE BÚSQUEDA EN LA URL
+    // 🔍 URL search params detection
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const searchParam = urlParams.get('search');
-        if (searchParam) {
-            setInitialSearchTerm(searchParam);
-        }
+        if (searchParam) setInitialSearchTerm(searchParam);
     }, [location.search]);
 
-    // 🎮 MANEJADOR DE SELECCIÓN DE JUEGO
-    const handleGameSelect = (product: Product): void => {
+    // 🎮 Event handlers
+    const handleGameSelect = (product: Product) => {
         add(product);
-        // Aquí podrías agregar notificaciones o feedback visual
         console.log(`Juego "${product.name}" agregado al carrito`);
     };
 
-    // 🔍 MANEJADOR DE RESULTADOS DE BÚSQUEDA
-    const handleSearchResult = (result: SearchResult): void => {
-        setSearchResult(result);
-    };
+    const handleSearchResult = (result: SearchResult) => setSearchResult(result);
 
     return (
         <div className="bg-light min-vh-100">
-            {/* 🎯 HEADER DE LA PÁGINA */}
+            {/* Header */}
             <div className="bg-primary text-white py-5">
                 <Container>
                     <Row>
                         <Col className="text-center">
                             <h1 className="display-4 fw-bold mb-3">
-                                <i className="bi bi-controller text-info me-3"></i>
-                                Catálogo de Juegos
+                                <i className="bi bi-controller text-info me-3"></i>Catálogo de Juegos
                             </h1>
                             <p className="lead">Encuentra tu próximo juego favorito</p>
                         </Col>
@@ -58,7 +51,7 @@ const Products: React.FC = () => {
                 </Container>
             </div>
 
-            {/* 🔍 BARRA DE BÚSQUEDA */}
+            {/* Search + Results */}
             <SearchBar 
                 products={products} 
                 onSearchResult={handleSearchResult}
@@ -67,7 +60,6 @@ const Products: React.FC = () => {
                 initialQuery={initialSearchTerm}
             />
 
-            {/* 🎮 RESULTADOS DE BÚSQUEDA */}
             <Container className="py-4">
                 <GameResults 
                     products={searchResult.products}

@@ -13,7 +13,19 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Admin from './pages/Admin/Admin';
 
+// 🎯 App Simplificado - Estructura Limpia
 const App: React.FC = () => {
+    const routes = [
+        { path: '/', component: Home },
+        { path: '/productos', component: Products },
+        { path: '/blogs', component: Blogs },
+        { path: '/nosotros', component: About },
+        { path: '/contacto', component: Contact },
+        { path: '/login', component: Login },
+        { path: '/registro', component: Register },
+        { path: '/admin', component: Admin }
+    ];
+
     return (
         <ProductProvider>
             <CartProvider>
@@ -22,14 +34,9 @@ const App: React.FC = () => {
                         <Header />
                         <main className="flex-grow-1">
                             <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/productos" element={<Products />} />
-                                <Route path="/blogs" element={<Blogs />} />
-                                <Route path="/nosotros" element={<About />} />
-                                <Route path="/contacto" element={<Contact />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/registro" element={<Register />} />
-                                <Route path="/admin" element={<Admin />} />
+                                {routes.map(({ path, component: Component }) => (
+                                    <Route key={path} path={path} element={<Component />} />
+                                ))}
                             </Routes>
                         </main>
                         <Footer />

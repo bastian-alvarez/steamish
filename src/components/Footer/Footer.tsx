@@ -2,112 +2,89 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 
+// 🦶 Footer Simplificado - Factory Pattern
 const Footer: React.FC = () => {
+    const createLink = (to: string, label: string) => ({ to, label });
+    const createSocial = (href: string, icon: string, variant: string) => ({ href, icon, variant });
+
+    const navLinks = [
+        createLink('/productos', 'Productos'),
+        createLink('/blogs', 'Blog'),
+        createLink('/nosotros', 'Nosotros'),
+        createLink('/contacto', 'Contacto')
+    ];
+
+    const supportLinks = [
+        createLink('/ayuda', 'Centro de ayuda'),
+        createLink('/reembolsos', 'Política de reembolsos'),
+        createLink('/terminos', 'Términos de servicio'),
+        createLink('/privacidad', 'Política de privacidad')
+    ];
+
+    const socialLinks = [
+        createSocial('https://facebook.com', 'facebook', 'primary'),
+        createSocial('https://instagram.com', 'instagram', 'danger'),
+        createSocial('https://twitter.com', 'twitter', 'info'),
+        createSocial('https://youtube.com', 'youtube', 'danger')
+    ];
+
     return (
         <footer className="bg-dark text-light py-5 mt-auto">
             <Container>
                 <Row className="g-4">
                     <Col lg={3} md={6}>
                         <h5 className="fw-bold mb-3">
-                            <i className="bi bi-controller text-info me-2"></i>
-                            Steamish Gaming
+                            <i className="bi bi-controller text-info me-2"></i>Steamish Gaming
                         </h5>
                         <p className="text-muted mb-3">
-                            La plataforma de videojuegos más elegante y moderna. Descubre, compra y disfruta de los mejores títulos del momento.
+                            La plataforma de videojuegos más elegante y moderna. Descubre y disfruta de los mejores títulos.
                         </p>
                         <div className="d-flex gap-2">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
-                               className="btn btn-outline-primary btn-sm">
-                                <i className="bi bi-facebook"></i>
-                            </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
-                               className="btn btn-outline-danger btn-sm">
-                                <i className="bi bi-instagram"></i>
-                            </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" 
-                               className="btn btn-outline-info btn-sm">
-                                <i className="bi bi-twitter"></i>
-                            </a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
-                               className="btn btn-outline-danger btn-sm">
-                                <i className="bi bi-youtube"></i>
-                            </a>
+                            {socialLinks.map(social => (
+                                <a key={social.icon} href={social.href} target="_blank" rel="noopener noreferrer" 
+                                   className={`btn btn-outline-${social.variant} btn-sm`}>
+                                    <i className={`bi bi-${social.icon}`}></i>
+                                </a>
+                            ))}
                         </div>
                     </Col>
 
                     <Col lg={2} md={6}>
                         <h6 className="fw-bold mb-3 text-info">
-                            <i className="bi bi-link-45deg me-1"></i>
-                            Enlaces
+                            <i className="bi bi-link-45deg me-1"></i>Enlaces
                         </h6>
                         <ul className="list-unstyled">
-                            <li className="mb-2">
-                                <Link to="/productos" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Productos
-                                </Link>
-                            </li>
-                            <li className="mb-2">
-                                <Link to="/blogs" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Blog
-                                </Link>
-                            </li>
-                            <li className="mb-2">
-                                <Link to="/nosotros" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Nosotros
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/contacto" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Contacto
-                                </Link>
-                            </li>
+                            {navLinks.map(link => (
+                                <li key={link.to} className="mb-2">
+                                    <Link to={link.to} className="text-muted text-decoration-none">
+                                        <i className="bi bi-chevron-right me-1"></i>{link.label}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </Col>
 
                     <Col lg={3} md={6}>
                         <h6 className="fw-bold mb-3 text-info">
-                            <i className="bi bi-question-circle me-1"></i>
-                            Soporte
+                            <i className="bi bi-question-circle me-1"></i>Soporte
                         </h6>
                         <ul className="list-unstyled">
-                            <li className="mb-2">
-                                <a href="/ayuda" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Centro de ayuda
-                                </a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="/reembolsos" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Política de reembolsos
-                                </a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="/terminos" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Términos de servicio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/privacidad" className="text-muted text-decoration-none">
-                                    <i className="bi bi-chevron-right me-1"></i>
-                                    Política de privacidad
-                                </a>
-                            </li>
+                            {supportLinks.map(link => (
+                                <li key={link.to} className="mb-2">
+                                    <a href={link.to} className="text-muted text-decoration-none">
+                                        <i className="bi bi-chevron-right me-1"></i>{link.label}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </Col>
 
                     <Col lg={4} md={6}>
                         <h6 className="fw-bold mb-3 text-info">
-                            <i className="bi bi-envelope me-1"></i>
-                            Newsletter Gaming
+                            <i className="bi bi-envelope me-1"></i>Newsletter Gaming
                         </h6>
                         <p className="text-muted mb-3">
-                            Únete a nuestra comunidad exclusiva y recibe ofertas especiales y lanzamientos.
+                            Únete y recibe ofertas especiales y lanzamientos.
                         </p>
                         <Form className="d-flex flex-column gap-2">
                             <Form.Control 
@@ -116,8 +93,7 @@ const Footer: React.FC = () => {
                                 className="bg-secondary border-0 text-light"
                             />
                             <Button variant="info" type="submit" className="fw-bold">
-                                <i className="bi bi-lightning me-1"></i>
-                                Unirse Ahora
+                                <i className="bi bi-lightning me-1"></i>Unirse Ahora
                             </Button>
                         </Form>
                     </Col>

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Form, InputGroup, Button, Badge, Container, Row, Col } from 'react-bootstrap';
 import { Product, SearchFilters, SearchResult } from '../../types/Product';
 
-// 🔍 INTERFACE PARA PROPS DEL COMPONENTE
 interface SearchBarProps {
     products: Product[];
     onSearchResult: (result: SearchResult) => void;
@@ -11,68 +10,18 @@ interface SearchBarProps {
     initialQuery?: string;
 }
 
-// 🎮 DATOS DE EJEMPLO PARA DEMOSTRACIÓN
+// 🎮 Datos simplificados con factory function
+const createSampleProduct = (id: string, name: string, price: number, category: string, rating: number, discount = 0): Product => ({
+    id, name, price, category, rating, discount, featured: discount === 0,
+    image: '', description: `${name} - Descripción del juego`, tags: [category, 'Gaming']
+});
+
 const SAMPLE_PRODUCTS: Product[] = [
-    {
-        id: '1',
-        name: 'Cyber Adventure 2077',
-        price: 59.99,
-        image: '',
-        rating: 4.9,
-        discount: 0,
-        category: 'Acción',
-        description: 'Un mundo futurista lleno de acción y aventuras épicas',
-        tags: ['Acción', 'RPG', 'Futurista', 'Aventura'],
-        featured: true
-    },
-    {
-        id: '2',
-        name: 'Mystic Realms',
-        price: 49.99,
-        image: '',
-        rating: 4.8,
-        discount: 10,
-        category: 'Aventura',
-        description: 'Explora mundos mágicos en este increíble juego de aventuras',
-        tags: ['Aventura', 'Magia', 'Fantasía', 'Exploración'],
-        featured: true
-    },
-    {
-        id: '3',
-        name: 'Space Odyssey',
-        price: 39.99,
-        image: '',
-        rating: 4.7,
-        discount: 5,
-        category: 'Simulación',
-        description: 'Vive la experiencia definitiva del espacio',
-        tags: ['Simulación', 'Espacio', 'Ciencia Ficción'],
-        featured: true
-    },
-    {
-        id: '4',
-        name: 'Racing Thunder',
-        price: 29.99,
-        image: '',
-        rating: 4.5,
-        discount: 15,
-        category: 'Carreras',
-        description: 'Velocidad extrema en las mejores pistas del mundo',
-        tags: ['Carreras', 'Velocidad', 'Competición'],
-        featured: false
-    },
-    {
-        id: '5',
-        name: 'Medieval Kingdom',
-        price: 44.99,
-        image: '',
-        rating: 4.6,
-        discount: 0,
-        category: 'Estrategia',
-        description: 'Construye tu reino medieval y conquista territorios',
-        tags: ['Estrategia', 'Medieval', 'Construcción', 'Guerra'],
-        featured: false
-    }
+    createSampleProduct('1', 'Cyber Adventure 2077', 59.99, 'Acción', 4.9),
+    createSampleProduct('2', 'Mystic Realms', 49.99, 'Aventura', 4.8, 10),
+    createSampleProduct('3', 'Space Odyssey', 39.99, 'Simulación', 4.7, 5),
+    createSampleProduct('4', 'Racing Thunder', 29.99, 'Carreras', 4.5, 15),
+    createSampleProduct('5', 'Medieval Kingdom', 44.99, 'Estrategia', 4.6)
 ];
 
 const SearchBar: React.FC<SearchBarProps> = ({ 
@@ -82,126 +31,57 @@ const SearchBar: React.FC<SearchBarProps> = ({
     showFilters = true,
     initialQuery = ''
 }) => {
-    // 🎯 ESTADOS CON INTERFACES TIPADAS
     const [filters, setFilters] = useState<SearchFilters>({
-        query: initialQuery,
-        category: '',
-        minRating: 0
-    });
-    
-    const [searchResult, setSearchResult] = useState<SearchResult>({
-        products: products,
-        totalCount: products.length,
-        filteredCount: products.length,
-        searchTerm: ''
+        query: initialQuery, category: '', minRating: 0
     });
 
-    // 🔍 FUNCIÓN DE BÚSQUEDA PRINCIPAL
-    const performSearch = useCallback((currentFilters: SearchFilters): SearchResult => {
-        let filteredProducts = [...products];
-
-        // Filtrar por nombre
-        if (currentFilters.query.trim()) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.name.toLowerCase().includes(currentFilters.query.toLowerCase()) ||
-                product.description.toLowerCase().includes(currentFilters.query.toLowerCase()) ||
-                product.tags.some(tag => tag.toLowerCase().includes(currentFilters.query.toLowerCase()))
-            );
-        }
-
-        // Filtrar por categoría
-        if (currentFilters.category) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.category === currentFilters.category
-            );
-        }
-
-        // Filtrar por rating mínimo
-        if (currentFilters.minRating && currentFilters.minRating > 0) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.rating >= currentFilters.minRating!
-            );
-        }
-
-        // Filtrar por rango de precios
-        if (currentFilters.minPrice) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.price >= currentFilters.minPrice!
-            );
-        }
-
-        if (currentFilters.maxPrice) {
-            filteredProducts = filteredProducts.filter(product =>
-                product.price <= currentFilters.maxPrice!
-            );
-        }
+    // 🔍 Búsqueda optimizada con useMemo
+    const searchResult = useMemo((): SearchResult => {
+        const filtered = products.filter(product => {
+            const matchesQuery = !filters.query || 
+                product.name.toLowerCase().includes(filters.query.toLowerCase()) ||
+                product.description.toLowerCase().includes(filters.query.toLowerCase()) ||
+                product.tags?.some(tag => tag.toLowerCase().includes(filters.query.toLowerCase()));
+            
+            const matchesCategory = !filters.category || product.category === filters.category;
+            const matchesRating = !filters.minRating || product.rating >= filters.minRating;
+            const matchesPrice = (!filters.minPrice || product.price >= filters.minPrice) &&
+                               (!filters.maxPrice || product.price <= filters.maxPrice);
+            
+            return matchesQuery && matchesCategory && matchesRating && matchesPrice;
+        });
 
         return {
-            products: filteredProducts,
+            products: filtered,
             totalCount: products.length,
-            filteredCount: filteredProducts.length,
-            searchTerm: currentFilters.query
+            filteredCount: filtered.length,
+            searchTerm: filters.query
         };
-    }, [products]);
+    }, [products, filters]);
 
-    // 🎯 MANEJADOR DE CAMBIOS EN BÚSQUEDA
-    const handleSearchChange = (query: string): void => {
-        const newFilters: SearchFilters = { ...filters, query };
-        setFilters(newFilters);
-        
-        const result = performSearch(newFilters);
-        setSearchResult(result);
-        onSearchResult(result);
-    };
+    // 🎯 Actualizadores de filtros simplificados
+    const updateFilter = useCallback((updates: Partial<SearchFilters>) => {
+        setFilters(prev => ({ ...prev, ...updates }));
+    }, []);
 
-    // 🏷️ MANEJADOR DE FILTROS
-    const handleFilterChange = (filterType: keyof SearchFilters, value: any): void => {
-        const newFilters: SearchFilters = { ...filters, [filterType]: value };
-        setFilters(newFilters);
-        
-        const result = performSearch(newFilters);
-        setSearchResult(result);
-        onSearchResult(result);
-    };
+    const clearFilters = useCallback(() => {
+        setFilters({ query: '', category: '', minRating: 0 });
+    }, []);
 
-    // 🧹 LIMPIAR FILTROS
-    const clearFilters = (): void => {
-        const defaultFilters: SearchFilters = { query: '', category: '', minRating: 0 };
-        setFilters(defaultFilters);
-        
-        const result = performSearch(defaultFilters);
-        setSearchResult(result);
-        onSearchResult(result);
-    };
+    const categories = useMemo(() => 
+        Array.from(new Set(products.map(p => p.category))), [products]
+    );
 
-    // 📋 OBTENER CATEGORÍAS ÚNICAS
-    const getUniqueCategories = (): string[] => {
-        return Array.from(new Set(products.map(product => product.category)));
-    };
-
-    // 🎨 EFECTO DE INICIALIZACIÓN
+    // 📡 Efecto para notificar cambios
     useEffect(() => {
-        const initialResult = performSearch(filters);
-        setSearchResult(initialResult);
-        onSearchResult(initialResult);
-    }, [filters, onSearchResult, performSearch]);
-
-    // 🔍 EFECTO PARA MANEJAR BÚSQUEDA INICIAL
-    useEffect(() => {
-        if (initialQuery) {
-            const newFilters: SearchFilters = { ...filters, query: initialQuery };
-            setFilters(newFilters);
-            const result = performSearch(newFilters);
-            setSearchResult(result);
-            onSearchResult(result);
-        }
-    }, [initialQuery, filters, onSearchResult, performSearch]);
+        onSearchResult(searchResult);
+    }, [searchResult, onSearchResult]);
 
     return (
         <Container fluid className="py-4" style={{ backgroundColor: '#f8f9fa' }}>
             <Row className="justify-content-center">
                 <Col xl={10} lg={11}>
-                    {/* 🔍 BARRA DE BÚSQUEDA PRINCIPAL */}
+                    {/* 🔍 Barra de búsqueda principal */}
                     <div className="mb-4">
                         <InputGroup size="lg" className="shadow-sm">
                             <InputGroup.Text className="bg-primary text-white border-primary">
@@ -211,14 +91,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                 type="text"
                                 placeholder={placeholder}
                                 value={filters.query}
-                                onChange={(e) => handleSearchChange(e.target.value)}
+                                onChange={(e) => updateFilter({ query: e.target.value })}
                                 className="border-primary"
                                 style={{ fontSize: '1.1rem' }}
                             />
                             {filters.query && (
                                 <Button 
                                     variant="outline-primary" 
-                                    onClick={() => handleSearchChange('')}
+                                    onClick={() => updateFilter({ query: '' })}
                                     className="border-primary"
                                 >
                                     <i className="bi bi-x-lg"></i>
@@ -227,20 +107,18 @@ const SearchBar: React.FC<SearchBarProps> = ({
                         </InputGroup>
                     </div>
 
-                    {/* 🎛️ FILTROS AVANZADOS */}
+                    {/* 🎛️ Filtros compactos */}
                     {showFilters && (
                         <Row className="mb-4">
                             <Col md={3} className="mb-2">
                                 <Form.Select
                                     value={filters.category || ''}
-                                    onChange={(e) => handleFilterChange('category', e.target.value)}
+                                    onChange={(e) => updateFilter({ category: e.target.value })}
                                     className="border-info"
                                 >
                                     <option value="">Todas las categorías</option>
-                                    {getUniqueCategories().map(category => (
-                                        <option key={category} value={category}>
-                                            {category}
-                                        </option>
+                                    {categories.map(category => (
+                                        <option key={category} value={category}>{category}</option>
                                     ))}
                                 </Form.Select>
                             </Col>
@@ -248,7 +126,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                             <Col md={3} className="mb-2">
                                 <Form.Select
                                     value={filters.minRating || 0}
-                                    onChange={(e) => handleFilterChange('minRating', Number(e.target.value))}
+                                    onChange={(e) => updateFilter({ minRating: Number(e.target.value) })}
                                     className="border-info"
                                 >
                                     <option value={0}>Cualquier rating</option>
@@ -265,54 +143,44 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                         type="number"
                                         placeholder="Precio mín"
                                         value={filters.minPrice || ''}
-                                        onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : undefined)}
+                                        onChange={(e) => updateFilter({ minPrice: e.target.value ? Number(e.target.value) : undefined })}
                                         className="border-info"
                                     />
                                 </InputGroup>
                             </Col>
                             
                             <Col md={3} className="mb-2">
-                                <Button 
-                                    variant="outline-primary" 
-                                    onClick={clearFilters}
-                                    className="w-100"
-                                >
-                                    <i className="bi bi-arrow-counterclockwise me-2"></i>
-                                    Limpiar filtros
+                                <Button variant="outline-primary" onClick={clearFilters} className="w-100">
+                                    <i className="bi bi-arrow-counterclockwise me-2"></i>Limpiar filtros
                                 </Button>
                             </Col>
                         </Row>
                     )}
 
-                    {/* 📊 RESULTADOS DE BÚSQUEDA */}
+                    {/* 📊 Resultados compactos */}
                     <Row className="align-items-center">
                         <Col md={8}>
                             <div className="d-flex align-items-center gap-3">
                                 <Badge bg="primary" className="fs-6 px-3 py-2">
-                                    <i className="bi bi-grid-3x3-gap me-2"></i>
-                                    {searchResult.filteredCount} juegos encontrados
+                                    <i className="bi bi-grid-3x3-gap me-2"></i>{searchResult.filteredCount} juegos encontrados
                                 </Badge>
                                 
                                 {filters.query && (
                                     <Badge bg="info" className="fs-6 px-3 py-2">
-                                        <i className="bi bi-search me-2"></i>
-                                        "{filters.query}"
+                                        <i className="bi bi-search me-2"></i>"{filters.query}"
                                     </Badge>
                                 )}
                                 
                                 {filters.category && (
                                     <Badge bg="secondary" className="fs-6 px-3 py-2">
-                                        <i className="bi bi-tag me-2"></i>
-                                        {filters.category}
+                                        <i className="bi bi-tag me-2"></i>{filters.category}
                                     </Badge>
                                 )}
                             </div>
                         </Col>
                         
                         <Col md={4} className="text-md-end mt-2 mt-md-0">
-                            <small className="text-muted">
-                                de {searchResult.totalCount} juegos totales
-                            </small>
+                            <small className="text-muted">de {searchResult.totalCount} juegos totales</small>
                         </Col>
                     </Row>
                 </Col>

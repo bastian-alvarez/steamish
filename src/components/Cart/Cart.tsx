@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
 import { useCart } from '../../context/CartContext';
 
-// 🛒 Cart Modal Minimalista con Bootstrap
+// 🛒 Cart Simplificado - Bootstrap Modal
 interface CartProps {
     isOpen: boolean;
     onClose: () => void;
@@ -15,8 +15,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
         <Modal show={isOpen} onHide={onClose} centered size="lg">
             <Modal.Header closeButton className="bg-primary text-white">
                 <Modal.Title>
-                    <i className="bi bi-cart3 me-2"></i>
-                    Mi Carrito ({count})
+                    <i className="bi bi-cart3 me-2"></i>Mi Carrito ({count})
                 </Modal.Title>
             </Modal.Header>
 
@@ -31,7 +30,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                     <>
                         <ListGroup variant="flush" className="mb-3">
                             {items.map((item) => {
-                                const discountedPrice = item.discount > 0 
+                                const price = item.discount > 0 
                                     ? item.price * (1 - item.discount / 100) 
                                     : item.price;
                                 
@@ -54,15 +53,11 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                                                             <span className="text-decoration-line-through text-muted small">
                                                                 ${item.price.toFixed(2)}
                                                             </span>
-                                                            <span className="text-success fw-bold">
-                                                                ${discountedPrice.toFixed(2)}
-                                                            </span>
+                                                            <span className="text-success fw-bold">${price.toFixed(2)}</span>
                                                             <Badge bg="danger">-{item.discount}%</Badge>
                                                         </>
                                                     ) : (
-                                                        <span className="text-success fw-bold">
-                                                            ${item.price.toFixed(2)}
-                                                        </span>
+                                                        <span className="text-success fw-bold">${item.price.toFixed(2)}</span>
                                                     )}
                                                 </div>
                                                 <small className="text-muted">
@@ -86,13 +81,9 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                         </ListGroup>
 
                         <div className="border-top pt-3">
-                            <Row className="align-items-center">
-                                <Col>
-                                    <h4 className="mb-0 text-primary fw-bold">
-                                        Total: ${totalPrice.toFixed(2)}
-                                    </h4>
-                                </Col>
-                            </Row>
+                            <h4 className="mb-0 text-primary fw-bold">
+                                Total: ${totalPrice.toFixed(2)}
+                            </h4>
                         </div>
                     </>
                 )}
@@ -101,12 +92,10 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             {items.length > 0 && (
                 <Modal.Footer className="bg-light">
                     <Button variant="outline-danger" onClick={clear}>
-                        <i className="bi bi-trash me-2"></i>
-                        Vaciar Carrito
+                        <i className="bi bi-trash me-2"></i>Vaciar Carrito
                     </Button>
                     <Button variant="primary" size="lg">
-                        <i className="bi bi-credit-card me-2"></i>
-                        Proceder al Pago
+                        <i className="bi bi-credit-card me-2"></i>Proceder al Pago
                     </Button>
                 </Modal.Footer>
             )}

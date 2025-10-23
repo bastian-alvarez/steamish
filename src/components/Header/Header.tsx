@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { Navbar, Nav, Container, Button, Badge } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button, Badge, Form, InputGroup } from 'react-bootstrap';
 import Cart from '../Cart/Cart';
 
 const Header: React.FC = () => {
     const { count } = useCart();
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen);
+    };
+
+    // 🔍 MANEJADOR DE BÚSQUEDA RÁPIDA
+    const handleQuickSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            // Redirigir a productos con query de búsqueda
+            navigate(`/productos?search=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+        }
     };
 
     return (
@@ -52,6 +64,23 @@ const Header: React.FC = () => {
                                 Admin
                             </Nav.Link>
                         </Nav>
+                        
+                        {/* 🔍 BARRA DE BÚSQUEDA RÁPIDA */}
+                        <Form onSubmit={handleQuickSearch} className="d-none d-lg-flex me-3">
+                            <InputGroup size="sm">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Buscar juegos..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="border-info"
+                                    style={{ minWidth: '200px' }}
+                                />
+                                <Button type="submit" variant="info" size="sm">
+                                    <i className="bi bi-search"></i>
+                                </Button>
+                            </InputGroup>
+                        </Form>
                         
                         <Nav className="ms-auto d-flex align-items-center">
                             <Link to="/login" className="btn btn-outline-light btn-sm me-3">

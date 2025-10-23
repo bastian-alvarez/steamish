@@ -1,0 +1,100 @@
+/* 🔍 SEARCH BAR STYLES */
+.searchContainer {
+    background: linear-gradient(135deg, #f8f9fa 0%, rgba(13, 110, 253, 0.05) 100%);
+    transition: all 0.3s ease;
+}
+
+.searchInputGroup {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.searchInputGroup:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.15);
+}
+
+.searchInput {
+    border: none;
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.searchIcon {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    border: none;
+    padding: 1rem 1.5rem;
+}
+
+.filterSelect {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.filterSelect:focus {
+    border-color: #0dcaf0;
+    box-shadow: 0 0 0 0.2rem rgba(13, 202, 240, 0.25);
+}
+
+.resultBadge {
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.5s ease;
+}
+
+.resultBadge:hover {
+    transform: scale(1.05);
+}
+
+.clearButton {
+    transition: all 0.3s ease;
+}
+
+.clearButton:hover {
+    transform: scale(1.1);
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* 🎨 ANIMATIONS */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.pulseAnimation {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+    .searchInput {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+    }
+    
+    .searchIcon {
+        padding: 0.8rem 1rem;
+    }
+}

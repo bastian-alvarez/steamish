@@ -24,16 +24,15 @@ const Blogs: React.FC = () => {
 
     const categories = ['Todos', 'Novedades', 'Tutoriales', 'Tecnología', 'Reviews', 'eSports', 'Arte'];
     
-    // 🔍 Filtros optimizados con useMemo
-    const filteredPosts = useMemo(() => 
-        blogPosts.filter(post => 
-            (activeCategory === 'Todos' || post.category === activeCategory) &&
-            (post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-             post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()))
-        ), [activeCategory, searchTerm]
-    );
-
-    const featuredPost = filteredPosts.find(post => post.featured);
+    // 🔍 Filtered posts with optimized dependencies
+    const filteredPosts = useMemo(() => {
+        return blogPosts.filter(post => {
+            const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesCategory = selectedCategory === 'Todas' || post.category === selectedCategory;
+            return matchesSearch && matchesCategory;
+        });
+    }, [searchTerm, selectedCategory, blogPosts]);    const featuredPost = filteredPosts.find(post => post.featured);
     const regularPosts = filteredPosts.filter(post => !post.featured);
 
     // 🎨 Helper para badges de categoría

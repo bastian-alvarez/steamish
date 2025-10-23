@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 // ⚡ Admin Panel Simplificado
 const Admin: React.FC = () => {

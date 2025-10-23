@@ -1,8 +1,8 @@
 import React from 'react';
+import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
 import { useCart } from '../../context/CartContext';
-import styles from './Cart.module.css';
 
-// 🛒 Cart Modal con Detalles de Juegos
+// 🛒 Cart Modal Minimalista con Bootstrap
 interface CartProps {
     isOpen: boolean;
     onClose: () => void;
@@ -11,109 +11,106 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
     const { items, count, totalPrice, remove, clear } = useCart();
 
-    if (!isOpen) return null;
-
     return (
-        <div className={styles.cartOverlay} onClick={onClose}>
-            <div className={styles.cartModal} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.cartHeader}>
-                    <h2 className={styles.cartTitle}>
-                        <span className={styles.cartTitleIcon}>🛒</span>
-                        Mi Carrito ({count})
-                    </h2>
-                    <button className={styles.closeButton} onClick={onClose}>
-                        ✕
-                    </button>
-                </div>
+        <Modal show={isOpen} onHide={onClose} centered size="lg">
+            <Modal.Header closeButton className="bg-primary text-white">
+                <Modal.Title>
+                    <i className="bi bi-cart3 me-2"></i>
+                    Mi Carrito ({count})
+                </Modal.Title>
+            </Modal.Header>
 
-                <div className={styles.cartContent}>
-                    {items.length === 0 ? (
-                        <div className={styles.emptyCart}>
-                            <div className={styles.emptyIcon}>🛒</div>
-                            <h3>Tu carrito está vacío</h3>
-                            <p>¡Agrega algunos juegos increíbles!</p>
-                        </div>
-                    ) : (
-                        <>
-                            <div className={styles.cartItemsList}>
-                                {items.map((item) => {
-                                    const discountedPrice = item.discount > 0 
-                                        ? item.price * (1 - item.discount / 100) 
-                                        : item.price;
-                                    
-                                    return (
-                                        <div key={item.id} className={styles.cartItem}>
-                                            <img 
-                                                src={item.image} 
-                                                alt={item.name}
-                                                className={styles.itemImage}
-                                            />
-                                            <div className={styles.itemDetails}>
-                                                <h4 className={styles.itemName}>{item.name}</h4>
-                                                <div className={styles.itemPrice}>
+            <Modal.Body className="p-4">
+                {items.length === 0 ? (
+                    <div className="text-center py-5">
+                        <i className="bi bi-cart-x text-muted" style={{ fontSize: '4rem' }}></i>
+                        <h4 className="mt-3 text-muted">Tu carrito está vacío</h4>
+                        <p className="text-muted">¡Agrega algunos juegos increíbles!</p>
+                    </div>
+                ) : (
+                    <>
+                        <ListGroup variant="flush" className="mb-3">
+                            {items.map((item) => {
+                                const discountedPrice = item.discount > 0 
+                                    ? item.price * (1 - item.discount / 100) 
+                                    : item.price;
+                                
+                                return (
+                                    <ListGroup.Item key={item.id} className="border-0 px-0">
+                                        <Row className="align-items-center">
+                                            <Col xs={3}>
+                                                <img 
+                                                    src={item.image} 
+                                                    alt={item.name}
+                                                    className="img-fluid rounded"
+                                                    style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                                                />
+                                            </Col>
+                                            <Col xs={6}>
+                                                <h6 className="mb-1 fw-bold">{item.name}</h6>
+                                                <div className="d-flex align-items-center gap-2">
                                                     {item.discount > 0 ? (
                                                         <>
-                                                            <span className={styles.originalPrice}>
+                                                            <span className="text-decoration-line-through text-muted small">
                                                                 ${item.price.toFixed(2)}
                                                             </span>
-                                                            <span className={styles.discountPrice}>
+                                                            <span className="text-success fw-bold">
                                                                 ${discountedPrice.toFixed(2)}
                                                             </span>
-                                                            <span className={styles.discountBadge}>
-                                                                -{item.discount}%
-                                                            </span>
+                                                            <Badge bg="danger">-{item.discount}%</Badge>
                                                         </>
                                                     ) : (
-                                                        <span className={styles.normalPrice}>
+                                                        <span className="text-success fw-bold">
                                                             ${item.price.toFixed(2)}
                                                         </span>
                                                     )}
                                                 </div>
-                                                <div className={styles.itemMeta}>
-                                                    <span className={styles.quantity}>
-                                                        🎮 Cantidad: {item.quantity}
-                                                    </span>
-                                                    <span className={styles.rating}>
-                                                        ⭐ {item.rating}/5
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <button 
-                                                onClick={() => remove(item.id)}
-                                                className={styles.removeButton}
-                                                title="Eliminar del carrito"
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                                <small className="text-muted">
+                                                    <i className="bi bi-star-fill text-warning me-1"></i>
+                                                    {item.rating}/5 • Cant: {item.quantity}
+                                                </small>
+                                            </Col>
+                                            <Col xs={3} className="text-end">
+                                                <Button 
+                                                    variant="outline-danger"
+                                                    size="sm"
+                                                    onClick={() => remove(item.id)}
+                                                >
+                                                    <i className="bi bi-trash"></i>
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </ListGroup.Item>
+                                );
+                            })}
+                        </ListGroup>
 
-                            <div className={styles.cartFooter}>
-                                <div className={styles.totalSection}>
-                                    <div className={styles.finalTotal}>
-                                        <strong>Total: ${totalPrice.toFixed(2)}</strong>
-                                    </div>
-                                    <div className={styles.actionButtons}>
-                                        <button 
-                                            onClick={clear}
-                                            className={styles.clearButton}
-                                        >
-                                            🗑️ Vaciar Carrito
-                                        </button>
-                                        <button className={styles.checkoutButton}>
-                                            <span className={styles.buttonIcon}>💳</span>
-                                            Proceder al Pago
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
-        </div>
+                        <div className="border-top pt-3">
+                            <Row className="align-items-center">
+                                <Col>
+                                    <h4 className="mb-0 text-primary fw-bold">
+                                        Total: ${totalPrice.toFixed(2)}
+                                    </h4>
+                                </Col>
+                            </Row>
+                        </div>
+                    </>
+                )}
+            </Modal.Body>
+
+            {items.length > 0 && (
+                <Modal.Footer className="bg-light">
+                    <Button variant="outline-danger" onClick={clear}>
+                        <i className="bi bi-trash me-2"></i>
+                        Vaciar Carrito
+                    </Button>
+                    <Button variant="primary" size="lg">
+                        <i className="bi bi-credit-card me-2"></i>
+                        Proceder al Pago
+                    </Button>
+                </Modal.Footer>
+            )}
+        </Modal>
     );
 };
 

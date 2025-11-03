@@ -1,0 +1,96 @@
+/* 🎨 Paleta de Colores Steamish */
+
+/* Variables CSS */
+:root {
+  --color-1: #d1c7e1;
+  --color-2: #a5a6d9;
+  --color-3: #7788c0;
+  --color-4: #4b4c9b;
+  --color-5: #2c2d68;
+  
+  /* Colores para uso en componentes */
+  --primary: var(--color-4);      /* Color principal: #4b4c9b */
+  --primary-dark: var(--color-5);  /* Color oscuro: #2c2d68 */
+  --primary-light: var(--color-3); /* Color claro: #7788c0 */
+  --secondary: var(--color-2);     /* Color secundario: #a5a6d9 */
+  --accent: var(--color-1);        /* Color de acento: #d1c7e1 */
+  
+  /* Colores de texto */
+  --text-primary: var(--color-5);
+  --text-secondary: var(--color-4);
+  --text-light: var(--color-1);
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, var(--color-4) 0%, var(--color-5) 100%);
+  --gradient-light: linear-gradient(135deg, var(--color-2) 0%, var(--color-3) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--color-3) 0%, var(--color-4) 100%);
+}
+
+/* Clases de color */
+.color-1 { color: var(--color-1); }
+.color-2 { color: var(--color-2); }
+.color-3 { color: var(--color-3); }
+.color-4 { color: var(--color-4); }
+.color-5 { color: var(--color-5); }
+
+/* Fondos de color */
+.bg-color-1 { background-color: var(--color-1) !important; }
+.bg-color-2 { background-color: var(--color-2) !important; }
+.bg-color-3 { background-color: var(--color-3) !important; }
+.bg-color-4 { background-color: var(--color-4) !important; }
+.bg-color-5 { background-color: var(--color-5) !important; }
+
+/* Override de Bootstrap primary */
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.badge-primary {
+  background-color: var(--primary);
+}
+
+/* Navbar personalizado */
+.navbar-primary {
+  background-color: var(--primary) !important;
+  background: var(--gradient-primary) !important;
+}
+
+/* Cards con bordes de color */
+.card-primary {
+  border-top: 4px solid var(--primary);
+}
+
+/* Enlaces */
+a.text-primary {
+  color: var(--primary) !important;
+}
+
+a.text-primary:hover {
+  color: var(--primary-dark) !important;
+}
+

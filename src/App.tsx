@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ProductProvider } from './context/ProductContext';
+import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -13,9 +14,15 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Admin from './pages/Admin/Admin';
 
-// 🎯 App Simplificado - Estructura Limpia
+// 🎯 Interfaces para rutas
+interface RouteConfig {
+    path: string;
+    component: React.ComponentType;
+}
+
+// 🎯 App con mejor uso de interfaces y useContext
 const App: React.FC = () => {
-    const routes = [
+    const routes: RouteConfig[] = [
         { path: '/', component: Home },
         { path: '/productos', component: Products },
         { path: '/blogs', component: Blogs },
@@ -27,23 +34,25 @@ const App: React.FC = () => {
     ];
 
     return (
-        <ProductProvider>
-            <CartProvider>
-                <Router>
-                    <div className="d-flex flex-column min-vh-100">
-                        <Header />
-                        <main className="flex-grow-1">
-                            <Routes>
-                                {routes.map(({ path, component: Component }) => (
-                                    <Route key={path} path={path} element={<Component />} />
-                                ))}
-                            </Routes>
-                        </main>
-                        <Footer />
-                    </div>
-                </Router>
-            </CartProvider>
-        </ProductProvider>
+        <AuthProvider>
+            <ProductProvider>
+                <CartProvider>
+                    <Router>
+                        <div className="d-flex flex-column min-vh-100">
+                            <Header />
+                            <main className="flex-grow-1">
+                                <Routes>
+                                    {routes.map(({ path, component: Component }) => (
+                                        <Route key={path} path={path} element={<Component />} />
+                                    ))}
+                                </Routes>
+                            </main>
+                            <Footer />
+                        </div>
+                    </Router>
+                </CartProvider>
+            </ProductProvider>
+        </AuthProvider>
     );
 };
 

@@ -7,10 +7,10 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import GameResults from '../../components/GameResults/GameResults';
 import { Product, SearchResult } from '../../types/Product';
 
-// 🎮 Products Simplificado - Lógica Consolidada
+// 🎮 Products con useState para el carrito y mejor uso de interfaces
 const Products: React.FC = () => {
-    const products = useProducts();
-    const { add } = useCart();
+    const { products } = useProducts();
+    const cart = useCart();
     const location = useLocation();
     const [searchResult, setSearchResult] = useState<SearchResult>({
         products: [],
@@ -28,22 +28,24 @@ const Products: React.FC = () => {
     }, [location.search]);
 
     // 🎮 Event handlers
-    const handleGameSelect = (product: Product) => {
-        add(product);
+    const handleGameSelect = (product: Product): void => {
+        cart.add(product);
         console.log(`Juego "${product.name}" agregado al carrito`);
     };
 
-    const handleSearchResult = (result: SearchResult) => setSearchResult(result);
+    const handleSearchResult = (result: SearchResult): void => {
+        setSearchResult(result);
+    };
 
     return (
         <div className="bg-light min-vh-100">
             {/* Header */}
-            <div className="bg-primary text-white py-5">
+            <div className="bg-primary text-white py-5" style={{ background: 'var(--gradient-primary)' }}>
                 <Container>
                     <Row>
                         <Col className="text-center">
                             <h1 className="display-4 fw-bold mb-3">
-                                <i className="bi bi-controller text-info me-3"></i>Catálogo de Juegos
+                                <i className="bi bi-controller me-3" style={{ color: 'var(--color-1)' }}></i>Catálogo de Juegos
                             </h1>
                             <p className="lead">Encuentra tu próximo juego favorito</p>
                         </Col>

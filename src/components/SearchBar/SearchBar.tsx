@@ -84,7 +84,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                     {/* 🔍 Barra de búsqueda principal */}
                     <div className="mb-4">
                         <InputGroup size="lg" className="shadow-sm">
-                            <InputGroup.Text className="bg-primary text-white border-primary">
+                            <InputGroup.Text className="text-white border-primary" style={{ background: 'var(--color-4)' }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control

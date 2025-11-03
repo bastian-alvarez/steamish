@@ -21,9 +21,9 @@ const Contact: React.FC = () => {
     ];
 
     return (
-        <div className="min-vh-100" style={{ background: 'linear-gradient(135deg, #0d6efd 0%, #6610f2 100%)' }}>
+        <div className="min-vh-100" style={{ background: 'var(--gradient-primary)' }}>
             {/* Hero Section */}
-            <div className="bg-primary text-white py-5">
+            <div className="bg-primary text-white py-5" style={{ background: 'var(--gradient-primary)' }}>
                 <Container>
                     <Row className="justify-content-center text-center">
                         <Col lg={8}>
@@ -44,7 +44,7 @@ const Contact: React.FC = () => {
                             <Col lg={6}>
                                 <Card className="border-0 shadow-lg h-100">
                                     <Card.Body className="p-4">
-                                        <h2 className="text-primary mb-4">
+                                        <h2 className="mb-4" style={{ color: 'var(--color-4)' }}>
                                             <i className="bi bi-chat-dots me-2"></i>Hablemos
                                         </h2>
                                         <p className="text-muted mb-4">
@@ -73,7 +73,7 @@ const Contact: React.FC = () => {
                             <Col lg={6}>
                                 <Card className="border-0 shadow-lg h-100">
                                     <Card.Body className="p-4">
-                                        <h2 className="text-primary mb-4">
+                                        <h2 className="mb-4" style={{ color: 'var(--color-4)' }}>
                                             <i className="bi bi-envelope-plus me-2"></i>Envíanos un mensaje
                                         </h2>
                                         
@@ -90,7 +90,7 @@ const Contact: React.FC = () => {
                                                 { field: 'email', icon: 'envelope', label: 'Email', type: 'email', placeholder: 'tu@email.com' }
                                             ].map(({ field, icon, label, type, placeholder }) => (
                                                 <div key={field} className="mb-3">
-                                                    <Form.Label className="fw-bold text-primary">
+                                                    <Form.Label className="fw-bold" style={{ color: 'var(--color-4)' }}>
                                                         <i className={`bi bi-${icon} me-1`}></i>{label}
                                                     </Form.Label>
                                                     <Form.Control

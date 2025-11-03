@@ -29,12 +29,12 @@ const Footer: React.FC = () => {
     ];
 
     return (
-        <footer className="bg-dark text-light py-5 mt-auto">
+        <footer className="text-light py-5 mt-auto" style={{ background: 'var(--color-5)' }}>
             <Container>
                 <Row className="g-4">
                     <Col lg={3} md={6}>
                         <h5 className="fw-bold mb-3">
-                            <i className="bi bi-controller text-info me-2"></i>Steamish Gaming
+                            <i className="bi bi-controller me-2" style={{ color: 'var(--color-2)' }}></i>Steamish Gaming
                         </h5>
                         <p className="text-muted mb-3">
                             La plataforma de videojuegos más elegante y moderna. Descubre y disfruta de los mejores títulos.

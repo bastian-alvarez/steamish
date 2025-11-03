@@ -29,10 +29,12 @@ const Blogs: React.FC = () => {
         return blogPosts.filter(post => {
             const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                 post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesCategory = selectedCategory === 'Todas' || post.category === selectedCategory;
+            const matchesCategory = activeCategory === 'Todos' || post.category === activeCategory;
             return matchesSearch && matchesCategory;
         });
-    }, [searchTerm, blogPosts]); // selectedCategory es estado local, no necesita dependencia    const featuredPost = filteredPosts.find(post => post.featured);
+    }, [searchTerm, activeCategory, blogPosts]);
+    
+    const featuredPost = filteredPosts.find(post => post.featured);
     const regularPosts = filteredPosts.filter(post => !post.featured);
 
     // 🎨 Helper para badges de categoría
@@ -46,7 +48,7 @@ const Blogs: React.FC = () => {
     return (
         <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
             {/* 🎯 Hero Section Compacto */}
-            <div className="bg-primary text-white py-5 text-center">
+            <div className="bg-primary text-white py-5 text-center" style={{ background: 'var(--gradient-primary)' }}>
                 <Container>
                     <h1 className="display-4 fw-bold mb-3">
                         <i className="bi bi-journal-text me-3"></i>Gaming Blog
@@ -60,7 +62,7 @@ const Blogs: React.FC = () => {
                 <Row className="mb-5 justify-content-center">
                     <Col lg={8}>
                         <InputGroup className="mb-4">
-                            <InputGroup.Text className="bg-primary text-white border-primary">
+                            <InputGroup.Text className="text-white border-primary" style={{ background: 'var(--color-4)' }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control
@@ -77,7 +79,10 @@ const Blogs: React.FC = () => {
                                     key={category}
                                     active={activeCategory === category}
                                     onClick={() => setActiveCategory(category)}
-                                    className={activeCategory === category ? 'bg-primary' : 'text-primary'}
+                                    className={activeCategory === category ? '' : ''}
+                                    style={activeCategory === category 
+                                        ? { background: 'var(--color-4)', color: 'white' }
+                                        : { color: 'var(--color-4)' }}
                                 >
                                     {category}
                                 </Nav.Link>
@@ -100,7 +105,7 @@ const Blogs: React.FC = () => {
                                         <Badge bg={getCategoryVariant(featuredPost.category)} className="me-2">{featuredPost.category}</Badge>
                                         <small className="text-muted">{featuredPost.date}</small>
                                     </div>
-                                    <Card.Title className="h3 text-primary fw-bold mb-3">{featuredPost.title}</Card.Title>
+                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: 'var(--color-4)' }}>{featuredPost.title}</Card.Title>
                                     <Card.Text className="text-muted mb-4 flex-grow-1">{featuredPost.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center">
                                         <small className="text-muted"><i className="bi bi-clock me-1"></i>{featuredPost.readTime}</small>
@@ -115,7 +120,7 @@ const Blogs: React.FC = () => {
                 {/* 📰 Articles Grid */}
                 <Row className="mb-4">
                     <Col>
-                        <h2 className="text-primary fw-bold">
+                        <h2 className="fw-bold" style={{ color: 'var(--color-4)' }}>
                             <i className="bi bi-fire me-2"></i>Últimos Artículos
                             <Badge bg="info" className="ms-2">{regularPosts.length}</Badge>
                         </h2>
@@ -132,7 +137,7 @@ const Blogs: React.FC = () => {
                                         <Badge bg={getCategoryVariant(post.category)} className="me-2">{post.category}</Badge>
                                         <small className="text-muted">{post.date}</small>
                                     </div>
-                                    <Card.Title className="h5 text-primary fw-bold mb-2">{post.title}</Card.Title>
+                                    <Card.Title className="h5 fw-bold mb-2" style={{ color: 'var(--color-4)' }}>{post.title}</Card.Title>
                                     <Card.Text className="text-muted mb-3 flex-grow-1">{post.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center mt-auto">
                                         <small className="text-muted"><i className="bi bi-clock me-1"></i>{post.readTime}</small>

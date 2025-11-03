@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { useAuth } from '../../context/AuthContext';
+import { RegisterData } from '../../types/User';
+import { FormField } from '../../types/Component';
 
-// ✨ Register Simplificado - Bootstrap Puro
+// ✨ Register con interfaces y useContext mejorado
+interface RegisterForm extends RegisterData {
+    confirmPassword: string;
+}
+
 const Register: React.FC = () => {
-    const [form, setForm] = useState({ username: '', email: '', password: '', confirmPassword: '' });
-    const [error, setError] = useState('');
+    const { register, error: authError, clearError } = useAuth();
+    const navigate = useNavigate();
+    const [form, setForm] = useState<RegisterForm>({ 
+        username: '', 
+        email: '', 
+        password: '', 
+        confirmPassword: '' 
+    });
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
+        clearError();
+        setError('');
+
         if (form.password !== form.confirmPassword) {
             setError('Las contraseñas no coinciden');
             return;
@@ -17,11 +35,20 @@ const Register: React.FC = () => {
             setError('La contraseña debe tener al menos 6 caracteres');
             return;
         }
-        setError('');
-        console.log('Usuario registrado:', form);
+
+        try {
+            setLoading(true);
+            const { confirmPassword, ...registerData } = form;
+            await register(registerData.username, registerData.email, registerData.password);
+            navigate('/');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error al registrar usuario');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const formFields = [
+    const formFields: FormField[] = [
         { field: 'username', icon: 'person', label: 'Usuario', type: 'text', placeholder: 'GamerPro123' },
         { field: 'email', icon: 'envelope', label: 'Email', type: 'email', placeholder: 'tu@email.com' },
         { field: 'password', icon: 'lock', label: 'Contraseña', type: 'password', placeholder: '••••••••' },
@@ -29,24 +56,25 @@ const Register: React.FC = () => {
     ];
 
     return (
-        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'linear-gradient(135deg, #6610f2 0%, #0dcaf0 100%)' }}>
+        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'var(--gradient-light)' }}>
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={6} md={8}>
                         <Card className="border-0 shadow-lg">
                             <Card.Body className="p-5">
                                 <div className="text-center mb-4">
-                                    <div className="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                                         style={{ width: '80px', height: '80px' }}>
+                                    <div className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-white"
+                                         style={{ background: 'var(--gradient-accent)', width: '80px', height: '80px' }}>
                                         <i className="bi bi-person-plus display-4"></i>
                                     </div>
                                     <h1 className="h3 text-primary fw-bold">Únete a Steamish</h1>
                                     <p className="text-muted">Crea tu cuenta gaming y comienza la aventura</p>
                                 </div>
 
-                                {error && (
+                                {(error || authError) && (
                                     <Alert variant="danger" className="d-flex align-items-center">
-                                        <i className="bi bi-exclamation-circle me-2"></i>{error}
+                                        <i className="bi bi-exclamation-circle me-2"></i>
+                                        {error || authError}
                                     </Alert>
                                 )}
 
@@ -72,12 +100,14 @@ const Register: React.FC = () => {
 
                                     <Button 
                                         type="submit" 
-                                        variant="info" 
+                                        variant="primary" 
                                         size="lg" 
                                         className="w-100 fw-bold mb-3"
-                                        style={{ background: 'linear-gradient(135deg, #6610f2, #0dcaf0)', border: 'none' }}
+                                        style={{ background: 'var(--gradient-accent)', border: 'none' }}
+                                        disabled={loading}
                                     >
-                                        <i className="bi bi-star me-2"></i>Crear Mi Cuenta
+                                        <i className="bi bi-star me-2"></i>
+                                        {loading ? 'Creando cuenta...' : 'Crear Mi Cuenta'}
                                     </Button>
 
                                     <div className="text-center">

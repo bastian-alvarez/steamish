@@ -186,6 +186,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                     size="sm"
                                     onClick={() => onGameSelect?.(product)}
                                     className="fw-bold"
+                                    style={{ background: 'var(--color-4)', borderColor: 'var(--color-4)' }}
                                 >
                                     <i className="bi bi-cart-plus me-1"></i>
                                     Agregar

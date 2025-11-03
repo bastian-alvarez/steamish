@@ -1,41 +1,58 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { useAuth } from '../../context/AuthContext';
+import { LoginCredentials } from '../../types/User';
 
-// 🔐 Login Simplificado - Bootstrap Puro
+// 🔐 Login con interfaces y useContext mejorado
 const Login: React.FC = () => {
-    const [form, setForm] = useState({ email: '', password: '' });
-    const [error, setError] = useState('');
+    const { login, error: authError, clearError } = useAuth();
+    const navigate = useNavigate();
+    const [form, setForm] = useState<LoginCredentials>({ email: '', password: '' });
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
+        clearError();
+        setError('');
+        
         if (!form.email || !form.password) {
             setError('Por favor, completa todos los campos.');
             return;
         }
-        setError('');
-        console.log('Iniciando sesión:', form);
+
+        try {
+            setLoading(true);
+            await login(form.email, form.password);
+            navigate('/');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'linear-gradient(135deg, #0d6efd 0%, #6610f2 100%)' }}>
+        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'var(--gradient-primary)' }}>
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={5} md={7}>
                         <Card className="border-0 shadow-lg">
                             <Card.Body className="p-5">
                                 <div className="text-center mb-4">
-                                    <div className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                                         style={{ width: '80px', height: '80px' }}>
+                                    <div className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-white"
+                                         style={{ background: 'var(--gradient-accent)', width: '80px', height: '80px' }}>
                                         <i className="bi bi-person-check display-4"></i>
                                     </div>
                                     <h1 className="h3 text-primary fw-bold">Bienvenido de Vuelta</h1>
                                     <p className="text-muted">Inicia sesión en tu cuenta gaming</p>
                                 </div>
 
-                                {error && (
+                                {(error || authError) && (
                                     <Alert variant="danger" className="d-flex align-items-center">
-                                        <i className="bi bi-exclamation-circle me-2"></i>{error}
+                                        <i className="bi bi-exclamation-circle me-2"></i>
+                                        {error || authError}
                                     </Alert>
                                 )}
 
@@ -65,9 +82,11 @@ const Login: React.FC = () => {
                                         variant="primary" 
                                         size="lg" 
                                         className="w-100 fw-bold mb-3"
-                                        style={{ background: 'linear-gradient(135deg, #0d6efd, #6610f2)', border: 'none' }}
+                                        style={{ background: 'var(--gradient-accent)', border: 'none' }}
+                                        disabled={loading}
                                     >
-                                        <i className="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                                        <i className="bi bi-box-arrow-in-right me-2"></i>
+                                        {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                                     </Button>
 
                                     <div className="text-center">

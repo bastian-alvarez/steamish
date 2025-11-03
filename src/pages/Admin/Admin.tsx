@@ -19,7 +19,7 @@ const Admin: React.FC = () => {
     return (
         <div className="min-vh-100 bg-light">
             {/* Header */}
-            <div className="bg-primary text-white py-4">
+            <div className="bg-primary text-white py-4" style={{ background: 'var(--gradient-primary)' }}>
                 <Container>
                     <Row>
                         <Col>
@@ -54,7 +54,7 @@ const Admin: React.FC = () => {
                 {/* Quick Actions */}
                 <Row>
                     <Col>
-                        <h2 className="text-primary mb-4">
+                        <h2 className="mb-4" style={{ color: 'var(--color-4)' }}>
                             <i className="bi bi-lightning me-2"></i>Acciones Rápidas
                         </h2>
                         <Row className="g-4">

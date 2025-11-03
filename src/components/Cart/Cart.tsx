@@ -1,19 +1,22 @@
 import React from 'react';
 import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
-import { useCart } from '../../context/CartContext';
+import { CartProps } from '../../types/Component';
 
-// 🛒 Cart Simplificado - Bootstrap Modal
-interface CartProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
+// 🛒 Cart con props usando interfaces
 
-const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
-    const { items, count, totalPrice, remove, clear } = useCart();
+const Cart: React.FC<CartProps> = ({ 
+    isOpen, 
+    onClose, 
+    items, 
+    count, 
+    totalPrice, 
+    onRemove, 
+    onClear 
+}) => {
 
     return (
         <Modal show={isOpen} onHide={onClose} centered size="lg">
-            <Modal.Header closeButton className="bg-primary text-white">
+            <Modal.Header closeButton className="bg-primary text-white" style={{ background: 'var(--gradient-primary)' }}>
                 <Modal.Title>
                     <i className="bi bi-cart3 me-2"></i>Mi Carrito ({count})
                 </Modal.Title>
@@ -69,7 +72,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                                                 <Button 
                                                     variant="outline-danger"
                                                     size="sm"
-                                                    onClick={() => remove(item.id)}
+                                                    onClick={() => onRemove(item.id)}
                                                 >
                                                     <i className="bi bi-trash"></i>
                                                 </Button>
@@ -91,7 +94,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
             {items.length > 0 && (
                 <Modal.Footer className="bg-light">
-                    <Button variant="outline-danger" onClick={clear}>
+                    <Button variant="outline-danger" onClick={onClear}>
                         <i className="bi bi-trash me-2"></i>Vaciar Carrito
                     </Button>
                     <Button variant="primary" size="lg">

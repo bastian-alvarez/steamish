@@ -1,7 +1,7 @@
 import { Product } from '../types/Product';
 import { getAvatarPorNombre } from '../mock-data/juegosMocks';
 
-// 🎮 DATOS COMPLETOS CON IMÁGENES REALES
+// 🎮 DATOS COMPLETOS CON IMÁGENES REALES DEL MOCK
 const games: Product[] = [
     { 
         id: '1', 

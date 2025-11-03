@@ -1,26 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { Container, Row, Col, Card, Badge, Button, InputGroup, Form, Nav } from 'react-bootstrap';
+import { blogs } from '../../mock-data/blogsMocks';
 
-// 📝 Blog Minimalista - Código Optimizado
+// 📝 Blog con Mock Data - Estructura similar a juegos
 const Blogs: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState('Todos');
     const [searchTerm, setSearchTerm] = useState('');
 
-    // 📊 Data simplificada con helper function
-    const createPost = (id: number, title: string, excerpt: string, category: string, readTime: string, featured = false) => ({
-        id, title, excerpt, category, readTime, featured,
-        date: `${15 - id} Oct 2025`,
-        image: `https://via.placeholder.com/400x200/${['0d6efd', '6610f2', '0dcaf0'][id % 3]}/ffffff?text=${category}`
-    });
-
-    const blogPosts = [
-        createPost(1, "Los 10 Juegos Más Esperados de 2025", "Descubre los títulos que revolucionarán el gaming este año...", "Novedades", "5 min", true),
-        createPost(2, "Guía Completa: Cómo Optimizar tu PC Gaming", "Consejos profesionales para sacar el máximo rendimiento...", "Tutoriales", "8 min"),
-        createPost(3, "El Futuro del Gaming: Realidad Virtual", "Explora cómo la VR está transformando la industria...", "Tecnología", "6 min"),
-        createPost(4, "Review: Los Mejores Indies de la Temporada", "Una selección cuidadosa de juegos independientes...", "Reviews", "7 min"),
-        createPost(5, "eSports 2025: Torneos y Competencias", "Todo lo que necesitas saber sobre los próximos torneos...", "eSports", "4 min"),
-        createPost(6, "Construcción de Mundos: Arte en Videojuegos", "Detrás de escenas: cómo los artistas crean universos fantásticos...", "Arte", "9 min")
-    ];
+    // 📊 Usar blogs del mock
+    const blogPosts = blogs;
 
     const categories = ['Todos', 'Novedades', 'Tutoriales', 'Tecnología', 'Reviews', 'eSports', 'Arte'];
     
@@ -40,7 +28,7 @@ const Blogs: React.FC = () => {
     // 🎨 Helper para badges de categoría
     const getCategoryVariant = (category: string) => ({
         'Novedades': 'primary', 'Tutoriales': 'info', 'Tecnología': 'success',
-        'Reviews': 'warning', 'eSports': 'danger'
+        'Reviews': 'warning', 'eSports': 'danger', 'Arte': 'secondary'
     }[category] || 'secondary');
 
     const resetFilters = () => { setSearchTerm(''); setActiveCategory('Todos'); };

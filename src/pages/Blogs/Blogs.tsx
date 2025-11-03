@@ -32,7 +32,7 @@ const Blogs: React.FC = () => {
             const matchesCategory = selectedCategory === 'Todas' || post.category === selectedCategory;
             return matchesSearch && matchesCategory;
         });
-    }, [searchTerm, selectedCategory, blogPosts]);    const featuredPost = filteredPosts.find(post => post.featured);
+    }, [searchTerm, blogPosts]); // selectedCategory es estado local, no necesita dependencia    const featuredPost = filteredPosts.find(post => post.featured);
     const regularPosts = filteredPosts.filter(post => !post.featured);
 
     // 🎨 Helper para badges de categoría

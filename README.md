@@ -54,9 +54,17 @@ npm run build
 ### Autenticación
 - **Login**: Iniciar sesión con credenciales
   - Demo: `demo@steamish.com` / `demo123`
-  - Admin: `admin@steamish.com` / `admin123`
+  - Admin: `admin@steamish.com` / `admin123` (solo para acceso al panel de administración)
 - **Registro**: Crear nueva cuenta de usuario
 - **Logout**: Cerrar sesión
+
+### Panel de Administración
+- **Acceso restringido**: Solo accesible para usuarios con rol de administrador
+- **Ruta protegida**: `/admin` no aparece en la navegación y requiere autenticación como admin
+- **Credenciales de admin**: 
+  - Email: `admin@steamish.com`
+  - Password: `admin123`
+- Si intentas acceder sin ser admin, verás un mensaje de "Acceso Denegado"
 
 ### Carrito de Compras
 - Agregar productos al carrito

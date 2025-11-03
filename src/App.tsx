@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Home from './pages/Home/Home';
 import Products from './pages/Products/Products';
 import Blogs from './pages/Blogs/Blogs';
@@ -40,13 +41,24 @@ const App: React.FC = () => {
                     <Router>
                         <div className="d-flex flex-column min-vh-100">
                             <Header />
-                            <main className="flex-grow-1">
-                                <Routes>
-                                    {routes.map(({ path, component: Component }) => (
+                        <main className="flex-grow-1">
+                            <Routes>
+                                {routes
+                                    .filter(route => route.path !== '/admin') // Filtrar admin de rutas públicas
+                                    .map(({ path, component: Component }) => (
                                         <Route key={path} path={path} element={<Component />} />
                                     ))}
-                                </Routes>
-                            </main>
+                                {/* Ruta protegida para Admin - solo accesible con credenciales de admin */}
+                                <Route 
+                                    path="/admin" 
+                                    element={
+                                        <ProtectedRoute requireAdmin={true}>
+                                            <Admin />
+                                        </ProtectedRoute>
+                                    } 
+                                />
+                            </Routes>
+                        </main>
                             <Footer />
                         </div>
                     </Router>

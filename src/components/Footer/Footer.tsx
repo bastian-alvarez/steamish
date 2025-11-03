@@ -29,20 +29,38 @@ const Footer: React.FC = () => {
     ];
 
     return (
-        <footer className="text-light py-5 mt-auto" style={{ background: 'var(--color-5)' }}>
+        <footer className="text-light py-5 mt-auto" style={{ background: 'var(--gradient-primary)' }}>
             <Container>
                 <Row className="g-4">
                     <Col lg={3} md={6}>
-                        <h5 className="fw-bold mb-3">
-                            <i className="bi bi-controller me-2" style={{ color: 'var(--color-2)' }}></i>Steamish Gaming
+                        <h5 className="fw-bold mb-3 text-white">
+                            <i className="bi bi-controller me-2" style={{ color: 'var(--color-1)' }}></i>Steamish Gaming
                         </h5>
-                        <p className="text-muted mb-3">
+                        <p className="mb-3" style={{ color: 'var(--color-2)' }}>
                             La plataforma de videojuegos más elegante y moderna. Descubre y disfruta de los mejores títulos.
                         </p>
                         <div className="d-flex gap-2">
                             {socialLinks.map(social => (
-                                <a key={social.icon} href={social.href} target="_blank" rel="noopener noreferrer" 
-                                   className={`btn btn-outline-${social.variant} btn-sm`}>
+                                <a 
+                                    key={social.icon} 
+                                    href={social.href} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="btn btn-sm"
+                                    style={{ 
+                                        borderColor: 'var(--color-2)', 
+                                        color: 'var(--color-2)',
+                                        backgroundColor: 'transparent'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'var(--color-2)';
+                                        e.currentTarget.style.color = 'var(--color-5)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                        e.currentTarget.style.color = 'var(--color-2)';
+                                    }}
+                                >
                                     <i className={`bi bi-${social.icon}`}></i>
                                 </a>
                             ))}
@@ -50,13 +68,19 @@ const Footer: React.FC = () => {
                     </Col>
 
                     <Col lg={2} md={6}>
-                        <h6 className="fw-bold mb-3 text-info">
+                        <h6 className="fw-bold mb-3" style={{ color: 'var(--color-3)' }}>
                             <i className="bi bi-link-45deg me-1"></i>Enlaces
                         </h6>
                         <ul className="list-unstyled">
                             {navLinks.map(link => (
                                 <li key={link.to} className="mb-2">
-                                    <Link to={link.to} className="text-muted text-decoration-none">
+                                    <Link 
+                                        to={link.to} 
+                                        className="text-decoration-none"
+                                        style={{ color: 'var(--color-2)' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-1)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-2)'}
+                                    >
                                         <i className="bi bi-chevron-right me-1"></i>{link.label}
                                     </Link>
                                 </li>
@@ -65,13 +89,19 @@ const Footer: React.FC = () => {
                     </Col>
 
                     <Col lg={3} md={6}>
-                        <h6 className="fw-bold mb-3 text-info">
+                        <h6 className="fw-bold mb-3" style={{ color: 'var(--color-3)' }}>
                             <i className="bi bi-question-circle me-1"></i>Soporte
                         </h6>
                         <ul className="list-unstyled">
                             {supportLinks.map(link => (
                                 <li key={link.to} className="mb-2">
-                                    <a href={link.to} className="text-muted text-decoration-none">
+                                    <a 
+                                        href={link.to} 
+                                        className="text-decoration-none"
+                                        style={{ color: 'var(--color-2)' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-1)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-2)'}
+                                    >
                                         <i className="bi bi-chevron-right me-1"></i>{link.label}
                                     </a>
                                 </li>
@@ -80,36 +110,57 @@ const Footer: React.FC = () => {
                     </Col>
 
                     <Col lg={4} md={6}>
-                        <h6 className="fw-bold mb-3 text-info">
+                        <h6 className="fw-bold mb-3" style={{ color: 'var(--color-3)' }}>
                             <i className="bi bi-envelope me-1"></i>Newsletter Gaming
                         </h6>
-                        <p className="text-muted mb-3">
+                        <p className="mb-3" style={{ color: 'var(--color-2)' }}>
                             Únete y recibe ofertas especiales y lanzamientos.
                         </p>
                         <Form className="d-flex flex-column gap-2">
                             <Form.Control 
                                 type="email" 
                                 placeholder="gamer@ejemplo.com" 
-                                className="bg-secondary border-0 text-light"
+                                className="border-0"
+                                style={{ 
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                                    color: 'white',
+                                    backdropFilter: 'blur(10px)'
+                                }}
                             />
-                            <Button variant="info" type="submit" className="fw-bold">
+                            <Button 
+                                type="submit" 
+                                className="fw-bold"
+                                style={{ 
+                                    background: 'var(--color-3)', 
+                                    borderColor: 'var(--color-3)',
+                                    color: 'white'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'var(--color-2)';
+                                    e.currentTarget.style.borderColor = 'var(--color-2)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'var(--color-3)';
+                                    e.currentTarget.style.borderColor = 'var(--color-3)';
+                                }}
+                            >
                                 <i className="bi bi-lightning me-1"></i>Unirse Ahora
                             </Button>
                         </Form>
                     </Col>
                 </Row>
 
-                <hr className="my-4 border-secondary" />
+                <hr className="my-4" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
                 
                 <Row className="align-items-center">
                     <Col md={6}>
-                        <small className="text-muted">
+                        <small style={{ color: 'var(--color-2)' }}>
                             <i className="bi bi-c-circle me-1"></i>
                             2025 Steamish Gaming Platform. Todos los derechos reservados.
                         </small>
                     </Col>
                     <Col md={6} className="text-md-end">
-                        <small className="text-muted">
+                        <small style={{ color: 'var(--color-2)' }}>
                             <i className="bi bi-heart-fill text-danger me-1"></i>
                             Creado para la comunidad gamer mundial
                         </small>

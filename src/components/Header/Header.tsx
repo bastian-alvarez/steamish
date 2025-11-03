@@ -12,14 +12,13 @@ const Header: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const navigate = useNavigate();
 
-    // Navigation items con interfaces
+    // Navigation items con interfaces (Admin removido - solo accesible con credenciales)
     const navItems: NavigationItem[] = [
         { to: '/', icon: 'house-door', label: 'Inicio', color: 'info' },
         { to: '/productos', icon: 'grid-3x3-gap', label: 'Productos', color: 'info' },
         { to: '/blogs', icon: 'journal-text', label: 'Blog', color: 'info' },
         { to: '/nosotros', icon: 'people', label: 'Nosotros', color: 'info' },
-        { to: '/contacto', icon: 'envelope', label: 'Contacto', color: 'light' },
-        { to: '/admin', icon: 'gear', label: 'Admin', color: 'info' }
+        { to: '/contacto', icon: 'envelope', label: 'Contacto', color: 'light' }
     ];
 
     const handleQuickSearch = (e: React.FormEvent) => {

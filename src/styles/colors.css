@@ -2,26 +2,27 @@
 
 /* Variables CSS */
 :root {
-  --color-1: #d1c7e1;
-  --color-2: #a5a6d9;
-  --color-3: #7788c0;
-  --color-4: #4b4c9b;
-  --color-5: #2c2d68;
+  --color-1: #1c1f3b;
+  --color-2: #282c4d;
+  --color-3: #3c3f68;
+  --color-4: #4d4d80;
+  --color-5: #606271;
   
   /* Colores para uso en componentes */
-  --primary: var(--color-4);      /* Color principal: #4b4c9b */
-  --primary-dark: var(--color-5);  /* Color oscuro: #2c2d68 */
-  --primary-light: var(--color-3); /* Color claro: #7788c0 */
-  --secondary: var(--color-2);     /* Color secundario: #a5a6d9 */
-  --accent: var(--color-1);        /* Color de acento: #d1c7e1 */
+  --primary: var(--color-4);      /* Color principal: #4d4d80 */
+  --primary-dark: var(--color-1);  /* Color oscuro: #1c1f3b */
+  --primary-light: var(--color-3); /* Color claro: #3c3f68 */
+  --secondary: var(--color-2);     /* Color secundario: #282c4d */
+  --accent: var(--color-5);        /* Color de acento: #606271 */
   
-  /* Colores de texto */
-  --text-primary: var(--color-5);
-  --text-secondary: var(--color-4);
-  --text-light: var(--color-1);
+  /* Colores de texto - Letras blancas para contraste */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.9);
+  --text-light: rgba(255, 255, 255, 0.85);
+  --text-muted: rgba(255, 255, 255, 0.7);
   
   /* Gradientes */
-  --gradient-primary: linear-gradient(135deg, var(--color-4) 0%, var(--color-5) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--color-4) 0%, var(--color-1) 100%);
   --gradient-light: linear-gradient(135deg, var(--color-2) 0%, var(--color-3) 100%);
   --gradient-accent: linear-gradient(135deg, var(--color-3) 0%, var(--color-4) 100%);
 }
@@ -46,7 +47,7 @@
 }
 
 .text-primary {
-  color: var(--primary) !important;
+  color: var(--text-primary) !important;
 }
 
 .btn-primary {
@@ -87,7 +88,7 @@
 
 /* Enlaces */
 a.text-primary {
-  color: var(--primary) !important;
+  color: var(--text-primary) !important;
 }
 
 a.text-primary:hover {

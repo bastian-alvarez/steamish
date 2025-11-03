@@ -5,7 +5,7 @@ import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { Product } from '../../types/Product';
 
-// 🏠 Home con interfaces y useContext mejorado
+// 🏠 Home con diseño mejorado
 const Home: React.FC = () => {
     const { featuredProducts } = useProducts();
     const cart = useCart();
@@ -57,52 +57,133 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div className="bg-light min-vh-100">
-            {/* 🎯 Hero Section Compacto */}
-            <section className="bg-primary text-white py-5" style={{ background: 'var(--gradient-primary)' }}>
-                <Container>
-                    <Row className="align-items-center min-vh-75">
-                        <Col lg={6} className="text-center text-lg-start">
-                            <h1 className="display-3 fw-bold mb-4">
-                                <i className="bi bi-controller me-3" style={{ color: 'var(--color-1)' }}></i>
-                                Descubre Juegos
-                                <span className="d-block" style={{ color: 'var(--color-1)' }}>Increíbles</span>
-                            </h1>
-                            <p className="lead mb-4 fs-5">
-                                La plataforma gaming más hermosa del mundo. Encuentra, explora y juega 
-                                los mejores videojuegos con una experiencia visual espectacular.
+        <div className="min-vh-100">
+            {/* 🎯 Hero Section Mejorado */}
+            <section className="text-white py-5 position-relative overflow-hidden" style={{ background: 'var(--gradient-primary)', minHeight: '85vh' }}>
+                {/* Elementos decorativos de fondo */}
+                <div className="position-absolute top-0 start-0 w-100 h-100" style={{ 
+                    background: 'radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)',
+                    pointerEvents: 'none'
+                }}></div>
+                
+                <Container className="position-relative" style={{ zIndex: 1 }}>
+                    <Row className="align-items-center min-vh-75 py-5">
+                        <Col lg={6} className="text-center text-lg-start mb-5 mb-lg-0">
+                            <div className="mb-4">
+                                <h1 className="display-3 fw-bold mb-3 text-white" style={{ lineHeight: '1.2' }}>
+                                    <i className="bi bi-controller me-3 d-inline-block" style={{ fontSize: '3rem' }}></i>
+                                    <span className="d-block mt-2">Descubre Juegos</span>
+                                    <span className="d-block text-white">Increíbles</span>
+                                </h1>
+                            </div>
+                            <p className="lead mb-4 text-white" style={{ 
+                                opacity: 0.95, 
+                                fontSize: '1.25rem',
+                                lineHeight: '1.6',
+                                maxWidth: '90%'
+                            }}>
+                                La plataforma gaming más hermosa del mundo. Encuentra, explora y juega los mejores videojuegos con una experiencia visual espectacular.
                             </p>
                             <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                 <Link 
                                     to="/productos" 
-                                    className="btn btn-lg fw-bold px-4"
-                                    style={{ background: 'var(--color-2)', borderColor: 'var(--color-2)', color: 'var(--color-5)' }}
+                                    className="btn btn-lg fw-bold px-5 py-3 rounded-3 text-decoration-none"
+                                    style={{ 
+                                        background: 'rgba(255, 255, 255, 0.15)',
+                                        border: '2px solid rgba(255, 255, 255, 0.3)',
+                                        color: 'white',
+                                        backdropFilter: 'blur(10px)',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                                        e.currentTarget.style.transform = 'translateY(-3px)';
+                                        e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = 'none';
+                                    }}
                                 >
                                     <i className="bi bi-grid-3x3-gap me-2"></i>Explorar Juegos
                                 </Link>
                                 <Link 
                                     to="/nosotros" 
-                                    className="btn btn-outline-light btn-lg fw-bold px-4"
-                                    style={{ borderColor: 'var(--color-1)', color: 'var(--color-1)' }}
+                                    className="btn btn-outline-light btn-lg fw-bold px-5 py-3 rounded-3 text-decoration-none"
+                                    style={{ 
+                                        borderWidth: '2px',
+                                        borderColor: 'rgba(255, 255, 255, 0.5)',
+                                        color: 'white',
+                                        background: 'transparent',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+                                        e.currentTarget.style.transform = 'translateY(-3px)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = 'transparent';
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                    }}
                                 >
                                     <i className="bi bi-people me-2"></i>Conocer Más
                                 </Link>
                             </div>
                         </Col>
                         
+                        {/* Card Premium - Mejorado */}
                         <Col lg={6} className="text-center mt-5 mt-lg-0">
-                            <Card className="shadow-lg border-0 mx-auto" style={{ maxWidth: '350px' }}>
-                                <Card.Body className="p-4">
-                                    <div className="rounded-3 p-4 mb-3" style={{ background: 'var(--gradient-primary)' }}>
-                                        <i className="bi bi-joystick display-1 text-white"></i>
-                                    </div>
-                                    <Card.Title className="h4" style={{ color: 'var(--color-4)' }}>Juegos Premium</Card.Title>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                        <Badge className="me-2" style={{ background: 'var(--color-3)', color: 'white' }}>
+                            <Card className="border-0 shadow-lg mx-auto" style={{ 
+                                maxWidth: '380px',
+                                borderRadius: '20px',
+                                overflow: 'hidden',
+                                transition: 'transform 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-10px)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                            }}
+                            >
+                                {/* Icon Area */}
+                                <div 
+                                    className="p-5 d-flex align-items-center justify-content-center"
+                                    style={{ 
+                                        background: 'var(--gradient-primary)',
+                                        minHeight: '200px'
+                                    }}
+                                >
+                                    <i className="bi bi-joystick text-white" style={{ fontSize: '5rem' }}></i>
+                                </div>
+                                
+                                <Card.Body className="p-5">
+                                    <Card.Title className="h3 mb-3 fw-bold" style={{ color: 'var(--color-1)', fontSize: '1.75rem' }}>
+                                        Juegos Premium
+                                    </Card.Title>
+                                    <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
+                                        <Badge 
+                                            className="px-3 py-2 rounded-pill" 
+                                            style={{ 
+                                                background: 'var(--gradient-primary)',
+                                                color: 'white',
+                                                fontSize: '1rem'
+                                            }}
+                                        >
                                             <i className="bi bi-star-fill me-1"></i>5.0
                                         </Badge>
-                                        <small className="text-muted">+10,000 juegos disponibles</small>
+                                        <small className="text-muted" style={{ fontSize: '0.95rem' }}>
+                                            +10,000 juegos disponibles
+                                        </small>
                                     </div>
+                                    <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
+                                        Accede a nuestra biblioteca completa de títulos seleccionados
+                                    </p>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -110,60 +191,155 @@ const Home: React.FC = () => {
                 </Container>
             </section>
 
-            {/* 🎮 Featured Games Simplificado */}
-            <section className="py-5">
+            {/* 🎮 Featured Games Section - Mejorado */}
+            <section className="py-5" style={{ background: '#f8f9fa' }}>
                 <Container>
                     <Row className="mb-5 text-center">
                         <Col>
-                            <h2 className="display-5 fw-bold mb-3" style={{ color: 'var(--color-4)' }}>
-                                <i className="bi bi-fire me-3" style={{ color: 'var(--color-3)' }}></i>Juegos Destacados
+                            <h2 className="display-5 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
+                                <i className="bi bi-fire me-3" style={{ color: 'var(--color-4)' }}></i>
+                                Juegos Destacados
                             </h2>
-                            <p className="lead text-muted">Los títulos más populares de la temporada</p>
+                            <p className="lead text-muted mb-0">Los títulos más populares de la temporada</p>
                         </Col>
                     </Row>
 
                     <Row className="g-4">
                         {featuredGames.map(game => (
                             <Col key={game.id} lg={4} md={6}>
-                                <Card className="h-100 border-0 shadow-sm hover-effect">
-                                    <Card.Img 
-                                        variant="top" 
-                                        src={game.image || 'https://via.placeholder.com/300x200'} 
-                                        alt={game.name} 
-                                        style={{ height: '200px', objectFit: 'cover' }} 
-                                    />
-                                    <Card.Body className="d-flex flex-column">
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <Badge style={{ background: 'var(--color-3)' }}>{game.category}</Badge>
-                                            {game.discount > 0 && <Badge bg="danger">-{game.discount}%</Badge>}
-                                        </div>
-                                        <Card.Title className="h5" style={{ color: 'var(--color-4)' }}>{game.name}</Card.Title>
+                                <Card className="h-100 border-0 shadow-sm position-relative" style={{ 
+                                    borderRadius: '20px',
+                                    overflow: 'hidden',
+                                    transition: 'all 0.3s ease',
+                                    backgroundColor: 'white'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-10px)';
+                                    e.currentTarget.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.15)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                                }}
+                                >
+                                    {/* Imagen del juego */}
+                                    <div style={{ 
+                                        position: 'relative', 
+                                        overflow: 'hidden',
+                                        backgroundColor: '#f8f9fa',
+                                        height: '280px'
+                                    }}>
+                                        <img 
+                                            src={game.image} 
+                                            alt={game.name}
+                                            className="w-100 h-100"
+                                            style={{ 
+                                                objectFit: 'cover',
+                                                transition: 'transform 0.4s ease',
+                                                backgroundColor: '#e9ecef'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1.08)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                            }}
+                                            loading="lazy"
+                                        />
+                                        
+                                        {/* Badge de descuento */}
+                                        {game.discount > 0 && (
+                                            <Badge 
+                                                bg="danger" 
+                                                className="position-absolute top-0 end-0 m-3 px-3 py-2 fw-bold"
+                                                style={{ 
+                                                    fontSize: '1rem', 
+                                                    borderRadius: '25px',
+                                                    zIndex: 10,
+                                                    boxShadow: '0 4px 10px rgba(220, 53, 69, 0.4)'
+                                                }}
+                                            >
+                                                -{game.discount}%
+                                            </Badge>
+                                        )}
+                                        
+                                        {/* Badge de categoría */}
+                                        <Badge 
+                                            className="position-absolute top-0 start-0 m-3 px-3 py-2 fw-semibold"
+                                            style={{ 
+                                                background: 'rgba(255, 255, 255, 0.9)',
+                                                color: 'var(--color-1)',
+                                                fontSize: '0.85rem',
+                                                borderRadius: '20px',
+                                                zIndex: 10,
+                                                backdropFilter: 'blur(10px)'
+                                            }}
+                                        >
+                                            {game.category}
+                                        </Badge>
+                                    </div>
+                                    
+                                    <Card.Body className="d-flex flex-column p-4">
+                                        <Card.Title className="h5 mb-3 fw-bold" style={{ 
+                                            color: 'var(--color-1)', 
+                                            fontSize: '1.25rem',
+                                            lineHeight: '1.4',
+                                            minHeight: '3rem'
+                                        }}>
+                                            {game.name}
+                                        </Card.Title>
+                                        
+                                        {/* Rating */}
                                         <div className="d-flex align-items-center mb-3">
-                                            <div className="text-warning me-2">
+                                            <div className="text-warning me-2" style={{ fontSize: '1.1rem' }}>
                                                 {[...Array(5)].map((_, i) => (
-                                                    <i key={i} className={`bi bi-star${i < Math.floor(game.rating) ? '-fill' : ''}`}></i>
+                                                    <i key={i} className={`bi bi-star${i < Math.floor(game.rating) ? '-fill' : i < game.rating ? '-half' : ''}`}></i>
                                                 ))}
                                             </div>
-                                            <small className="text-muted">({game.rating})</small>
+                                            <span className="fw-bold text-muted" style={{ fontSize: '0.95rem' }}>
+                                                {game.rating}
+                                            </span>
                                         </div>
+                                        
                                         <div className="mt-auto">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <div>
-                                                    {game.discount > 0 ? (
-                                                        <>
-                                                            <span className="text-muted text-decoration-line-through me-2">${game.price}</span>
-                                                            <span className="h5 text-success mb-0">${(game.price * (1 - game.discount / 100)).toFixed(2)}</span>
-                                                        </>
-                                                    ) : (
-                                                        <span className="h5 text-success mb-0">${game.price}</span>
-                                                    )}
-                                                </div>
+                                            {/* Precio */}
+                                            <div className="mb-3">
+                                                {game.discount > 0 ? (
+                                                    <div className="d-flex align-items-baseline gap-2">
+                                                        <span className="text-muted text-decoration-line-through" style={{ fontSize: '1rem' }}>
+                                                            ${game.price.toFixed(2)}
+                                                        </span>
+                                                        <span className="h4 text-success mb-0 fw-bold">
+                                                            ${(game.price * (1 - game.discount / 100)).toFixed(2)}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="h4 text-success mb-0 fw-bold">
+                                                        ${game.price.toFixed(2)}
+                                                    </span>
+                                                )}
                                             </div>
+                                            
+                                            {/* Botón */}
                                             <Button 
                                                 variant="primary" 
-                                                className="w-100"
+                                                className="w-100 fw-bold rounded-3 py-3"
                                                 onClick={() => handleAddToCart(game)}
-                                                style={{ background: 'var(--gradient-primary)', border: 'none' }}
+                                                style={{ 
+                                                    background: 'var(--gradient-primary)', 
+                                                    border: 'none',
+                                                    color: 'white',
+                                                    fontSize: '1rem',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(-3px)';
+                                                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(28, 31, 59, 0.35)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(0)';
+                                                    e.currentTarget.style.boxShadow = 'none';
+                                                }}
                                             >
                                                 <i className="bi bi-cart-plus me-2"></i>Agregar al Carrito
                                             </Button>
@@ -175,9 +351,6 @@ const Home: React.FC = () => {
                     </Row>
                 </Container>
             </section>
-
-            {/* 🎨 CSS Inline Minimalista */}
-            <style>{`.hover-effect:hover { transform: translateY(-5px); transition: all 0.3s ease; }`}</style>
         </div>
     );
 };

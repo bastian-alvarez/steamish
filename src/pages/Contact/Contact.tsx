@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 
-// 📞 Contact Simplificado - Código Mínimo
+// 📞 Contact - Diseño Moderno Mejorado
 const Contact: React.FC = () => {
     const [form, setForm] = useState({ name: '', email: '', message: '' });
     const [success, setSuccess] = useState(false);
@@ -10,57 +10,98 @@ const Contact: React.FC = () => {
         e.preventDefault();
         console.log('✅ Mensaje enviado:', form);
         setSuccess(true);
-        setTimeout(() => setSuccess(false), 3000);
+        setTimeout(() => setSuccess(false), 5000);
         setForm({ name: '', email: '', message: '' });
     };
 
     const contactData = [
-        { icon: 'envelope', title: 'Email', desc: 'hello@steamish.com', bg: 'primary' },
-        { icon: 'discord', title: 'Discord', desc: 'Steamish Gaming Community', bg: 'info' },
-        { icon: 'lightning', title: 'Respuesta', desc: 'En menos de 24 horas', bg: 'warning' }
+        { 
+            icon: 'envelope-check', 
+            title: 'Email', 
+            desc: 'hello@steamish.com',
+            color: '#0d6efd'
+        },
+        { 
+            icon: 'discord', 
+            title: 'Discord', 
+            desc: 'Steamish Gaming Community',
+            color: '#5865F2'
+        },
+        { 
+            icon: 'lightning-charge', 
+            title: 'Respuesta', 
+            desc: 'En menos de 24 horas',
+            color: '#FFC107'
+        }
     ];
 
     return (
-        <div className="min-vh-100" style={{ background: 'var(--gradient-primary)' }}>
-            {/* Hero Section */}
-            <div className="bg-primary text-white py-5" style={{ background: 'var(--gradient-primary)' }}>
-                <Container>
-                    <Row className="justify-content-center text-center">
-                        <Col lg={8}>
-                            <h1 className="display-4 fw-bold mb-3">
-                                <i className="bi bi-telephone me-3"></i>Contáctanos
-                            </h1>
-                            <p className="lead">¿Tienes preguntas? ¡Nos encantaría ayudarte!</p>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-
+        <div className="min-vh-100" style={{ background: 'var(--gradient-primary)', paddingBottom: '3rem' }}>
             <Container className="py-5">
                 <Row className="justify-content-center">
-                    <Col lg={10}>
-                        <Row className="g-5">
-                            {/* Info de contacto */}
-                            <Col lg={6}>
-                                <Card className="border-0 shadow-lg h-100">
-                                    <Card.Body className="p-4">
-                                        <h2 className="mb-4" style={{ color: 'var(--color-4)' }}>
-                                            <i className="bi bi-chat-dots me-2"></i>Hablemos
-                                        </h2>
-                                        <p className="text-muted mb-4">
-                                            Nuestro equipo gaming está aquí para resolver todas tus dudas.
-                                        </p>
+                    <Col lg={11}>
+                        <Row className="g-4">
+                            {/* Panel Izquierdo - Información de Contacto */}
+                            <Col lg={5}>
+                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                                    <Card.Body className="p-5">
+                                        <div className="mb-4">
+                                            <div className="d-flex align-items-center mb-3">
+                                                <div 
+                                                    className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                    style={{ 
+                                                        width: '60px', 
+                                                        height: '60px',
+                                                        background: 'var(--gradient-primary)'
+                                                    }}
+                                                >
+                                                    <i className="bi bi-chat-dots-fill text-white" style={{ fontSize: '1.5rem' }}></i>
+                                                </div>
+                                                <h2 className="mb-0 fw-bold" style={{ color: 'var(--color-1)', fontSize: '2rem' }}>
+                                                    Hablemos
+                                                </h2>
+                                            </div>
+                                            <p className="text-muted mb-0" style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                                Nuestro equipo gaming está aquí para resolver todas tus dudas.
+                                            </p>
+                                        </div>
                                         
-                                        <div className="d-flex flex-column gap-4">
-                                            {contactData.map(item => (
-                                                <div key={item.title} className="d-flex align-items-center">
-                                                    <div className={`bg-${item.bg} text-white rounded-circle d-flex align-items-center justify-content-center me-3`} 
-                                                         style={{ width: '50px', height: '50px' }}>
-                                                        <i className={`bi bi-${item.icon}`}></i>
+                                        <div className="d-flex flex-column gap-4 mt-5">
+                                            {contactData.map((item, index) => (
+                                                <div 
+                                                    key={item.title} 
+                                                    className="d-flex align-items-center p-3 rounded-3"
+                                                    style={{ 
+                                                        transition: 'all 0.3s ease',
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.02)'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
+                                                        e.currentTarget.style.transform = 'translateX(5px)';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.02)';
+                                                        e.currentTarget.style.transform = 'translateX(0)';
+                                                    }}
+                                                >
+                                                    <div 
+                                                        className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-4"
+                                                        style={{ 
+                                                            width: '60px', 
+                                                            height: '60px',
+                                                            backgroundColor: item.color,
+                                                            boxShadow: `0 4px 15px rgba(${item.color === '#0d6efd' ? '13, 110, 253' : item.color === '#5865F2' ? '88, 101, 242' : '255, 193, 7'}, 0.3)`
+                                                        }}
+                                                    >
+                                                        <i className={`bi bi-${item.icon} text-white`} style={{ fontSize: '1.5rem' }}></i>
                                                     </div>
-                                                    <div>
-                                                        <h5 className="mb-1">{item.title}</h5>
-                                                        <p className="text-muted mb-0">{item.desc}</p>
+                                                    <div className="flex-grow-1">
+                                                        <h5 className="mb-1 fw-bold" style={{ color: 'var(--color-1)', fontSize: '1.1rem' }}>
+                                                            {item.title}
+                                                        </h5>
+                                                        <p className="text-muted mb-0" style={{ fontSize: '0.95rem' }}>
+                                                            {item.desc}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -69,66 +110,131 @@ const Contact: React.FC = () => {
                                 </Card>
                             </Col>
 
-                            {/* Formulario simplificado */}
-                            <Col lg={6}>
-                                <Card className="border-0 shadow-lg h-100">
-                                    <Card.Body className="p-4">
-                                        <h2 className="mb-4" style={{ color: 'var(--color-4)' }}>
-                                            <i className="bi bi-envelope-plus me-2"></i>Envíanos un mensaje
-                                        </h2>
+                            {/* Panel Derecho - Formulario */}
+                            <Col lg={7}>
+                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                                    <Card.Body className="p-5">
+                                        <div className="d-flex align-items-center mb-4">
+                                            <div 
+                                                className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                style={{ 
+                                                    width: '60px', 
+                                                    height: '60px',
+                                                    background: 'var(--gradient-primary)'
+                                                }}
+                                            >
+                                                <i className="bi bi-envelope-plus-fill text-white" style={{ fontSize: '1.5rem' }}></i>
+                                            </div>
+                                            <h2 className="mb-0 fw-bold" style={{ color: 'var(--color-1)', fontSize: '2rem' }}>
+                                                Envíanos un mensaje
+                                            </h2>
+                                        </div>
                                         
                                         {success && (
-                                            <Alert variant="success" className="d-flex align-items-center">
-                                                <i className="bi bi-check-circle me-2"></i>
-                                                ¡Mensaje enviado con éxito!
+                                            <Alert 
+                                                variant="success" 
+                                                className="d-flex align-items-center mb-4 rounded-3"
+                                                style={{ 
+                                                    border: 'none',
+                                                    backgroundColor: '#d1e7dd',
+                                                    color: '#0f5132'
+                                                }}
+                                            >
+                                                <i className="bi bi-check-circle-fill me-2" style={{ fontSize: '1.2rem' }}></i>
+                                                <span className="fw-semibold">¡Mensaje enviado con éxito! Te responderemos pronto.</span>
                                             </Alert>
                                         )}
 
                                         <Form onSubmit={handleSubmit}>
                                             {[
-                                                { field: 'name', icon: 'person', label: 'Nombre', type: 'text', placeholder: 'Tu nombre' },
-                                                { field: 'email', icon: 'envelope', label: 'Email', type: 'email', placeholder: 'tu@email.com' }
+                                                { field: 'name', icon: 'person-fill', label: 'Nombre', type: 'text', placeholder: 'Tu nombre' },
+                                                { field: 'email', icon: 'envelope-fill', label: 'Email', type: 'email', placeholder: 'tu@email.com' }
                                             ].map(({ field, icon, label, type, placeholder }) => (
-                                                <div key={field} className="mb-3">
-                                                    <Form.Label className="fw-bold" style={{ color: 'var(--color-4)' }}>
-                                                        <i className={`bi bi-${icon} me-1`}></i>{label}
+                                                <div key={field} className="mb-4">
+                                                    <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: 'var(--color-1)', fontSize: '1rem' }}>
+                                                        <i className={`bi bi-${icon} me-2`} style={{ color: 'var(--color-4)' }}></i>
+                                                        {label}
                                                     </Form.Label>
                                                     <Form.Control
                                                         type={type}
+                                                        name={field}
                                                         placeholder={placeholder}
                                                         value={form[field as keyof typeof form]}
                                                         onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
-                                                        className="border-2"
-                                                        style={{ borderColor: '#0d6efd' }}
+                                                        className="border-2 rounded-3"
+                                                        style={{ 
+                                                            borderColor: 'var(--color-3)',
+                                                            padding: '0.75rem 1rem',
+                                                            fontSize: '1rem',
+                                                            transition: 'all 0.3s ease'
+                                                        }}
+                                                        onFocus={(e) => {
+                                                            e.currentTarget.style.borderColor = 'var(--color-4)';
+                                                            e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            e.currentTarget.style.borderColor = 'var(--color-3)';
+                                                            e.currentTarget.style.boxShadow = 'none';
+                                                        }}
                                                         required
                                                     />
                                                 </div>
                                             ))}
                                             
-                                            <div className="mb-3">
-                                                <Form.Label className="fw-bold text-primary">
-                                                    <i className="bi bi-chat-text me-1"></i>Mensaje
+                                            <div className="mb-4">
+                                                <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: 'var(--color-1)', fontSize: '1rem' }}>
+                                                    <i className="bi bi-chat-left-text-fill me-2" style={{ color: 'var(--color-4)' }}></i>
+                                                    Mensaje
                                                 </Form.Label>
                                                 <Form.Control
                                                     as="textarea"
-                                                    rows={5}
+                                                    name="message"
+                                                    rows={6}
                                                     placeholder="Tu mensaje..."
                                                     value={form.message}
                                                     onChange={(e) => setForm(prev => ({ ...prev, message: e.target.value }))}
-                                                    className="border-2"
-                                                    style={{ borderColor: '#0d6efd' }}
+                                                    className="border-2 rounded-3"
+                                                    style={{ 
+                                                        borderColor: 'var(--color-3)',
+                                                        padding: '0.75rem 1rem',
+                                                        fontSize: '1rem',
+                                                        resize: 'vertical',
+                                                        transition: 'all 0.3s ease'
+                                                    }}
+                                                    onFocus={(e) => {
+                                                        e.currentTarget.style.borderColor = 'var(--color-4)';
+                                                        e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
+                                                    }}
+                                                    onBlur={(e) => {
+                                                        e.currentTarget.style.borderColor = 'var(--color-3)';
+                                                        e.currentTarget.style.boxShadow = 'none';
+                                                    }}
                                                     required
                                                 />
                                             </div>
 
                                             <Button 
                                                 type="submit" 
-                                                variant="primary" 
                                                 size="lg" 
-                                                className="w-100 fw-bold"
-                                                style={{ background: 'linear-gradient(135deg, #0d6efd, #6610f2)', border: 'none' }}
+                                                className="w-100 fw-bold rounded-3 py-3"
+                                                style={{ 
+                                                    background: 'var(--gradient-primary)', 
+                                                    border: 'none',
+                                                    color: 'white',
+                                                    fontSize: '1.1rem',
+                                                    boxShadow: '0 4px 15px rgba(28, 31, 59, 0.3)',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(28, 31, 59, 0.4)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(0)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 31, 59, 0.3)';
+                                                }}
                                             >
-                                                <i className="bi bi-send me-2"></i>Enviar Mensaje
+                                                <i className="bi bi-send-fill me-2"></i>Enviar Mensaje
                                             </Button>
                                         </Form>
                                     </Card.Body>

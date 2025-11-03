@@ -84,7 +84,7 @@ const Cart: React.FC<CartProps> = ({
                         </ListGroup>
 
                         <div className="border-top pt-3">
-                            <h4 className="mb-0 text-primary fw-bold">
+                            <h4 className="mb-0 fw-bold" style={{ color: 'var(--color-1)' }}>
                                 Total: ${totalPrice.toFixed(2)}
                             </h4>
                         </div>

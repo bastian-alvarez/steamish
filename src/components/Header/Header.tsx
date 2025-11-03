@@ -55,7 +55,7 @@ const Header: React.FC = () => {
                             className="bi bi-controller me-2" 
                             style={{ 
                                 fontSize: '1.75rem',
-                                color: 'var(--color-1)'
+                                color: 'rgba(255, 255, 255, 0.95)'
                             }}
                         ></i>
                         <span>Steamish</span>
@@ -96,7 +96,7 @@ const Header: React.FC = () => {
                                 >
                                     <i 
                                         className={`bi bi-${item.icon} me-1`}
-                                        style={{ fontSize: '0.9rem', color: 'var(--color-2)' }}
+                                        style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)' }}
                                     ></i>
                                     {item.label}
                                 </Nav.Link>
@@ -130,12 +130,12 @@ const Header: React.FC = () => {
                                 <Button 
                                     type="submit" 
                                     size="sm"
-                                    style={{ 
-                                        background: 'var(--color-3)',
-                                        borderColor: 'var(--color-3)',
-                                        color: 'white',
-                                        borderLeft: 'none'
-                                    }}
+                                style={{ 
+                                    background: 'rgba(255, 255, 255, 0.2)',
+                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                    color: 'white',
+                                    borderLeft: 'none'
+                                }}
                                 >
                                     <i className="bi bi-search"></i>
                                 </Button>
@@ -167,18 +167,18 @@ const Header: React.FC = () => {
                                 className="position-relative btn-sm"
                                 onClick={() => setIsCartOpen(!isCartOpen)}
                                 style={{ 
-                                    background: 'var(--color-2)',
-                                    borderColor: 'var(--color-2)',
-                                    color: 'var(--color-5)',
+                                    background: 'rgba(255, 255, 255, 0.2)',
+                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                    color: 'white',
                                     fontWeight: '600'
                                 }}
                                 onMouseEnter={(e) => {
-                                    e.currentTarget.style.background = 'var(--color-1)';
-                                    e.currentTarget.style.borderColor = 'var(--color-1)';
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
                                 }}
                                 onMouseLeave={(e) => {
-                                    e.currentTarget.style.background = 'var(--color-2)';
-                                    e.currentTarget.style.borderColor = 'var(--color-2)';
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
                                 }}
                             >
                                 <i className="bi bi-cart3 me-1"></i>Carrito

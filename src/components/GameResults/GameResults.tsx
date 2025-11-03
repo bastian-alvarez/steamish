@@ -152,7 +152,7 @@ const GameResults: React.FC<GameResultsProps> = ({
 
                         <Card.Body className="p-4">
                             {/* 📝 TÍTULO DEL JUEGO */}
-                            <Card.Title className="h5 text-primary fw-bold mb-2">
+                            <Card.Title className="h5 fw-bold mb-2" style={{ color: 'var(--color-1)' }}>
                                 {highlightSearchTerm(product.name, searchTerm)}
                             </Card.Title>
 
@@ -166,7 +166,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 <div className="me-2">
                                     {renderStars(product.rating)}
                                 </div>
-                                <span className="fw-bold text-primary">{product.rating}</span>
+                                <span className="fw-bold" style={{ color: 'var(--color-1)' }}>{product.rating}</span>
                                 <small className="text-muted ms-1">({Math.floor(Math.random() * 1000) + 100} reseñas)</small>
                             </div>
 
@@ -206,7 +206,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                     size="sm"
                                     onClick={() => onGameSelect?.(product)}
                                     className="fw-bold"
-                                    style={{ background: 'var(--color-4)', borderColor: 'var(--color-4)' }}
+                                    style={{ background: 'var(--gradient-primary)', borderColor: 'var(--color-4)', color: 'white' }}
                                 >
                                     <i className="bi bi-cart-plus me-1"></i>
                                     Agregar

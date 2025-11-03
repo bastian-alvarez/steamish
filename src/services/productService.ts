@@ -1,12 +1,13 @@
 import { Product } from '../types/Product';
+import { getAvatarPorNombre } from '../mock-data/juegosMocks';
 
-// 🎮 DATOS COMPLETOS PARA LA NUEVA INTERFAZ
+// 🎮 DATOS COMPLETOS CON IMÁGENES REALES
 const games: Product[] = [
     { 
         id: '1', 
         name: 'Cyberpunk 2077', 
         price: 59.99, 
-        image: 'https://via.placeholder.com/300x400/FF6B6B/white?text=Cyberpunk', 
+        image: getAvatarPorNombre('Cyberpunk 2077'), 
         rating: 4.2, 
         discount: 15,
         category: 'Acción',
@@ -18,7 +19,7 @@ const games: Product[] = [
         id: '2', 
         name: 'The Witcher 3', 
         price: 39.99, 
-        image: 'https://via.placeholder.com/300x400/4ECDC4/white?text=Witcher', 
+        image: getAvatarPorNombre('The Witcher 3'), 
         rating: 4.8, 
         discount: 20,
         category: 'Aventura',
@@ -30,7 +31,7 @@ const games: Product[] = [
         id: '3', 
         name: 'Minecraft', 
         price: 26.95, 
-        image: 'https://via.placeholder.com/300x400/45B7D1/white?text=Minecraft', 
+        image: getAvatarPorNombre('Minecraft'), 
         rating: 4.5, 
         discount: 0,
         category: 'Simulación',
@@ -42,7 +43,7 @@ const games: Product[] = [
         id: '4', 
         name: 'GTA V', 
         price: 29.99, 
-        image: 'https://via.placeholder.com/300x400/96CEB4/white?text=GTA+V', 
+        image: getAvatarPorNombre('GTA V'), 
         rating: 4.6, 
         discount: 25,
         category: 'Acción',
@@ -54,7 +55,7 @@ const games: Product[] = [
         id: '5', 
         name: 'Elden Ring', 
         price: 69.99, 
-        image: 'https://via.placeholder.com/300x400/FECA57/white?text=Elden+Ring', 
+        image: getAvatarPorNombre('Elden Ring'), 
         rating: 4.9, 
         discount: 10,
         category: 'Aventura',
@@ -66,7 +67,7 @@ const games: Product[] = [
         id: '6', 
         name: 'Spider-Man', 
         price: 49.99, 
-        image: 'https://via.placeholder.com/300x400/FF9FF3/white?text=Spider-Man', 
+        image: getAvatarPorNombre('Spider-Man'), 
         rating: 4.7, 
         discount: 30,
         category: 'Acción',

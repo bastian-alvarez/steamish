@@ -124,10 +124,23 @@ const GameResults: React.FC<GameResultsProps> = ({
 
                         {/* 🎮 IMAGEN DEL JUEGO */}
                         <div className="position-relative">
-                            <div className="bg-primary d-flex align-items-center justify-content-center" 
-                                 style={{ height: '200px' }}>
-                                <i className="bi bi-controller display-1 text-white"></i>
-                            </div>
+                            <Card.Img 
+                                variant="top" 
+                                src={product.image} 
+                                alt={product.name}
+                                style={{ height: '200px', objectFit: 'cover' }}
+                                onError={(e) => {
+                                    // Fallback si la imagen no carga
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.display = 'none';
+                                    target.parentElement!.innerHTML = `
+                                        <div class="bg-primary d-flex align-items-center justify-content-center" 
+                                             style="height: 200px;">
+                                            <i class="bi bi-controller display-1 text-white"></i>
+                                        </div>
+                                    `;
+                                }}
+                            />
                         </div>
 
                         <Card.Body className="p-4">

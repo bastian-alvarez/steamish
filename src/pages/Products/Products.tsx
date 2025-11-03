@@ -37,6 +37,18 @@ const Products: React.FC = () => {
         setSearchResult(result);
     };
 
+    // 🔄 Inicializar con todos los productos al cargar
+    useEffect(() => {
+        if (products.length > 0 && searchResult.products.length === 0 && !initialSearchTerm) {
+            setSearchResult({
+                products: products,
+                totalCount: products.length,
+                filteredCount: products.length,
+                searchTerm: ''
+            });
+        }
+    }, [products, searchResult.products.length, initialSearchTerm]);
+
     return (
         <div className="bg-light min-vh-100">
             {/* Header */}
@@ -44,10 +56,10 @@ const Products: React.FC = () => {
                 <Container>
                     <Row>
                         <Col className="text-center">
-                            <h1 className="display-4 fw-bold mb-3">
-                                <i className="bi bi-controller me-3" style={{ color: 'var(--color-1)' }}></i>Catálogo de Juegos
+                            <h1 className="display-4 fw-bold mb-3 text-white">
+                                <i className="bi bi-controller me-3"></i>Catálogo de Juegos
                             </h1>
-                            <p className="lead">Encuentra tu próximo juego favorito</p>
+                            <p className="lead text-white">Encuentra tu próximo juego favorito</p>
                         </Col>
                     </Row>
                 </Container>
@@ -64,7 +76,7 @@ const Products: React.FC = () => {
 
             <Container className="py-4">
                 <GameResults 
-                    products={searchResult.products}
+                    products={searchResult.products.length > 0 ? searchResult.products : products}
                     searchTerm={searchResult.searchTerm}
                     onGameSelect={handleGameSelect}
                 />

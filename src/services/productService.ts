@@ -77,6 +77,9 @@ const games: Product[] = [
     }
 ];
 
+// Debug: Verificar que las imágenes se carguen correctamente
+console.log('🎮 Productos cargados con imágenes:', games.map(g => ({ name: g.name, image: g.image })));
+
 // 🚀 SERVICIO SÚPER SIMPLE - Una sola función
 const productService = {
     getAllProducts: () => games

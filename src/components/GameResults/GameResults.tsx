@@ -123,31 +123,29 @@ const GameResults: React.FC<GameResultsProps> = ({
                         )}
 
                         {/* 🎮 IMAGEN DEL JUEGO */}
-                        <div className="position-relative" style={{ height: '200px', overflow: 'hidden' }}>
+                        <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
                             <img 
-                                src={product.image} 
+                                src={product.image || 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=Game'} 
                                 alt={product.name}
                                 className="img-fluid w-100 h-100"
                                 style={{ 
                                     objectFit: 'cover',
-                                    backgroundColor: '#f8f9fa'
+                                    transition: 'transform 0.3s ease',
+                                    backgroundColor: '#e9ecef'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1.05)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1)';
                                 }}
                                 onError={(e) => {
                                     // Fallback si la imagen no carga
                                     const target = e.target as HTMLImageElement;
-                                    target.style.display = 'none';
-                                    const fallback = target.parentElement?.querySelector('.image-fallback');
-                                    if (fallback) {
-                                        (fallback as HTMLElement).style.display = 'flex';
-                                    }
+                                    target.src = 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=' + encodeURIComponent(product.name);
                                 }}
+                                loading="lazy"
                             />
-                            <div 
-                                className="image-fallback bg-primary d-flex align-items-center justify-content-center position-absolute top-0 start-0 w-100 h-100"
-                                style={{ display: 'none' }}
-                            >
-                                <i className="bi bi-controller display-1 text-white"></i>
-                            </div>
                         </div>
 
                         <Card.Body className="p-4">

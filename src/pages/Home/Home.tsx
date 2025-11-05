@@ -1,14 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { Product } from '../../types/Product';
+import { COLORS } from '../../utils/constants';
 
-// 🏠 Home con diseño mejorado
+// Home con diseño mejorado
 const Home: React.FC = () => {
     const { featuredProducts } = useProducts();
     const cart = useCart();
+    const navigate = useNavigate();
 
     // Si no hay productos destacados, usar datos de ejemplo
     const featuredGames: Product[] = featuredProducts.length > 0 
@@ -52,14 +54,15 @@ const Home: React.FC = () => {
             }
         ];
 
-    const handleAddToCart = (game: Product): void => {
+    const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>, game: Product): void => {
+        e.stopPropagation();
         cart.add(game);
     };
 
     return (
         <div className="min-vh-100">
-            {/* 🎯 Hero Section Mejorado */}
-            <section className="text-white py-5 position-relative overflow-hidden" style={{ background: 'var(--gradient-primary)', minHeight: '85vh' }}>
+            {/* Hero Section Mejorado */}
+            <section className="text-white py-5 position-relative overflow-hidden" style={{ background: COLORS.gradientPrimary, minHeight: '85vh' }}>
                 {/* Elementos decorativos de fondo */}
                 <div className="position-absolute top-0 start-0 w-100 h-100" style={{ 
                     background: 'radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)',
@@ -108,7 +111,7 @@ const Home: React.FC = () => {
                                         e.currentTarget.style.boxShadow = 'none';
                                     }}
                                 >
-                                    <i className="bi bi-grid-3x3-gap me-2"></i>Explorar Juegos
+                                    <i className="bi bi-joystick me-2"></i>Explorar Juegos
                                 </Link>
                                 <Link 
                                     to="/nosotros" 
@@ -155,7 +158,7 @@ const Home: React.FC = () => {
                                 <div 
                                     className="p-5 d-flex align-items-center justify-content-center"
                                     style={{ 
-                                        background: 'var(--gradient-primary)',
+                                        background: COLORS.gradientPrimary,
                                         minHeight: '200px'
                                     }}
                                 >
@@ -163,14 +166,14 @@ const Home: React.FC = () => {
                                 </div>
                                 
                                 <Card.Body className="p-5">
-                                    <Card.Title className="h3 mb-3 fw-bold" style={{ color: 'var(--color-1)', fontSize: '1.75rem' }}>
+                                    <Card.Title className="h3 mb-3 fw-bold" style={{ color: COLORS.color1, fontSize: '1.75rem' }}>
                                         Juegos Premium
                                     </Card.Title>
                                     <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
                                         <Badge 
                                             className="px-3 py-2 rounded-pill" 
                                             style={{ 
-                                                background: 'var(--gradient-primary)',
+                                                background: COLORS.gradientPrimary,
                                                 color: 'white',
                                                 fontSize: '1rem'
                                             }}
@@ -191,13 +194,13 @@ const Home: React.FC = () => {
                 </Container>
             </section>
 
-            {/* 🎮 Featured Games Section - Mejorado */}
+            {/* Featured Games Section - Mejorado */}
             <section className="py-5" style={{ background: '#f8f9fa' }}>
                 <Container>
                     <Row className="mb-5 text-center">
                         <Col>
-                            <h2 className="display-5 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
-                                <i className="bi bi-fire me-3" style={{ color: 'var(--color-4)' }}></i>
+                            <h2 className="display-5 fw-bold mb-3" style={{ color: COLORS.color1 }}>
+                                <i className="bi bi-fire me-3" style={{ color: COLORS.color4 }}></i>
                                 Juegos Destacados
                             </h2>
                             <p className="lead text-muted mb-0">Los títulos más populares de la temporada</p>
@@ -207,20 +210,24 @@ const Home: React.FC = () => {
                     <Row className="g-4">
                         {featuredGames.map(game => (
                             <Col key={game.id} lg={4} md={6}>
-                                <Card className="h-100 border-0 shadow-sm position-relative" style={{ 
-                                    borderRadius: '20px',
-                                    overflow: 'hidden',
-                                    transition: 'all 0.3s ease',
-                                    backgroundColor: 'white'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-10px)';
-                                    e.currentTarget.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.15)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-                                }}
+                                <Card 
+                                    className="h-100 border-0 shadow-sm position-relative" 
+                                    style={{ 
+                                        borderRadius: '20px',
+                                        overflow: 'hidden',
+                                        transition: 'all 0.3s ease',
+                                        backgroundColor: 'white',
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => navigate(`/productos/${game.id}`)}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-10px)';
+                                        e.currentTarget.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.15)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                                    }}
                                 >
                                     {/* Imagen del juego */}
                                     <div style={{ 
@@ -252,11 +259,13 @@ const Home: React.FC = () => {
                                             <Badge 
                                                 bg="danger" 
                                                 className="position-absolute top-0 end-0 m-3 px-3 py-2 fw-bold"
+                                                onClick={(e) => e.stopPropagation()}
                                                 style={{ 
                                                     fontSize: '1rem', 
                                                     borderRadius: '25px',
                                                     zIndex: 10,
-                                                    boxShadow: '0 4px 10px rgba(220, 53, 69, 0.4)'
+                                                    boxShadow: '0 4px 10px rgba(220, 53, 69, 0.4)',
+                                                    pointerEvents: 'auto'
                                                 }}
                                             >
                                                 -{game.discount}%
@@ -266,13 +275,15 @@ const Home: React.FC = () => {
                                         {/* Badge de categoría */}
                                         <Badge 
                                             className="position-absolute top-0 start-0 m-3 px-3 py-2 fw-semibold"
+                                            onClick={(e) => e.stopPropagation()}
                                             style={{ 
                                                 background: 'rgba(255, 255, 255, 0.9)',
-                                                color: 'var(--color-1)',
+                                                color: COLORS.color1,
                                                 fontSize: '0.85rem',
                                                 borderRadius: '20px',
                                                 zIndex: 10,
-                                                backdropFilter: 'blur(10px)'
+                                                backdropFilter: 'blur(10px)',
+                                                pointerEvents: 'auto'
                                             }}
                                         >
                                             {game.category}
@@ -281,7 +292,7 @@ const Home: React.FC = () => {
                                     
                                     <Card.Body className="d-flex flex-column p-4">
                                         <Card.Title className="h5 mb-3 fw-bold" style={{ 
-                                            color: 'var(--color-1)', 
+                                            color: COLORS.color1,
                                             fontSize: '1.25rem',
                                             lineHeight: '1.4',
                                             minHeight: '3rem'
@@ -324,9 +335,9 @@ const Home: React.FC = () => {
                                             <Button 
                                                 variant="primary" 
                                                 className="w-100 fw-bold rounded-3 py-3"
-                                                onClick={() => handleAddToCart(game)}
+                                                onClick={(e) => handleAddToCart(e, game)}
                                                 style={{ 
-                                                    background: 'var(--gradient-primary)', 
+                                                    background: COLORS.gradientPrimary, 
                                                     border: 'none',
                                                     color: 'white',
                                                     fontSize: '1rem',

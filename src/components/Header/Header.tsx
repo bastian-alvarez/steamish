@@ -4,8 +4,9 @@ import { Navbar, Nav, Container, Button, Badge, Form, InputGroup } from 'react-b
 import Cart from '../Cart/Cart';
 import { useCart } from '../../context/CartContext';
 import { NavigationItem } from '../../types/Component';
+import { COLORS } from '../../utils/constants';
 
-// 🎯 Header con useState para el carrito
+// Header con useState para el carrito
 const Header: React.FC = () => {
     const cart = useCart();
     const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -15,7 +16,7 @@ const Header: React.FC = () => {
     // Navigation items con interfaces (Admin removido - solo accesible con credenciales)
     const navItems: NavigationItem[] = [
         { to: '/', icon: 'house-door', label: 'Inicio', color: 'info' },
-        { to: '/productos', icon: 'grid-3x3-gap', label: 'Productos', color: 'info' },
+        { to: '/productos', icon: 'joystick', label: 'Productos', color: 'info' },
         { to: '/blogs', icon: 'journal-text', label: 'Blog', color: 'info' },
         { to: '/nosotros', icon: 'people', label: 'Nosotros', color: 'info' },
         { to: '/contacto', icon: 'envelope', label: 'Contacto', color: 'light' }
@@ -35,7 +36,7 @@ const Header: React.FC = () => {
                 expand="lg" 
                 className="shadow-sm"
                 style={{ 
-                    background: 'var(--gradient-primary)',
+                    background: COLORS.gradientPrimary,
                     paddingTop: '0.75rem',
                     paddingBottom: '0.75rem'
                 }}

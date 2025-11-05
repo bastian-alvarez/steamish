@@ -1,4 +1,4 @@
-// 🎯 INTERFACE PARA PRODUCTOS/JUEGOS
+// INTERFACE PARA PRODUCTOS/JUEGOS
 export interface Product {
     id: string;
     name: string;
@@ -12,7 +12,7 @@ export interface Product {
     featured: boolean;
 }
 
-// 🔍 INTERFACE PARA FILTROS DE BÚSQUEDA
+// INTERFACE PARA FILTROS DE BÚSQUEDA
 export interface SearchFilters {
     query: string;
     category?: string;
@@ -22,7 +22,7 @@ export interface SearchFilters {
     tags?: string[];
 }
 
-// 📊 INTERFACE PARA RESULTADOS DE BÚSQUEDA
+// INTERFACE PARA RESULTADOS DE BÚSQUEDA
 export interface SearchResult {
     products: Product[];
     totalCount: number;

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Product } from '../types/Product';
 import productService from '../services/productService';
 
-// 🎯 Interfaces para ProductContext
+// Interfaces para ProductContext
 export interface ProductContextType {
     products: Product[];
     loading: boolean;
@@ -11,11 +11,13 @@ export interface ProductContextType {
     getProductById: (id: string) => Product | undefined;
     getProductsByCategory: (category: string) => Product[];
     refreshProducts: () => void;
+    addProduct: (product: Omit<Product, 'id'>) => Product;
+    deleteProduct: (id: string) => boolean;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-// 🎯 ProductProvider con estado mejorado usando useContext
+// ProductProvider con estado mejorado usando useContext
 export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -59,7 +61,19 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         featuredProducts,
         getProductById,
         getProductsByCategory,
-        refreshProducts: loadProducts
+        refreshProducts: loadProducts,
+        addProduct: (product: Omit<Product, 'id'>) => {
+            const newProduct = productService.addProduct(product);
+            loadProducts();
+            return newProduct;
+        },
+        deleteProduct: (id: string) => {
+            const deleted = productService.deleteProduct(id);
+            if (deleted) {
+                loadProducts();
+            }
+            return deleted;
+        }
     };
 
     return (

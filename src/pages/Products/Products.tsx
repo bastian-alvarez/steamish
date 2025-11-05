@@ -6,8 +6,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import GameResults from '../../components/GameResults/GameResults';
 import { Product, SearchResult } from '../../types/Product';
+import { COLORS } from '../../utils/constants';
 
-// 🎮 Products con useState para el carrito y mejor uso de interfaces
+// Products con useState para el carrito y mejor uso de interfaces
 const Products: React.FC = () => {
     const { products } = useProducts();
     const cart = useCart();
@@ -20,14 +21,14 @@ const Products: React.FC = () => {
     });
     const [initialSearchTerm, setInitialSearchTerm] = useState<string>('');
 
-    // 🔍 URL search params detection
+    // URL search params detection
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const searchParam = urlParams.get('search');
         if (searchParam) setInitialSearchTerm(searchParam);
     }, [location.search]);
 
-    // 🎮 Event handlers
+    // Event handlers
     const handleGameSelect = (product: Product): void => {
         cart.add(product);
         console.log(`Juego "${product.name}" agregado al carrito`);
@@ -52,7 +53,7 @@ const Products: React.FC = () => {
     return (
         <div className="bg-light min-vh-100">
             {/* Header */}
-            <div className="bg-primary text-white py-5" style={{ background: 'var(--gradient-primary)' }}>
+            <div className="bg-primary text-white py-5" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <Row>
                         <Col className="text-center">

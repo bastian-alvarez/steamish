@@ -1,8 +1,10 @@
 import React from 'react';
-import { Row, Col, Card, Badge, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Row, Col, Card, Badge, Button, ButtonGroup } from 'react-bootstrap';
 import { Product } from '../../types/Product';
+import { COLORS } from '../../utils/constants';
 
-// 🎮 INTERFACE PARA PROPS DEL COMPONENTE
+// INTERFACE PARA PROPS DEL COMPONENTE
 interface GameResultsProps {
     products: Product[];
     searchTerm: string;
@@ -14,7 +16,8 @@ const GameResults: React.FC<GameResultsProps> = ({
     searchTerm, 
     onGameSelect 
 }) => {
-    // 🎯 FUNCIÓN PARA RESALTAR TEXTO DE BÚSQUEDA
+    const navigate = useNavigate();
+    // FUNCIÓN PARA RESALTAR TEXTO DE BÚSQUEDA
     const highlightSearchTerm = (text: string, term: string): JSX.Element => {
         if (!term.trim()) {
             return <span>{text}</span>;
@@ -38,7 +41,7 @@ const GameResults: React.FC<GameResultsProps> = ({
         );
     };
 
-    // 🎨 FUNCIÓN PARA OBTENER COLOR DE CATEGORÍA
+    // FUNCIÓN PARA OBTENER COLOR DE CATEGORÍA
     const getCategoryColor = (category: string): string => {
         const colors: Record<string, string> = {
             'Acción': 'danger',
@@ -51,7 +54,7 @@ const GameResults: React.FC<GameResultsProps> = ({
         return colors[category] || 'dark';
     };
 
-    // 🌟 FUNCIÓN PARA RENDERIZAR ESTRELLAS
+    // FUNCIÓN PARA RENDERIZAR ESTRELLAS
     const renderStars = (rating: number): JSX.Element[] => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -79,7 +82,7 @@ const GameResults: React.FC<GameResultsProps> = ({
         return stars;
     };
 
-    // 📊 MENSAJE CUANDO NO HAY RESULTADOS
+    // MENSAJE CUANDO NO HAY RESULTADOS
     if (products.length === 0) {
         return (
             <div className="text-center py-5">
@@ -106,23 +109,46 @@ const GameResults: React.FC<GameResultsProps> = ({
             {products.map((product, index) => (
                 <Col key={product.id} lg={4} md={6} className="animate__animated animate__fadeInUp" 
                      style={{ animationDelay: `${index * 0.1}s` }}>
-                    <Card className="h-100 shadow-sm border-0 game-result-card position-relative overflow-hidden">
-                        {/* 🏷️ BADGE DE DESTACADO */}
+                    <Card 
+                        className="h-100 shadow-sm border-0 game-result-card position-relative overflow-hidden"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(`/productos/${product.id}`)}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-5px)';
+                            e.currentTarget.style.transition = 'transform 0.3s ease';
+                            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '';
+                        }}
+                    >
+                        {/* BADGE DE DESTACADO */}
                         {product.featured && (
-                            <Badge bg="info" className="position-absolute top-0 start-0 m-2 z-index-1">
+                            <Badge 
+                                bg="info" 
+                                className="position-absolute top-0 start-0 m-2 z-index-1"
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ pointerEvents: 'auto' }}
+                            >
                                 <i className="bi bi-star-fill me-1"></i>
                                 Destacado
                             </Badge>
                         )}
 
-                        {/* 💰 BADGE DE DESCUENTO */}
+                        {/* BADGE DE DESCUENTO */}
                         {product.discount > 0 && (
-                            <Badge bg="danger" className="position-absolute top-0 end-0 m-2 z-index-1">
+                            <Badge 
+                                bg="danger" 
+                                className="position-absolute top-0 end-0 m-2 z-index-1"
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ pointerEvents: 'auto' }}
+                            >
                                 -{product.discount}%
                             </Badge>
                         )}
 
-                        {/* 🎮 IMAGEN DEL JUEGO */}
+                        {/* IMAGEN DEL JUEGO */}
                         <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
                             <img 
                                 src={product.image || 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=Game'} 
@@ -149,26 +175,25 @@ const GameResults: React.FC<GameResultsProps> = ({
                         </div>
 
                         <Card.Body className="p-4">
-                            {/* 📝 TÍTULO DEL JUEGO */}
-                            <Card.Title className="h5 fw-bold mb-2" style={{ color: 'var(--color-1)' }}>
+                            {/* TÍTULO DEL JUEGO */}
+                            <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.color1 }}>
                                 {highlightSearchTerm(product.name, searchTerm)}
                             </Card.Title>
 
-                            {/* 📄 DESCRIPCIÓN */}
+                            {/* DESCRIPCIÓN */}
                             <Card.Text className="text-muted mb-3 small">
                                 {highlightSearchTerm(product.description, searchTerm)}
                             </Card.Text>
 
-                            {/* ⭐ RATING */}
+                            {/* RATING */}
                             <div className="d-flex align-items-center mb-3">
                                 <div className="me-2">
                                     {renderStars(product.rating)}
                                 </div>
-                                <span className="fw-bold" style={{ color: 'var(--color-1)' }}>{product.rating}</span>
-                                <small className="text-muted ms-1">({Math.floor(Math.random() * 1000) + 100} reseñas)</small>
+                                <span className="fw-bold" style={{ color: COLORS.color1 }}>{product.rating}</span>
                             </div>
 
-                            {/* 🏷️ CATEGORÍA Y TAGS */}
+                            {/* CATEGORÍA Y TAGS */}
                             <div className="mb-3">
                                 <Badge bg={getCategoryColor(product.category)} className="me-2">
                                     {product.category}
@@ -180,7 +205,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 ))}
                             </div>
 
-                            {/* 💰 PRECIO Y ACCIÓN */}
+                            {/* PRECIO Y ACCIÓN */}
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
                                     {product.discount > 0 ? (
@@ -194,21 +219,27 @@ const GameResults: React.FC<GameResultsProps> = ({
                                         </div>
                                     ) : (
                                         <span className="fw-bold text-primary fs-5">
-                                            ${product.price.toFixed(2)}
+                                            {product.price === 0 ? 'Gratis' : `$${product.price.toFixed(2)}`}
                                         </span>
                                     )}
                                 </div>
                                 
-                                <Button 
-                                    variant="primary" 
-                                    size="sm"
-                                    onClick={() => onGameSelect?.(product)}
-                                    className="fw-bold"
-                                    style={{ background: 'var(--gradient-primary)', borderColor: 'var(--color-4)', color: 'white' }}
-                                >
-                                    <i className="bi bi-cart-plus me-1"></i>
-                                    Agregar
-                                </Button>
+                                <ButtonGroup onClick={(e) => e.stopPropagation()}>
+                                    <Button 
+                                        variant="primary" 
+                                        size="sm"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onGameSelect?.(product);
+                                        }}
+                                        className="fw-bold"
+                                        style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
+                                        disabled={product.price === 0}
+                                    >
+                                        <i className="bi bi-cart-plus me-1"></i>
+                                        {product.price === 0 ? 'Gratis' : 'Agregar'}
+                                    </Button>
+                                </ButtonGroup>
                             </div>
                         </Card.Body>
                     </Card>

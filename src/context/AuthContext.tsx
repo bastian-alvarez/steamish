@@ -7,8 +7,8 @@ export interface AuthContextType {
     user: User | null;
     loading: boolean;
     error: string | null;
-    login: (email: string, password: string) => Promise<void>;
-    register: (username: string, email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<User>;
+    register: (username: string, email: string, password: string) => Promise<User>;
     logout: () => Promise<void>;
     isAuthenticated: boolean;
     isAdmin: boolean;
@@ -41,12 +41,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
-    const login = useCallback(async (email: string, password: string): Promise<void> => {
+    const login = useCallback(async (email: string, password: string): Promise<User> => {
         try {
             setLoading(true);
             setError(null);
             const userData = await authService.login({ email, password });
             setUser(userData);
+            return userData;
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Error al iniciar sesión';
             setError(errorMessage);
@@ -56,12 +57,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
-    const register = useCallback(async (username: string, email: string, password: string): Promise<void> => {
+    const register = useCallback(async (username: string, email: string, password: string): Promise<User> => {
         try {
             setLoading(true);
             setError(null);
             const userData = await authService.register({ username, email, password });
             setUser(userData);
+            return userData;
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Error al registrar usuario';
             setError(errorMessage);

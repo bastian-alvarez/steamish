@@ -8,20 +8,22 @@ import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Home from './pages/Home/Home';
 import Products from './pages/Products/Products';
+import ProductDetail from './pages/ProductDetail/ProductDetail';
 import Blogs from './pages/Blogs/Blogs';
+import BlogDetail from './pages/BlogDetail/BlogDetail';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Admin from './pages/Admin/Admin';
 
-// 🎯 Interfaces para rutas
+// Interfaces para rutas
 interface RouteConfig {
     path: string;
     component: React.ComponentType;
 }
 
-// 🎯 App con mejor uso de interfaces y useContext
+// App con mejor uso de interfaces y useContext
 const App: React.FC = () => {
     const routes: RouteConfig[] = [
         { path: '/', component: Home },
@@ -48,6 +50,10 @@ const App: React.FC = () => {
                                     .map(({ path, component: Component }) => (
                                         <Route key={path} path={path} element={<Component />} />
                                     ))}
+                                {/* Ruta para detalle de blog */}
+                                <Route path="/blogs/:id" element={<BlogDetail />} />
+                                {/* Ruta para detalle de producto */}
+                                <Route path="/productos/:id" element={<ProductDetail />} />
                                 {/* Ruta protegida para Admin - solo accesible con credenciales de admin */}
                                 <Route 
                                     path="/admin" 

@@ -1,4 +1,4 @@
-// 🎮 Mock Data para Juegos - Con imágenes reales de cada juego
+// Mock Data para Juegos - Con imágenes reales de cada juego
 export interface JuegoPropiedades {
     serie: number;
     id: number;
@@ -123,17 +123,17 @@ export const juegos: JuegoPropiedades[] = [
     }
 ];
 
-// 🔧 Helper function para obtener juego por ID
+// Helper function para obtener juego por ID
 export const getJuegoPorId = (id: number): JuegoPropiedades | undefined => {
     return juegos.find(juego => juego.id === id);
 };
 
-// 🔧 Helper function para obtener juegos por serie
+// Helper function para obtener juegos por serie
 export const getJuegosPorSerie = (serie: number): JuegoPropiedades[] => {
     return juegos.filter(juego => juego.serie === serie);
 };
 
-// 🔧 Helper function para obtener avatar por nombre
+// Helper function para obtener avatar por nombre
 export const getAvatarPorNombre = (name: string): string => {
     const juego = juegos.find(j => j.name.toLowerCase() === name.toLowerCase());
     return juego?.avatar || 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=Game';

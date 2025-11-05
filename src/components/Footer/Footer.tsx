@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { COLORS } from '../../utils/constants';
 
-// 🦶 Footer Mejorado - Diseño Moderno
+// Footer Mejorado - Diseño Moderno
 const Footer: React.FC = () => {
     const createLink = (to: string, label: string) => ({ to, label });
     const createSocial = (href: string, icon: string) => ({ href, icon });
@@ -29,7 +30,7 @@ const Footer: React.FC = () => {
     ];
 
     return (
-        <footer className="text-white py-5 mt-auto" style={{ background: 'var(--gradient-primary)' }}>
+        <footer className="text-white py-5 mt-auto" style={{ background: COLORS.gradientPrimary }}>
             <Container>
                 <Row className="g-4 mb-4">
                     {/* Brand Column */}

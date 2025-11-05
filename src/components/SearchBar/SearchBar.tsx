@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Form, InputGroup, Button, Badge, Container, Row, Col } from 'react-bootstrap';
 import { Product, SearchFilters, SearchResult } from '../../types/Product';
+import { COLORS } from '../../utils/constants';
 
 interface SearchBarProps {
     products: Product[];
@@ -10,7 +11,7 @@ interface SearchBarProps {
     initialQuery?: string;
 }
 
-// 🎮 Datos simplificados con factory function
+// Datos simplificados con factory function
 const createSampleProduct = (id: string, name: string, price: number, category: string, rating: number, discount = 0): Product => ({
     id, name, price, category, rating, discount, featured: discount === 0,
     image: '', description: `${name} - Descripción del juego`, tags: [category, 'Gaming']
@@ -32,19 +33,29 @@ const SearchBar: React.FC<SearchBarProps> = ({
     initialQuery = ''
 }) => {
     const [filters, setFilters] = useState<SearchFilters>({
-        query: initialQuery, category: '', minRating: 0
+        query: initialQuery, 
+        category: '', 
+        minRating: 0,
+        minPrice: undefined,
+        maxPrice: undefined
     });
 
-    // 🔍 Búsqueda optimizada con useMemo
+    // Búsqueda optimizada con useMemo
     const searchResult = useMemo((): SearchResult => {
         const filtered = products.filter(product => {
+            // Búsqueda por texto (nombre, descripción, tags)
             const matchesQuery = !filters.query || 
                 product.name.toLowerCase().includes(filters.query.toLowerCase()) ||
                 product.description.toLowerCase().includes(filters.query.toLowerCase()) ||
                 product.tags?.some(tag => tag.toLowerCase().includes(filters.query.toLowerCase()));
             
+            // Filtro por categoría
             const matchesCategory = !filters.category || product.category === filters.category;
+            
+            // Filtro por rating mínimo
             const matchesRating = !filters.minRating || product.rating >= filters.minRating;
+            
+            // Filtro por precio (mínimo y máximo)
             const matchesPrice = (!filters.minPrice || product.price >= filters.minPrice) &&
                                (!filters.maxPrice || product.price <= filters.maxPrice);
             
@@ -59,13 +70,19 @@ const SearchBar: React.FC<SearchBarProps> = ({
         };
     }, [products, filters]);
 
-    // 🎯 Actualizadores de filtros simplificados
+    // Actualizadores de filtros simplificados
     const updateFilter = useCallback((updates: Partial<SearchFilters>) => {
         setFilters(prev => ({ ...prev, ...updates }));
     }, []);
 
     const clearFilters = useCallback(() => {
-        setFilters({ query: '', category: '', minRating: 0 });
+        setFilters({ 
+            query: '', 
+            category: '', 
+            minRating: 0,
+            minPrice: undefined,
+            maxPrice: undefined
+        });
     }, []);
 
     const categories = useMemo(() => 
@@ -81,10 +98,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <Container fluid className="py-4" style={{ backgroundColor: '#f8f9fa' }}>
             <Row className="justify-content-center">
                 <Col xl={10} lg={11}>
-                    {/* 🔍 Barra de búsqueda principal */}
+                    {/* Barra de búsqueda principal */}
                     <div className="mb-4">
                         <InputGroup size="lg" className="shadow-sm">
-                            <InputGroup.Text className="text-white border-primary" style={{ background: 'var(--color-4)' }}>
+                            <InputGroup.Text className="text-white border-primary" style={{ background: COLORS.color4 }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control
@@ -107,14 +124,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
                         </InputGroup>
                     </div>
 
-                    {/* 🎛️ Filtros compactos */}
+                    {/* Filtros */}
                     {showFilters && (
                         <Row className="mb-4">
                             <Col md={3} className="mb-2">
                                 <Form.Select
                                     value={filters.category || ''}
-                                    onChange={(e) => updateFilter({ category: e.target.value })}
+                                    onChange={(e) => updateFilter({ category: e.target.value || undefined })}
                                     className="border-info"
+                                    style={{ fontSize: '0.95rem' }}
                                 >
                                     <option value="">Todas las categorías</option>
                                     {categories.map(category => (
@@ -126,43 +144,60 @@ const SearchBar: React.FC<SearchBarProps> = ({
                             <Col md={3} className="mb-2">
                                 <Form.Select
                                     value={filters.minRating || 0}
-                                    onChange={(e) => updateFilter({ minRating: Number(e.target.value) })}
+                                    onChange={(e) => updateFilter({ minRating: Number(e.target.value) || undefined })}
                                     className="border-info"
+                                    style={{ fontSize: '0.95rem' }}
                                 >
                                     <option value={0}>Cualquier rating</option>
                                     <option value={4.5}>4.5+ estrellas</option>
                                     <option value={4.0}>4.0+ estrellas</option>
                                     <option value={3.5}>3.5+ estrellas</option>
+                                    <option value={3.0}>3.0+ estrellas</option>
                                 </Form.Select>
                             </Col>
                             
                             <Col md={3} className="mb-2">
                                 <InputGroup>
-                                    <InputGroup.Text className="bg-info text-white">$</InputGroup.Text>
+                                    <InputGroup.Text className="bg-info text-white border-info">
+                                        <i className="bi bi-currency-dollar"></i>
+                                    </InputGroup.Text>
                                     <Form.Control
                                         type="number"
                                         placeholder="Precio mín"
+                                        min="0"
+                                        step="0.01"
                                         value={filters.minPrice || ''}
-                                        onChange={(e) => updateFilter({ minPrice: e.target.value ? Number(e.target.value) : undefined })}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            updateFilter({ 
+                                                minPrice: value ? Number(value) : undefined 
+                                            });
+                                        }}
                                         className="border-info"
+                                        style={{ fontSize: '0.95rem' }}
                                     />
                                 </InputGroup>
                             </Col>
                             
                             <Col md={3} className="mb-2">
-                                <Button variant="outline-primary" onClick={clearFilters} className="w-100">
+                                <Button 
+                                    variant="outline-primary" 
+                                    onClick={clearFilters} 
+                                    className="w-100 border-info"
+                                    style={{ fontSize: '0.95rem' }}
+                                >
                                     <i className="bi bi-arrow-counterclockwise me-2"></i>Limpiar filtros
                                 </Button>
                             </Col>
                         </Row>
                     )}
 
-                    {/* 📊 Resultados compactos */}
+                    {/* Resultados */}
                     <Row className="align-items-center">
                         <Col md={8}>
-                            <div className="d-flex align-items-center gap-3">
+                            <div className="d-flex align-items-center gap-3 flex-wrap">
                                 <Badge bg="primary" className="fs-6 px-3 py-2">
-                                    <i className="bi bi-grid-3x3-gap me-2"></i>{searchResult.filteredCount} juegos encontrados
+                                    <i className="bi bi-joystick me-2"></i>{searchResult.filteredCount} juegos encontrados
                                 </Badge>
                                 
                                 {filters.query && (

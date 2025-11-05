@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
 import { CartProps } from '../../types/Component';
+import { COLORS } from '../../utils/constants';
 
 // 🛒 Cart con props usando interfaces
 
@@ -16,7 +17,7 @@ const Cart: React.FC<CartProps> = ({
 
     return (
         <Modal show={isOpen} onHide={onClose} centered size="lg">
-            <Modal.Header closeButton className="bg-primary text-white" style={{ background: 'var(--gradient-primary)' }}>
+            <Modal.Header closeButton className="bg-primary text-white" style={{ background: COLORS.gradientPrimary }}>
                 <Modal.Title>
                     <i className="bi bi-cart3 me-2"></i>Mi Carrito ({count})
                 </Modal.Title>
@@ -84,7 +85,7 @@ const Cart: React.FC<CartProps> = ({
                         </ListGroup>
 
                         <div className="border-top pt-3">
-                            <h4 className="mb-0 fw-bold" style={{ color: 'var(--color-1)' }}>
+                            <h4 className="mb-0 fw-bold" style={{ color: COLORS.color1 }}>
                                 Total: ${totalPrice.toFixed(2)}
                             </h4>
                         </div>

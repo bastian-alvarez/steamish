@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
+import { COLORS } from '../../utils/constants';
 
-// 📞 Contact - Diseño Moderno Mejorado
+// Contact - Diseño Moderno Mejorado
 const Contact: React.FC = () => {
     const [form, setForm] = useState({ name: '', email: '', message: '' });
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('✅ Mensaje enviado:', form);
+        console.log('Mensaje enviado:', form);
         setSuccess(true);
         setTimeout(() => setSuccess(false), 5000);
         setForm({ name: '', email: '', message: '' });
@@ -36,7 +37,7 @@ const Contact: React.FC = () => {
     ];
 
     return (
-        <div className="min-vh-100" style={{ background: 'var(--gradient-primary)', paddingBottom: '3rem' }}>
+        <div className="min-vh-100" style={{ background: COLORS.gradientPrimary, paddingBottom: '3rem' }}>
             <Container className="py-5">
                 <Row className="justify-content-center">
                     <Col lg={11}>
@@ -52,12 +53,12 @@ const Contact: React.FC = () => {
                                                     style={{ 
                                                         width: '60px', 
                                                         height: '60px',
-                                                        background: 'var(--gradient-primary)'
+                                                        background: COLORS.gradientPrimary
                                                     }}
                                                 >
                                                     <i className="bi bi-chat-dots-fill text-white" style={{ fontSize: '1.5rem' }}></i>
                                                 </div>
-                                                <h2 className="mb-0 fw-bold" style={{ color: 'var(--color-1)', fontSize: '2rem' }}>
+                                                <h2 className="mb-0 fw-bold" style={{ color: COLORS.color1, fontSize: '2rem' }}>
                                                     Hablemos
                                                 </h2>
                                             </div>
@@ -96,7 +97,7 @@ const Contact: React.FC = () => {
                                                         <i className={`bi bi-${item.icon} text-white`} style={{ fontSize: '1.5rem' }}></i>
                                                     </div>
                                                     <div className="flex-grow-1">
-                                                        <h5 className="mb-1 fw-bold" style={{ color: 'var(--color-1)', fontSize: '1.1rem' }}>
+                                                        <h5 className="mb-1 fw-bold" style={{ color: COLORS.color1, fontSize: '1.1rem' }}>
                                                             {item.title}
                                                         </h5>
                                                         <p className="text-muted mb-0" style={{ fontSize: '0.95rem' }}>
@@ -120,12 +121,12 @@ const Contact: React.FC = () => {
                                                 style={{ 
                                                     width: '60px', 
                                                     height: '60px',
-                                                    background: 'var(--gradient-primary)'
+                                                    background: COLORS.gradientPrimary
                                                 }}
                                             >
                                                 <i className="bi bi-envelope-plus-fill text-white" style={{ fontSize: '1.5rem' }}></i>
                                             </div>
-                                            <h2 className="mb-0 fw-bold" style={{ color: 'var(--color-1)', fontSize: '2rem' }}>
+                                            <h2 className="mb-0 fw-bold" style={{ color: COLORS.color1, fontSize: '2rem' }}>
                                                 Envíanos un mensaje
                                             </h2>
                                         </div>
@@ -151,8 +152,8 @@ const Contact: React.FC = () => {
                                                 { field: 'email', icon: 'envelope-fill', label: 'Email', type: 'email', placeholder: 'tu@email.com' }
                                             ].map(({ field, icon, label, type, placeholder }) => (
                                                 <div key={field} className="mb-4">
-                                                    <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: 'var(--color-1)', fontSize: '1rem' }}>
-                                                        <i className={`bi bi-${icon} me-2`} style={{ color: 'var(--color-4)' }}></i>
+                                                    <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.color1, fontSize: '1rem' }}>
+                                                        <i className={`bi bi-${icon} me-2`} style={{ color: COLORS.color4 }}></i>
                                                         {label}
                                                     </Form.Label>
                                                     <Form.Control
@@ -163,17 +164,17 @@ const Contact: React.FC = () => {
                                                         onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
                                                         className="border-2 rounded-3"
                                                         style={{ 
-                                                            borderColor: 'var(--color-3)',
+                                                            borderColor: COLORS.color3,
                                                             padding: '0.75rem 1rem',
                                                             fontSize: '1rem',
                                                             transition: 'all 0.3s ease'
                                                         }}
                                                         onFocus={(e) => {
-                                                            e.currentTarget.style.borderColor = 'var(--color-4)';
+                                                            e.currentTarget.style.borderColor = COLORS.color4;
                                                             e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
                                                         }}
                                                         onBlur={(e) => {
-                                                            e.currentTarget.style.borderColor = 'var(--color-3)';
+                                                            e.currentTarget.style.borderColor = COLORS.color3;
                                                             e.currentTarget.style.boxShadow = 'none';
                                                         }}
                                                         required
@@ -182,8 +183,8 @@ const Contact: React.FC = () => {
                                             ))}
                                             
                                             <div className="mb-4">
-                                                <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: 'var(--color-1)', fontSize: '1rem' }}>
-                                                    <i className="bi bi-chat-left-text-fill me-2" style={{ color: 'var(--color-4)' }}></i>
+                                                <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.color1, fontSize: '1rem' }}>
+                                                    <i className="bi bi-chat-left-text-fill me-2" style={{ color: COLORS.color4 }}></i>
                                                     Mensaje
                                                 </Form.Label>
                                                 <Form.Control
@@ -195,18 +196,18 @@ const Contact: React.FC = () => {
                                                     onChange={(e) => setForm(prev => ({ ...prev, message: e.target.value }))}
                                                     className="border-2 rounded-3"
                                                     style={{ 
-                                                        borderColor: 'var(--color-3)',
+                                                        borderColor: COLORS.color3,
                                                         padding: '0.75rem 1rem',
                                                         fontSize: '1rem',
                                                         resize: 'vertical',
                                                         transition: 'all 0.3s ease'
                                                     }}
                                                     onFocus={(e) => {
-                                                        e.currentTarget.style.borderColor = 'var(--color-4)';
+                                                        e.currentTarget.style.borderColor = COLORS.color4;
                                                         e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
                                                     }}
                                                     onBlur={(e) => {
-                                                        e.currentTarget.style.borderColor = 'var(--color-3)';
+                                                        e.currentTarget.style.borderColor = COLORS.color3;
                                                         e.currentTarget.style.boxShadow = 'none';
                                                     }}
                                                     required
@@ -218,7 +219,7 @@ const Contact: React.FC = () => {
                                                 size="lg" 
                                                 className="w-100 fw-bold rounded-3 py-3"
                                                 style={{ 
-                                                    background: 'var(--gradient-primary)', 
+                                                    background: COLORS.gradientPrimary, 
                                                     border: 'none',
                                                     color: 'white',
                                                     fontSize: '1.1rem',

@@ -1,18 +1,21 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Badge, Button, InputGroup, Form, Nav } from 'react-bootstrap';
 import { blogs } from '../../mock-data/blogsMocks';
+import { COLORS } from '../../utils/constants';
 
-// 📝 Blog con Mock Data - Estructura similar a juegos
+// Blog con Mock Data - Estructura similar a juegos
 const Blogs: React.FC = () => {
+    const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState('Todos');
     const [searchTerm, setSearchTerm] = useState('');
 
-    // 📊 Usar blogs del mock
+    // Usar blogs del mock
     const blogPosts = blogs;
 
     const categories = ['Todos', 'Novedades', 'Tutoriales', 'Tecnología', 'Reviews', 'eSports', 'Arte'];
     
-    // 🔍 Filtered posts with optimized dependencies
+    // Filtered posts with optimized dependencies
     const filteredPosts = useMemo(() => {
         return blogPosts.filter(post => {
             const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -25,7 +28,7 @@ const Blogs: React.FC = () => {
     const featuredPost = filteredPosts.find(post => post.featured);
     const regularPosts = filteredPosts.filter(post => !post.featured);
 
-    // 🎨 Helper para badges de categoría
+    // Helper para badges de categoría
     const getCategoryVariant = (category: string) => ({
         'Novedades': 'primary', 'Tutoriales': 'info', 'Tecnología': 'success',
         'Reviews': 'warning', 'eSports': 'danger', 'Arte': 'secondary'
@@ -35,8 +38,8 @@ const Blogs: React.FC = () => {
 
     return (
         <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
-            {/* 🎯 Hero Section Compacto */}
-            <div className="bg-primary text-white py-5 text-center" style={{ background: 'var(--gradient-primary)' }}>
+            {/* Hero Section Compacto */}
+            <div className="bg-primary text-white py-5 text-center" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <h1 className="display-4 fw-bold mb-3">
                         <i className="bi bi-journal-text me-3"></i>Gaming Blog
@@ -46,11 +49,11 @@ const Blogs: React.FC = () => {
             </div>
 
             <Container className="py-5">
-                {/* 🔍 Search & Filters Simplificado */}
+                {/* Search & Filters Simplificado */}
                 <Row className="mb-5 justify-content-center">
                     <Col lg={8}>
                         <InputGroup className="mb-4">
-                            <InputGroup.Text className="text-white border-primary" style={{ background: 'var(--color-4)' }}>
+                            <InputGroup.Text className="text-white border-primary" style={{ background: COLORS.color4 }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control
@@ -69,8 +72,8 @@ const Blogs: React.FC = () => {
                                     onClick={() => setActiveCategory(category)}
                                     className={activeCategory === category ? '' : ''}
                                     style={activeCategory === category 
-                                        ? { background: 'var(--color-4)', color: 'white' }
-                                        : { color: 'var(--color-4)' }}
+                                        ? { background: COLORS.color4, color: 'white' }
+                                        : { color: COLORS.color4 }}
                                 >
                                     {category}
                                 </Nav.Link>
@@ -79,7 +82,7 @@ const Blogs: React.FC = () => {
                     </Col>
                 </Row>
 
-                {/* ⭐ Featured Article */}
+                {/* Featured Article */}
                 {featuredPost && (
                     <Card className="border-0 shadow-lg overflow-hidden mb-5">
                         <Row className="g-0">
@@ -93,11 +96,16 @@ const Blogs: React.FC = () => {
                                         <Badge bg={getCategoryVariant(featuredPost.category)} className="me-2">{featuredPost.category}</Badge>
                                         <small className="text-muted">{featuredPost.date}</small>
                                     </div>
-                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: 'var(--color-4)' }}>{featuredPost.title}</Card.Title>
+                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: COLORS.color4 }}>{featuredPost.title}</Card.Title>
                                     <Card.Text className="text-muted mb-4 flex-grow-1">{featuredPost.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center">
                                         <small className="text-muted"><i className="bi bi-clock me-1"></i>{featuredPost.readTime}</small>
-                                        <Button variant="primary"><i className="bi bi-book me-2"></i>Leer Artículo</Button>
+                                        <Button 
+                                            variant="primary"
+                                            onClick={() => navigate(`/blogs/${featuredPost.id}`)}
+                                        >
+                                            <i className="bi bi-book me-2"></i>Leer Artículo
+                                        </Button>
                                     </div>
                                 </Card.Body>
                             </Col>
@@ -105,10 +113,10 @@ const Blogs: React.FC = () => {
                     </Card>
                 )}
 
-                {/* 📰 Articles Grid */}
+                {/* Articles Grid */}
                 <Row className="mb-4">
                     <Col>
-                        <h2 className="fw-bold" style={{ color: 'var(--color-4)' }}>
+                        <h2 className="fw-bold" style={{ color: COLORS.color4 }}>
                             <i className="bi bi-fire me-2"></i>Últimos Artículos
                             <Badge bg="info" className="ms-2">{regularPosts.length}</Badge>
                         </h2>
@@ -125,11 +133,17 @@ const Blogs: React.FC = () => {
                                         <Badge bg={getCategoryVariant(post.category)} className="me-2">{post.category}</Badge>
                                         <small className="text-muted">{post.date}</small>
                                     </div>
-                                    <Card.Title className="h5 fw-bold mb-2" style={{ color: 'var(--color-4)' }}>{post.title}</Card.Title>
+                                    <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.color4 }}>{post.title}</Card.Title>
                                     <Card.Text className="text-muted mb-3 flex-grow-1">{post.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center mt-auto">
                                         <small className="text-muted"><i className="bi bi-clock me-1"></i>{post.readTime}</small>
-                                        <Button variant="outline-primary" size="sm">Leer más <i className="bi bi-arrow-right ms-1"></i></Button>
+                                        <Button 
+                                            variant="outline-primary" 
+                                            size="sm"
+                                            onClick={() => navigate(`/blogs/${post.id}`)}
+                                        >
+                                            Leer más <i className="bi bi-arrow-right ms-1"></i>
+                                        </Button>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -150,7 +164,7 @@ const Blogs: React.FC = () => {
                 )}
             </Container>
 
-            {/* 🎨 CSS Inline Minimalista */}
+            {/* CSS Inline Minimalista */}
             <style>{`.hover-shadow-lg:hover { transform: translateY(-5px); box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important; } .transition-all { transition: all 0.3s ease; }`}</style>
         </div>
     );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
+import { COLORS } from '../../utils/constants';
 
 const About: React.FC = () => {
     // Valores principales
@@ -52,7 +53,7 @@ const About: React.FC = () => {
         <div className="min-vh-100">
             {/* Hero Section Mejorado */}
             <section className="text-white py-5 position-relative overflow-hidden" style={{ 
-                background: 'var(--gradient-primary)',
+                background: COLORS.gradientPrimary,
                 minHeight: '60vh',
                 display: 'flex',
                 alignItems: 'center'
@@ -109,14 +110,14 @@ const About: React.FC = () => {
                                                 style={{ 
                                                     width: '70px', 
                                                     height: '70px',
-                                                    background: 'var(--gradient-primary)',
+                                                    background: COLORS.gradientPrimary,
                                                     color: 'white'
                                                 }}
                                             >
                                                 <i className={`bi bi-${stat.icon}`} style={{ fontSize: '2rem' }}></i>
                                             </div>
                                         </div>
-                                        <h2 className="display-5 fw-bold mb-2" style={{ color: 'var(--color-1)' }}>
+                                        <h2 className="display-5 fw-bold mb-2" style={{ color: COLORS.color1 }}>
                                             {stat.number}
                                         </h2>
                                         <p className="text-muted mb-0 fw-semibold">{stat.label}</p>
@@ -134,13 +135,13 @@ const About: React.FC = () => {
                     <Row className="align-items-center g-5">
                         <Col lg={6}>
                             <Badge className="mb-3 px-3 py-2 rounded-pill" style={{ 
-                                background: 'var(--gradient-primary)',
+                                background: COLORS.gradientPrimary,
                                 color: 'white',
                                 fontSize: '0.9rem'
                             }}>
                                 <i className="bi bi-clock-history me-2"></i>Nuestra Historia
                             </Badge>
-                            <h2 className="display-5 fw-bold mb-4" style={{ color: 'var(--color-1)' }}>
+                            <h2 className="display-5 fw-bold mb-4" style={{ color: COLORS.color1 }}>
                                 Una Pasión por los Videojuegos
                             </h2>
                             <p className="lead text-muted mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.8' }}>
@@ -164,7 +165,7 @@ const About: React.FC = () => {
                                     <div 
                                         className="p-5 text-center text-white"
                                         style={{ 
-                                            background: 'var(--gradient-primary)',
+                                            background: COLORS.gradientPrimary,
                                             minHeight: '300px',
                                             display: 'flex',
                                             flexDirection: 'column',
@@ -198,14 +199,14 @@ const About: React.FC = () => {
                                             style={{ 
                                                 width: '80px', 
                                                 height: '80px',
-                                                background: 'var(--gradient-primary)',
+                                                background: COLORS.gradientPrimary,
                                                 color: 'white'
                                             }}
                                         >
                                             <i className={`bi bi-${mission.icon}`} style={{ fontSize: '2.5rem' }}></i>
                                         </div>
                                     </div>
-                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
+                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: COLORS.color1 }}>
                                         {mission.title}
                                     </Card.Title>
                                     <Card.Text className="text-muted" style={{ lineHeight: '1.8', fontSize: '1rem' }}>
@@ -224,14 +225,14 @@ const About: React.FC = () => {
                                             style={{ 
                                                 width: '80px', 
                                                 height: '80px',
-                                                background: 'var(--gradient-primary)',
+                                                background: COLORS.gradientPrimary,
                                                 color: 'white'
                                             }}
                                         >
                                             <i className={`bi bi-${vision.icon}`} style={{ fontSize: '2.5rem' }}></i>
                                         </div>
                                     </div>
-                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
+                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: COLORS.color1 }}>
                                         {vision.title}
                                     </Card.Title>
                                     <Card.Text className="text-muted" style={{ lineHeight: '1.8', fontSize: '1rem' }}>
@@ -250,13 +251,13 @@ const About: React.FC = () => {
                     <Row className="text-center mb-5">
                         <Col lg={8} className="mx-auto">
                             <Badge className="mb-3 px-3 py-2 rounded-pill" style={{ 
-                                background: 'var(--gradient-primary)',
+                                background: COLORS.gradientPrimary,
                                 color: 'white',
                                 fontSize: '0.9rem'
                             }}>
                                 <i className="bi bi-star-fill me-2"></i>Nuestros Pilares
                             </Badge>
-                            <h2 className="display-5 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
+                            <h2 className="display-5 fw-bold mb-3" style={{ color: COLORS.color1 }}>
                                 Lo Que Nos Define
                             </h2>
                             <p className="lead text-muted">
@@ -297,7 +298,7 @@ const About: React.FC = () => {
                                         >
                                             <i className={`bi bi-${value.icon}`} style={{ fontSize: '2.5rem' }}></i>
                                         </div>
-                                        <Card.Title className="h4 fw-bold mb-3" style={{ color: 'var(--color-1)' }}>
+                                        <Card.Title className="h4 fw-bold mb-3" style={{ color: COLORS.color1 }}>
                                             {value.title}
                                         </Card.Title>
                                         <Card.Text className="text-muted" style={{ lineHeight: '1.8' }}>
@@ -312,7 +313,7 @@ const About: React.FC = () => {
             </section>
 
             {/* Call to Action */}
-            <section className="py-5 text-white" style={{ background: 'var(--gradient-primary)' }}>
+            <section className="py-5 text-white" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <Row className="text-center">
                         <Col lg={8} className="mx-auto">
@@ -341,7 +342,7 @@ const About: React.FC = () => {
                                         e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
                                     }}
                                 >
-                                    <i className="bi bi-grid-3x3-gap me-2"></i>Explorar Juegos
+                                    <i className="bi bi-joystick me-2"></i>Explorar Juegos
                                 </a>
                                 <a 
                                     href="/contacto" 

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
-import { LoginCredentials } from '../../types/User';
+import { LoginCredentials, UserRole } from '../../types/User';
+import { COLORS } from '../../utils/constants';
 
 // 🔐 Login con interfaces y useContext mejorado
 const Login: React.FC = () => {
@@ -24,8 +25,14 @@ const Login: React.FC = () => {
 
         try {
             setLoading(true);
-            await login(form.email, form.password);
-            navigate('/');
+            const user = await login(form.email, form.password);
+            
+            // Redirigir según el rol del usuario
+            if (user?.role === UserRole.ADMIN) {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
         } finally {
@@ -34,7 +41,7 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'var(--gradient-primary)' }}>
+        <div className="min-vh-100 d-flex align-items-center" style={{ background: COLORS.gradientPrimary }}>
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={5} md={7}>
@@ -42,7 +49,7 @@ const Login: React.FC = () => {
                             <Card.Body className="p-5">
                                 <div className="text-center mb-4">
                                     <div className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-white"
-                                         style={{ background: 'var(--gradient-accent)', width: '80px', height: '80px' }}>
+                                         style={{ background: COLORS.gradientAccent, width: '80px', height: '80px' }}>
                                         <i className="bi bi-person-check display-4"></i>
                                     </div>
                                     <h1 className="h3 text-primary fw-bold">Bienvenido de Vuelta</h1>
@@ -82,7 +89,7 @@ const Login: React.FC = () => {
                                         variant="primary" 
                                         size="lg" 
                                         className="w-100 fw-bold mb-3"
-                                        style={{ background: 'var(--gradient-accent)', border: 'none' }}
+                                        style={{ background: COLORS.gradientAccent, border: 'none' }}
                                         disabled={loading}
                                     >
                                         <i className="bi bi-box-arrow-in-right me-2"></i>

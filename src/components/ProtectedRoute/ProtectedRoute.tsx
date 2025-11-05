@@ -2,21 +2,22 @@ import React from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Container, Row, Col, Card, Alert, Spinner } from 'react-bootstrap';
+import { COLORS } from '../../utils/constants';
 
-// 🔒 Interfaces para ProtectedRoute
+// Interfaces para ProtectedRoute
 interface ProtectedRouteProps {
     children: React.ReactElement;
     requireAdmin?: boolean;
 }
 
-// 🔒 Componente para proteger rutas que requieren autenticación y/o permisos de admin
+// Componente para proteger rutas que requieren autenticación y/o permisos de admin
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = false }) => {
     const { isAuthenticated, isAdmin, loading } = useAuth();
 
     // Mostrar spinner mientras se carga la autenticación
     if (loading) {
         return (
-            <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: 'var(--gradient-primary)' }}>
+            <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={6}>
@@ -41,7 +42,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
     // Si requiere admin y no es admin, mostrar error de acceso denegado
     if (requireAdmin && !isAdmin) {
         return (
-            <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: 'var(--gradient-primary)' }}>
+            <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={6}>
@@ -50,7 +51,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
                                     <div className="mb-4">
                                         <i className="bi bi-shield-exclamation display-1 text-danger"></i>
                                     </div>
-                                    <Card.Title className="h3 mb-3" style={{ color: 'var(--color-4)' }}>
+                                    <Card.Title className="h3 mb-3" style={{ color: COLORS.color4 }}>
                                         Acceso Denegado
                                     </Card.Title>
                                     <Alert variant="danger" className="mb-4">
@@ -65,7 +66,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
                                             to="/" 
                                             className="btn text-decoration-none"
                                             style={{ 
-                                                background: 'var(--gradient-primary)', 
+                                                background: COLORS.gradientPrimary, 
                                                 border: 'none',
                                                 color: 'white'
                                             }}
@@ -76,8 +77,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
                                             to="/login" 
                                             className="btn text-decoration-none"
                                             style={{ 
-                                                borderColor: 'var(--color-4)', 
-                                                color: 'var(--color-4)',
+                                                borderColor: COLORS.color4,
+                                                color: COLORS.color4,
                                                 backgroundColor: 'transparent',
                                                 borderWidth: '1px',
                                                 borderStyle: 'solid'

@@ -4,8 +4,9 @@ import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext';
 import { RegisterData } from '../../types/User';
 import { FormField } from '../../types/Component';
+import { COLORS } from '../../utils/constants';
 
-// ✨ Register con interfaces y useContext mejorado
+// Register con interfaces y useContext mejorado
 interface RegisterForm extends RegisterData {
     confirmPassword: string;
 }
@@ -56,7 +57,7 @@ const Register: React.FC = () => {
     ];
 
     return (
-        <div className="min-vh-100 d-flex align-items-center" style={{ background: 'var(--gradient-light)' }}>
+        <div className="min-vh-100 d-flex align-items-center" style={{ background: COLORS.gradientLight }}>
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={6} md={8}>
@@ -64,7 +65,7 @@ const Register: React.FC = () => {
                             <Card.Body className="p-5">
                                 <div className="text-center mb-4">
                                     <div className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-white"
-                                         style={{ background: 'var(--gradient-accent)', width: '80px', height: '80px' }}>
+                                         style={{ background: COLORS.gradientAccent, width: '80px', height: '80px' }}>
                                         <i className="bi bi-person-plus display-4"></i>
                                     </div>
                                     <h1 className="h3 text-primary fw-bold">Únete a Steamish</h1>
@@ -103,7 +104,7 @@ const Register: React.FC = () => {
                                         variant="primary" 
                                         size="lg" 
                                         className="w-100 fw-bold mb-3"
-                                        style={{ background: 'var(--gradient-accent)', border: 'none' }}
+                                        style={{ background: COLORS.gradientAccent, border: 'none' }}
                                         disabled={loading}
                                     >
                                         <i className="bi bi-star me-2"></i>

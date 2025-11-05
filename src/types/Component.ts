@@ -2,7 +2,7 @@ import React from 'react';
 import { Product, SearchResult } from './Product';
 import { CartItem } from './Cart';
 
-// 🎯 Interfaces para props de componentes
+// Interfaces para props de componentes
 
 export interface CartProps {
     isOpen: boolean;

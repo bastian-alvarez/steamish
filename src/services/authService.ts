@@ -90,6 +90,11 @@ class AuthService {
         localStorage.removeItem(this.STORAGE_KEY);
     }
 
+    // Obtener todos los usuarios (para estadísticas admin)
+    getAllUsers(): User[] {
+        return this.getStoredUsers();
+    }
+
     // Obtener usuarios almacenados
     private getStoredUsers(): User[] {
         const usersJson = localStorage.getItem('steamish_users');

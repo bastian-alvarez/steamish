@@ -3,7 +3,7 @@ import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
 import { CartProps } from '../../types/Component';
 import { COLORS } from '../../utils/constants';
 
-// 🛒 Cart con props usando interfaces
+// Cart con props usando interfaces
 
 const Cart: React.FC<CartProps> = ({ 
     isOpen, 

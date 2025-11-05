@@ -1,6 +1,4 @@
-# 🚀 Guía Rápida de Inicio - Steamish
 
-## ⚡ Pasos para Ejecutar el Proyecto
 
 ### Paso 1: Verificar Node.js
 
@@ -38,14 +36,13 @@ npm start
 
 El navegador se abrirá automáticamente en `http://localhost:3000`
 
-## ✅ Verificación
 
 Si todo funciona correctamente, deberías ver:
 - La página de inicio de Steamish
 - El header con navegación
 - Juegos destacados en la página principal
 
-## 🔑 Credenciales de Prueba
+## Credenciales de Prueba
 
 **Usuario Demo:**
 - Email: `demo@steamish.com`
@@ -55,11 +52,11 @@ Si todo funciona correctamente, deberías ver:
 - Email: `admin@steamish.com`
 - Password: `admin123`
 
-## 🛑 Detener el Servidor
+## Detener el Servidor
 
 Presiona `Ctrl + C` en la terminal donde está corriendo el servidor.
 
-## 📞 ¿Problemas?
+## Problemas?
 
 1. **Error "npm no se reconoce"**
    - Instala Node.js desde nodejs.org
@@ -76,5 +73,5 @@ Presiona `Ctrl + C` en la terminal donde está corriendo el servidor.
 
 ---
 
-¡Listo para comenzar! 🎮
+¡Listo para comenzar!
 

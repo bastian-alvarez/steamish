@@ -1,15 +1,15 @@
-# 🎮 Steamish - Plataforma de Venta de Videojuegos
+# Steamish - Plataforma de Venta de Videojuegos
 
 Proyecto full stack de página web para venta de videojuegos desarrollado con React y TypeScript.
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 Antes de ejecutar el proyecto, asegúrate de tener instalado:
 
 - **Node.js** (versión 16 o superior)
 - **npm** (viene incluido con Node.js)
 
-### 🔧 Instalación de Node.js
+### Instalación de Node.js
 
 Si no tienes Node.js instalado:
 
@@ -22,7 +22,7 @@ Si no tienes Node.js instalado:
    npm --version
    ```
 
-## 🚀 Instalación y Ejecución
+## Instalación y Ejecución
 
 ### 1. Instalar dependencias
 
@@ -49,7 +49,7 @@ El proyecto se abrirá automáticamente en tu navegador en `http://localhost:300
 npm run build
 ```
 
-## 🎯 Funcionalidades
+## Funcionalidades
 
 ### Autenticación
 - **Login**: Iniciar sesión con credenciales
@@ -85,7 +85,7 @@ npm run build
 - Páginas informativas (Nosotros, Blog, Contacto)
 - Panel de administración
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 - **React 18.2.0** - Librería de JavaScript para interfaces
 - **TypeScript 4.9.5** - Superset de JavaScript con tipado estático
@@ -95,7 +95,7 @@ npm run build
 - **Bootstrap Icons** - Iconos
 - **Animate.css** - Animaciones
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 steamish/
@@ -127,7 +127,7 @@ steamish/
 └── package.json
 ```
 
-## 🔑 Características Técnicas
+## Características Técnicas
 
 - **Uso extensivo de Interfaces TypeScript**: Todo el código está tipado
 - **useState para el carrito**: El carrito usa useState internamente en CartContext
@@ -135,7 +135,7 @@ steamish/
 - **LocalStorage**: Persistencia de usuarios y sesiones
 - **Componentes funcionales**: Uso de hooks de React
 
-## 🐛 Solución de Problemas
+## Solución de Problemas
 
 ### Error: "npm no se reconoce"
 - Asegúrate de tener Node.js instalado
@@ -150,14 +150,14 @@ steamish/
 - Elimina `node_modules` y `package-lock.json`
 - Ejecuta `npm install` nuevamente
 
-## 📝 Scripts Disponibles
+## Scripts Disponibles
 
 - `npm start` - Inicia el servidor de desarrollo
 - `npm run build` - Compila para producción
 - `npm test` - Ejecuta las pruebas
 - `npm run eject` - Expone la configuración de Create React App
 
-## 👨‍💻 Desarrollo
+## Desarrollo
 
 Este proyecto fue desarrollado como parte de un curso Full Stack II, implementando:
 - Arquitectura de componentes React

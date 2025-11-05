@@ -1,4 +1,4 @@
-// 🛒 CartContext - Usa useState internamente para el estado del carrito
+// CartContext - Usa useState internamente para el estado del carrito
 import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from 'react';
 import { Product } from '../types/Product';
 import { CartItem, CartHook } from '../types/Cart';

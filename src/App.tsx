@@ -18,6 +18,7 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Admin from './pages/Admin/Admin';
 import Library from './pages/Library/Library';
+import Moderator from './pages/Moderator/Moderator';
 
 // Interfaces para rutas
 interface RouteConfig {
@@ -72,6 +73,15 @@ const App: React.FC = () => {
                                         element={
                                             <ProtectedRoute requireAdmin={true}>
                                                 <Admin />
+                                            </ProtectedRoute>
+                                        } 
+                                    />
+                                {/* Ruta protegida para Moderador - solo accesible con credenciales de moderador */}
+                                    <Route 
+                                        path="/moderator" 
+                                        element={
+                                            <ProtectedRoute requireModerator={true}>
+                                                <Moderator />
                                             </ProtectedRoute>
                                         } 
                                     />

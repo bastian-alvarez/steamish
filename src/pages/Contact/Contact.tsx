@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 import { COLORS } from '../../utils/constants';
+import contactService from '../../services/contactService';
 
 // Contact - Diseño Moderno Mejorado
 const Contact: React.FC = () => {
@@ -9,7 +10,8 @@ const Contact: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Mensaje enviado:', form);
+        // Guardar el mensaje usando el servicio
+        contactService.saveMessage(form.name, form.email, form.message);
         setSuccess(true);
         setTimeout(() => setSuccess(false), 5000);
         setForm({ name: '', email: '', message: '' });

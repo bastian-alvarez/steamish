@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { User, LoginCredentials, RegisterData, UserRole } from '../types/User';
+import { User, UserRole } from '../types/User';
 import authService from '../services/authService';
 
 // 🔐 Interfaces para AuthContext
@@ -12,6 +12,7 @@ export interface AuthContextType {
     logout: () => Promise<void>;
     isAuthenticated: boolean;
     isAdmin: boolean;
+    isModerator: boolean;
     clearError: () => void;
 }
 
@@ -22,11 +23,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
-    // Cargar usuario al montar
-    useEffect(() => {
-        loadCurrentUser();
-    }, []);
 
     const loadCurrentUser = useCallback(() => {
         try {
@@ -40,6 +36,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setLoading(false);
         }
     }, []);
+
+    // Cargar usuario al montar
+    useEffect(() => {
+        loadCurrentUser();
+    }, [loadCurrentUser]);
 
     const login = useCallback(async (email: string, password: string): Promise<User> => {
         try {
@@ -99,6 +100,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         logout,
         isAuthenticated: user !== null,
         isAdmin: user?.role === UserRole.ADMIN,
+        isModerator: user?.role === UserRole.MODERATOR,
         clearError
     };
 

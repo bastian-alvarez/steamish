@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Badge, Button, Alert, Toast, ToastContainer } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Toast, ToastContainer } from 'react-bootstrap';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';

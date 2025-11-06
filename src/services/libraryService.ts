@@ -52,5 +52,10 @@ class LibraryService {
     }
 }
 
-export default new LibraryService();
+const libraryService = new LibraryService();
+export default libraryService;
+
+
+
+
 

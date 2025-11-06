@@ -33,6 +33,8 @@ const Login: React.FC = () => {
             // Redirigir según el rol del usuario
             if (user?.role === UserRole.ADMIN) {
                 navigate('/admin');
+            } else if (user?.role === UserRole.MODERATOR) {
+                navigate('/moderator');
             } else {
                 navigate('/');
             }

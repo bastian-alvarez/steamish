@@ -39,8 +39,13 @@ class AuthService {
             throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador para más información.');
         }
 
-        // Guardar usuario actual
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+        // Guardar usuario actual (crear una copia sin las fechas como objetos Date para evitar problemas de serialización)
+        const userToStore = {
+            ...user,
+            createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : user.createdAt,
+            updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : user.updatedAt
+        };
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
         return user;
     }
 
@@ -76,10 +81,21 @@ class AuthService {
 
         // Guardar nuevo usuario
         users.push(newUser);
-        localStorage.setItem('steamish_users', JSON.stringify(users));
+        // Serializar fechas correctamente antes de guardar
+        const usersToStore = users.map(u => ({
+            ...u,
+            createdAt: u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt,
+            updatedAt: u.updatedAt instanceof Date ? u.updatedAt.toISOString() : u.updatedAt
+        }));
+        localStorage.setItem('steamish_users', JSON.stringify(usersToStore));
         
         // Guardar usuario actual
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newUser));
+        const userToStore = {
+            ...newUser,
+            createdAt: newUser.createdAt instanceof Date ? newUser.createdAt.toISOString() : newUser.createdAt,
+            updatedAt: newUser.updatedAt instanceof Date ? newUser.updatedAt.toISOString() : newUser.updatedAt
+        };
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
         
         return newUser;
     }
@@ -103,7 +119,13 @@ class AuthService {
         if (userIndex !== -1) {
             users[userIndex].isActive = isActive;
             users[userIndex].updatedAt = new Date();
-            localStorage.setItem('steamish_users', JSON.stringify(users));
+            // Serializar fechas correctamente antes de guardar
+            const usersToStore = users.map(u => ({
+                ...u,
+                createdAt: u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt,
+                updatedAt: u.updatedAt instanceof Date ? u.updatedAt.toISOString() : u.updatedAt
+            }));
+            localStorage.setItem('steamish_users', JSON.stringify(usersToStore));
             
             // Si el usuario está bloqueado y está logueado, cerrar su sesión
             const currentUser = this.getCurrentUser();
@@ -116,6 +138,8 @@ class AuthService {
     // Obtener usuarios almacenados
     private getStoredUsers(): User[] {
         const usersJson = localStorage.getItem('steamish_users');
+        let users: User[] = [];
+
         if (!usersJson) {
             // Usuarios por defecto
             const defaultUsers: User[] = [
@@ -125,6 +149,16 @@ class AuthService {
                     email: 'admin@steamish.com',
                     password: 'admin123',
                     role: UserRole.ADMIN,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'moderator_1',
+                    username: 'moderator',
+                    email: 'moderator@steamish.com',
+                    password: 'moderator123',
+                    role: UserRole.MODERATOR,
                     isActive: true,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -150,21 +184,53 @@ class AuthService {
                     updatedAt: new Date()
                 }
             ];
-            localStorage.setItem('steamish_users', JSON.stringify(defaultUsers));
+            // Serializar fechas correctamente antes de guardar
+            const defaultUsersToStore = defaultUsers.map(u => ({
+                ...u,
+                createdAt: u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt,
+                updatedAt: u.updatedAt instanceof Date ? u.updatedAt.toISOString() : u.updatedAt
+            }));
+            localStorage.setItem('steamish_users', JSON.stringify(defaultUsersToStore));
             return defaultUsers;
         }
 
         try {
-            return JSON.parse(usersJson).map((user: any) => ({
+            users = JSON.parse(usersJson).map((user: any) => ({
                 ...user,
                 createdAt: new Date(user.createdAt),
                 updatedAt: new Date(user.updatedAt)
             }));
         } catch {
-            return [];
+            users = [];
         }
+
+        // Verificar si el moderador existe, si no, agregarlo
+        const moderatorExists = users.some(u => u.email === 'moderator@steamish.com');
+        if (!moderatorExists) {
+            const moderator: User = {
+                id: 'moderator_1',
+                username: 'moderator',
+                email: 'moderator@steamish.com',
+                password: 'moderator123',
+                role: UserRole.MODERATOR,
+                isActive: true,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            users.push(moderator);
+            // Guardar usuarios actualizados
+            const usersToStore = users.map(u => ({
+                ...u,
+                createdAt: u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt,
+                updatedAt: u.updatedAt instanceof Date ? u.updatedAt.toISOString() : u.updatedAt
+            }));
+            localStorage.setItem('steamish_users', JSON.stringify(usersToStore));
+        }
+
+        return users;
     }
 }
 
-export default new AuthService();
+const authService = new AuthService();
+export default authService;
 

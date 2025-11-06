@@ -4,6 +4,7 @@ import { useProducts } from '../../context/ProductContext';
 import { COLORS } from '../../utils/constants';
 import authService from '../../services/authService';
 import { Product } from '../../types/Product';
+import { UserRole } from '../../types/User';
 
 interface AdminFormData {
     name: string;
@@ -34,7 +35,8 @@ interface QuickAction {
 
 const Admin: React.FC = () => {
     const { products, addProduct, deleteProduct, refreshProducts } = useProducts();
-    const [modals, setModals] = useState({ newGame: false, config: false, reports: false, gamesList: false });
+    const [modals, setModals] = useState({ newGame: false, gamesList: false, usersList: false });
+    const [users, setUsers] = useState(authService.getAllUsers());
     const [formError, setFormError] = useState('');
     const [formData, setFormData] = useState<AdminFormData>({
         name: '', description: '', price: '', category: '', rating: '',
@@ -60,8 +62,10 @@ const Admin: React.FC = () => {
     const quickActions: QuickAction[] = [
         { icon: 'plus-circle', title: 'Nuevo Juego', desc: 'Agregar producto', color: 'primary', action: () => setModals({ ...modals, newGame: true }) },
         { icon: 'list-ul', title: 'Gestionar Juegos', desc: 'Ver y eliminar', color: 'warning', action: () => setModals({ ...modals, gamesList: true }) },
-        { icon: 'gear', title: 'Configuración', desc: 'Ajustes del sitio', color: 'info', action: () => setModals({ ...modals, config: true }) },
-        { icon: 'bar-chart', title: 'Reportes', desc: 'Ver estadísticas', color: 'success', action: () => setModals({ ...modals, reports: true }) }
+        { icon: 'people', title: 'Gestionar Usuarios', desc: 'Bloquear y desbloquear', color: 'danger', action: () => {
+            setUsers(authService.getAllUsers());
+            setModals({ ...modals, usersList: true });
+        }}
     ];
 
     const updateForm = (field: keyof AdminFormData, value: string | boolean) => 
@@ -129,6 +133,20 @@ const Admin: React.FC = () => {
         }
     };
 
+    const handleToggleUserStatus = (userId: string) => {
+        const user = users.find(u => u.id === userId);
+        if (!user) return;
+
+        const newStatus = !user.isActive;
+        const statusText = newStatus ? 'desbloqueado' : 'bloqueado';
+        
+        if (window.confirm(`¿Estás seguro de que deseas ${statusText === 'bloqueado' ? 'bloquear' : 'desbloquear'} al usuario "${user.username}"?\n\n${newStatus ? 'El usuario podrá iniciar sesión nuevamente.' : 'El usuario no podrá iniciar sesión hasta que sea desbloqueado.'}`)) {
+            authService.updateUserStatus(userId, newStatus);
+            setUsers(authService.getAllUsers());
+            alert(`Usuario "${user.username}" ha sido ${statusText} exitosamente.`);
+        }
+    };
+
     const formFields = [
         { field: 'name' as keyof AdminFormData, icon: 'tag', label: 'Nombre del Juego', type: 'text', placeholder: 'Ej: Super Mario Bros', required: true, cols: 12 },
         { field: 'description' as keyof AdminFormData, icon: 'card-text', label: 'Descripción', type: 'textarea', placeholder: 'Descripción detallada del juego...', required: true, cols: 12 },
@@ -156,7 +174,7 @@ const Admin: React.FC = () => {
             </div>
 
             <Container className="py-5">
-                <Row className="g-4 mb-5">
+                <Row className="g-4 mb-5 justify-content-center">
                     {adminStats.map(stat => (
                         <Col key={stat.title} lg={3} md={6}>
                             <Card className="border-0 shadow-sm h-100">
@@ -178,7 +196,7 @@ const Admin: React.FC = () => {
                         <h2 className="mb-4" style={{ color: COLORS.color4 }}>
                             <i className="bi bi-lightning me-2"></i>Acciones Rápidas
                         </h2>
-                        <Row className="g-4">
+                        <Row className="g-4 justify-content-center">
                             {quickActions.map(action => (
                                 <Col key={action.title} lg={3} md={6}>
                                     <Card className="border-0 shadow-sm h-100 hover-effect">
@@ -307,62 +325,78 @@ const Admin: React.FC = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={modals.config} onHide={() => setModals({ ...modals, config: false })} centered size="lg">
+            <Modal show={modals.usersList} onHide={() => setModals({ ...modals, usersList: false })} centered size="xl">
                 <Modal.Header closeButton style={{ background: COLORS.gradientPrimary, color: 'white' }}>
-                    <Modal.Title><i className="bi bi-gear me-2"></i>Configuración del Sitio</Modal.Title>
+                    <Modal.Title><i className="bi bi-people me-2"></i>Gestionar Usuarios</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert variant="info"><i className="bi bi-info-circle me-2"></i>Panel de configuración en desarrollo.</Alert>
-                    <Row className="g-3">
-                        {['Apariencia', 'Notificaciones', 'Seguridad', 'General'].map((title, idx) => (
-                            <Col key={idx} md={6}>
-                                <Card className="border">
-                                    <Card.Body>
-                                        <h6 className="fw-bold"><i className={`bi bi-${['palette', 'bell', 'shield-check', 'globe'][idx]} me-2`}></i>{title}</h6>
-                                        <p className="text-muted small mb-0">{['Personaliza colores y tema', 'Gestiona alertas del sistema', 'Configuración de permisos', 'Ajustes generales del sitio'][idx]}</p>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
+                    {users.length === 0 ? (
+                        <Alert variant="info" className="text-center">
+                            <i className="bi bi-info-circle me-2"></i>No hay usuarios en el sistema.
+                        </Alert>
+                    ) : (
+                        <Table hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map(user => (
+                                    <tr key={user.id}>
+                                        <td>
+                                            <strong>{user.email}</strong>
+                                        </td>
+                                        <td>{user.username}</td>
+                                        <td>
+                                            {user.role === UserRole.ADMIN ? (
+                                                <Badge bg="danger">Admin</Badge>
+                                            ) : (
+                                                <Badge bg="secondary">Usuario</Badge>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {user.isActive ? (
+                                                <Badge bg="success">
+                                                    <i className="bi bi-check-circle me-1"></i>Activo
+                                                </Badge>
+                                            ) : (
+                                                <Badge bg="danger">
+                                                    <i className="bi bi-x-circle me-1"></i>Bloqueado
+                                                </Badge>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <small>{new Date(user.createdAt).toLocaleDateString('es-ES')}</small>
+                                        </td>
+                                        <td>
+                                            {user.role !== UserRole.ADMIN && (
+                                                <Button 
+                                                    variant={user.isActive ? "danger" : "success"} 
+                                                    size="sm" 
+                                                    onClick={() => handleToggleUserStatus(user.id)}
+                                                >
+                                                    <i className={`bi bi-${user.isActive ? 'lock' : 'unlock'} me-1`}></i>
+                                                    {user.isActive ? 'Bloquear' : 'Desbloquear'}
+                                                </Button>
+                                            )}
+                                            {user.role === UserRole.ADMIN && (
+                                                <small className="text-muted">No se puede bloquear</small>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setModals({ ...modals, config: false })}>Cerrar</Button>
-                    <Button variant="primary" disabled>Guardar Cambios</Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={modals.reports} onHide={() => setModals({ ...modals, reports: false })} centered size="lg">
-                <Modal.Header closeButton style={{ background: COLORS.gradientPrimary, color: 'white' }}>
-                    <Modal.Title><i className="bi bi-bar-chart me-2"></i>Reportes y Estadísticas</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row className="g-3 mb-3">
-                        {[
-                            { color: 'info', icon: 'people', title: 'Usuarios Activos', count: stats.users, desc: 'Total de usuarios registrados' },
-                            { color: 'success', icon: 'box-seam', title: 'Productos en Catálogo', count: stats.games, desc: 'Juegos disponibles' }
-                        ].map(({ color, icon, title, count, desc }) => (
-                            <Col key={title} md={6}>
-                                <Card className={`border border-${color}`}>
-                                    <Card.Body>
-                                        <h6 className={`text-${color} fw-bold`}><i className={`bi bi-${icon} me-2`}></i>{title}</h6>
-                                        <h3 className="mb-0">{count}</h3>
-                                        <small className="text-muted">{desc}</small>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                    <Alert variant="success">
-                        <i className="bi bi-check-circle me-2"></i>
-                        <strong>Reporte Generado:</strong> {new Date().toLocaleDateString('es-ES', { 
-                            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                        })}
-                    </Alert>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setModals({ ...modals, reports: false })}>Cerrar</Button>
-                    <Button variant="success" disabled><i className="bi bi-download me-2"></i>Exportar PDF</Button>
+                    <Button variant="secondary" onClick={() => setModals({ ...modals, usersList: false })}>Cerrar</Button>
                 </Modal.Footer>
             </Modal>
 

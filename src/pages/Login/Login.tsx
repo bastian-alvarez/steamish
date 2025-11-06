@@ -27,6 +27,9 @@ const Login: React.FC = () => {
             setLoading(true);
             const user = await login(form.email, form.password);
             
+            // Esperar un momento para asegurar que el contexto se actualice
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
             // Redirigir según el rol del usuario
             if (user?.role === UserRole.ADMIN) {
                 navigate('/admin');

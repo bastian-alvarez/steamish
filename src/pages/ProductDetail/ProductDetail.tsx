@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Badge, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Button, Badge, Spinner, Alert } from 'react-bootstrap';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../components/NotificationToast/NotificationToast';
+import libraryService from '../../services/libraryService';
 import { COLORS } from '../../utils/constants';
 
 const ProductDetail: React.FC = () => {
@@ -10,9 +13,22 @@ const ProductDetail: React.FC = () => {
     const navigate = useNavigate();
     const { getProductById } = useProducts();
     const cart = useCart();
+    const { isAuthenticated, user } = useAuth();
+    const { showSuccess, showWarning } = useNotification();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [showAddedAlert, setShowAddedAlert] = useState<boolean>(false);
+    const [showAuthAlert, setShowAuthAlert] = useState<boolean>(false);
+    const [isOwned, setIsOwned] = useState<boolean>(false);
     
     const product = id ? getProductById(id) : undefined;
+
+    // Verificar si el juego ya está en la biblioteca
+    useEffect(() => {
+        if (user && product) {
+            const owned = libraryService.isInLibrary(user.id, product.id);
+            setIsOwned(owned);
+        }
+    }, [user, product]);
 
     // Loader de carga por 1 segundo
     useEffect(() => {
@@ -68,10 +84,33 @@ const ProductDetail: React.FC = () => {
         return stars;
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Verificar si el usuario está autenticado
+        if (!isAuthenticated) {
+            showWarning('Debes iniciar sesión para agregar productos al carrito');
+            setShowAuthAlert(true);
+            setTimeout(() => {
+                setShowAuthAlert(false);
+            }, 4000);
+            // Redirigir al login después de mostrar el mensaje
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+            return;
+        }
+        
         if (product) {
             cart.add(product);
-            console.log(`Juego "${product.name}" agregado al carrito`);
+            showSuccess(`¡${product.name} agregado al carrito!`);
+            
+            // Mostrar alerta de confirmación local también
+            setShowAddedAlert(true);
+            setTimeout(() => {
+                setShowAddedAlert(false);
+            }, 3000);
         }
     };
 
@@ -260,18 +299,70 @@ const ProductDetail: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div className="d-flex gap-3 flex-wrap">
-                                    <Button 
-                                        variant="primary" 
-                                        size="lg"
-                                        onClick={handleAddToCart}
-                                        className="fw-bold px-4"
-                                        style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
-                                        disabled={product.price === 0}
+                                {/* Alerta de confirmación */}
+                                {showAddedAlert && (
+                                    <Alert 
+                                        variant="success" 
+                                        className="mb-3 animate__animated animate__fadeIn"
+                                        onClose={() => setShowAddedAlert(false)} 
+                                        dismissible
                                     >
-                                        <i className="bi bi-cart-plus me-2"></i>
-                                        {product.price === 0 ? 'Gratis' : 'Agregar al Carrito'}
-                                    </Button>
+                                        <i className="bi bi-check-circle me-2"></i>
+                                        <strong>¡Agregado al carrito!</strong> El juego "{product.name}" se ha agregado correctamente.
+                                    </Alert>
+                                )}
+
+                                {/* Alerta de autenticación requerida */}
+                                {showAuthAlert && (
+                                    <Alert 
+                                        variant="warning" 
+                                        className="mb-3 animate__animated animate__fadeIn"
+                                        onClose={() => setShowAuthAlert(false)} 
+                                        dismissible
+                                    >
+                                        <i className="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>Inicia sesión para comprar</strong> Debes iniciar sesión para agregar productos al carrito. Redirigiendo...
+                                    </Alert>
+                                )}
+
+                                <div className="d-flex gap-3 flex-wrap">
+                                    {isOwned ? (
+                                        <>
+                                            <Button 
+                                                variant="success" 
+                                                size="lg"
+                                                onClick={() => navigate('/biblioteca')}
+                                                className="fw-bold px-4"
+                                            >
+                                                <i className="bi bi-check-circle me-2"></i>
+                                                Ya en tu Biblioteca
+                                            </Button>
+                                            <Button 
+                                                variant="outline-primary" 
+                                                size="lg"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    // Botón sin funcionalidad
+                                                }}
+                                                className="fw-bold px-4"
+                                            >
+                                                <i className="bi bi-download me-2"></i>
+                                                Descargar
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button 
+                                            variant="primary" 
+                                            size="lg"
+                                            onClick={handleAddToCart}
+                                            className="fw-bold px-4"
+                                            style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
+                                            disabled={product.price === 0}
+                                        >
+                                            <i className="bi bi-cart-plus me-2"></i>
+                                            {product.price === 0 ? 'Gratis' : 'Agregar al Carrito'}
+                                        </Button>
+                                    )}
                                     <Button 
                                         variant="outline-secondary" 
                                         size="lg"

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Alert, Toast, ToastContainer } from 'react-bootstrap';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../components/NotificationToast/NotificationToast';
 import { Product } from '../../types/Product';
 import { COLORS } from '../../utils/constants';
 
@@ -10,7 +12,10 @@ import { COLORS } from '../../utils/constants';
 const Home: React.FC = () => {
     const { featuredProducts } = useProducts();
     const cart = useCart();
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
+    const { showSuccess, showWarning } = useNotification();
+    const [showAuthToast, setShowAuthToast] = useState(false);
 
     // Si no hay productos destacados, usar datos de ejemplo
     const featuredGames: Product[] = featuredProducts.length > 0 
@@ -56,7 +61,20 @@ const Home: React.FC = () => {
 
     const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>, game: Product): void => {
         e.stopPropagation();
+        e.preventDefault();
+        
+        // Verificar si el usuario está autenticado
+        if (!isAuthenticated) {
+            showWarning('Debes iniciar sesión para agregar productos al carrito');
+            setShowAuthToast(true);
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+            return;
+        }
+        
         cart.add(game);
+        showSuccess(`¡${game.name} agregado al carrito!`);
     };
 
     return (
@@ -213,21 +231,21 @@ const Home: React.FC = () => {
                                 <Card 
                                     className="h-100 border-0 shadow-sm position-relative" 
                                     style={{ 
-                                        borderRadius: '20px',
-                                        overflow: 'hidden',
-                                        transition: 'all 0.3s ease',
+                                    borderRadius: '20px',
+                                    overflow: 'hidden',
+                                    transition: 'all 0.3s ease',
                                         backgroundColor: 'white',
                                         cursor: 'pointer'
-                                    }}
+                                }}
                                     onClick={() => navigate(`/productos/${game.id}`)}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(-10px)';
-                                        e.currentTarget.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.15)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                        e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-                                    }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-10px)';
+                                    e.currentTarget.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.15)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                                }}
                                 >
                                     {/* Imagen del juego */}
                                     <div style={{ 
@@ -362,6 +380,25 @@ const Home: React.FC = () => {
                     </Row>
                 </Container>
             </section>
+
+            {/* Toast para mostrar mensaje de autenticación requerida */}
+            <ToastContainer position="top-end" className="p-3" style={{ zIndex: 9999 }}>
+                <Toast 
+                    show={showAuthToast} 
+                    onClose={() => setShowAuthToast(false)} 
+                    delay={3000} 
+                    autohide
+                    bg="warning"
+                >
+                    <Toast.Header>
+                        <i className="bi bi-exclamation-triangle me-2"></i>
+                        <strong className="me-auto">Autenticación requerida</strong>
+                    </Toast.Header>
+                    <Toast.Body>
+                        Debes iniciar sesión para agregar productos al carrito. Redirigiendo...
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
         </div>
     );
 };

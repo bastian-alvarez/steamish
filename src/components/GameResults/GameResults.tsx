@@ -225,20 +225,20 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 </div>
                                 
                                 <ButtonGroup onClick={(e) => e.stopPropagation()}>
-                                    <Button 
-                                        variant="primary" 
-                                        size="sm"
+                                <Button 
+                                    variant="primary" 
+                                    size="sm"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             onGameSelect?.(product);
                                         }}
-                                        className="fw-bold"
+                                    className="fw-bold"
                                         style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
                                         disabled={product.price === 0}
-                                    >
-                                        <i className="bi bi-cart-plus me-1"></i>
+                                >
+                                    <i className="bi bi-cart-plus me-1"></i>
                                         {product.price === 0 ? 'Gratis' : 'Agregar'}
-                                    </Button>
+                                </Button>
                                 </ButtonGroup>
                             </div>
                         </Card.Body>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
-import { useLocation } from 'react-router-dom';
-import { Container, Row, Col } from 'react-bootstrap';
+import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../components/NotificationToast/NotificationToast';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Toast, ToastContainer } from 'react-bootstrap';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import GameResults from '../../components/GameResults/GameResults';
 import { Product, SearchResult } from '../../types/Product';
@@ -12,7 +14,10 @@ import { COLORS } from '../../utils/constants';
 const Products: React.FC = () => {
     const { products } = useProducts();
     const cart = useCart();
+    const { isAuthenticated } = useAuth();
+    const { showSuccess, showWarning } = useNotification();
     const location = useLocation();
+    const navigate = useNavigate();
     const [searchResult, setSearchResult] = useState<SearchResult>({
         products: [],
         totalCount: 0,
@@ -20,6 +25,7 @@ const Products: React.FC = () => {
         searchTerm: ''
     });
     const [initialSearchTerm, setInitialSearchTerm] = useState<string>('');
+    const [showAuthToast, setShowAuthToast] = useState(false);
 
     // URL search params detection
     useEffect(() => {
@@ -30,8 +36,18 @@ const Products: React.FC = () => {
 
     // Event handlers
     const handleGameSelect = (product: Product): void => {
+        // Verificar si el usuario está autenticado
+        if (!isAuthenticated) {
+            showWarning('Debes iniciar sesión para agregar productos al carrito');
+            setShowAuthToast(true);
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+            return;
+        }
+        
         cart.add(product);
-        console.log(`Juego "${product.name}" agregado al carrito`);
+        showSuccess(`¡${product.name} agregado al carrito!`);
     };
 
     const handleSearchResult = (result: SearchResult): void => {
@@ -82,6 +98,25 @@ const Products: React.FC = () => {
                     onGameSelect={handleGameSelect}
                 />
             </Container>
+
+            {/* Toast para mostrar mensaje de autenticación requerida */}
+            <ToastContainer position="top-end" className="p-3" style={{ zIndex: 9999 }}>
+                <Toast 
+                    show={showAuthToast} 
+                    onClose={() => setShowAuthToast(false)} 
+                    delay={3000} 
+                    autohide
+                    bg="warning"
+                >
+                    <Toast.Header>
+                        <i className="bi bi-exclamation-triangle me-2"></i>
+                        <strong className="me-auto">Autenticación requerida</strong>
+                    </Toast.Header>
+                    <Toast.Body>
+                        Debes iniciar sesión para agregar productos al carrito. Redirigiendo...
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
         </div>
     );
 };

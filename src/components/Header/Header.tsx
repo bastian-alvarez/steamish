@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Container, Button, Badge, Form, InputGroup } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button, Badge, Form, InputGroup, Dropdown } from 'react-bootstrap';
 import Cart from '../Cart/Cart';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { UserRole } from '../../types/User';
 import { NavigationItem } from '../../types/Component';
 import { COLORS } from '../../utils/constants';
 
 // Header con useState para el carrito
 const Header: React.FC = () => {
     const cart = useCart();
+    const { isAuthenticated, user, logout } = useAuth();
+    const navigate = useNavigate();
     const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const navigate = useNavigate();
 
     // Navigation items con interfaces (Admin removido - solo accesible con credenciales)
     const navItems: NavigationItem[] = [
@@ -28,6 +31,11 @@ const Header: React.FC = () => {
             navigate(`/productos?search=${encodeURIComponent(searchQuery.trim())}`);
             setSearchQuery('');
         }
+    };
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/');
     };
 
     return (
@@ -144,25 +152,62 @@ const Header: React.FC = () => {
                         </Form>
                         
                         <Nav className="d-flex align-items-center gap-2">
-                            <Link 
-                                to="/login" 
-                                className="btn btn-sm text-decoration-none"
-                                style={{ 
-                                    borderColor: 'rgba(255, 255, 255, 0.4)',
-                                    color: 'white',
-                                    backgroundColor: 'transparent',
-                                    borderWidth: '1px',
-                                    borderStyle: 'solid'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = 'transparent';
-                                }}
-                            >
-                                <i className="bi bi-box-arrow-in-right me-1"></i>Login
-                            </Link>
+                            {isAuthenticated && user ? (
+                                <>
+                                    <Dropdown>
+                                        <Dropdown.Toggle 
+                                            variant="outline-light" 
+                                            size="sm"
+                                            className="d-flex align-items-center"
+                                            style={{ 
+                                                borderColor: 'rgba(255, 255, 255, 0.4)',
+                                                color: 'white'
+                                            }}
+                                        >
+                                            <i className="bi bi-person-circle me-2"></i>
+                                            {user.username || user.email}
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.ItemText>
+                                                <small className="text-muted">{user.email}</small>
+                                            </Dropdown.ItemText>
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item as={Link} to="/biblioteca">
+                                                <i className="bi bi-collection me-2"></i>Mi Biblioteca
+                                            </Dropdown.Item>
+                                            {user.role === UserRole.ADMIN && (
+                                                <Dropdown.Item as={Link} to="/admin">
+                                                    <i className="bi bi-shield-check me-2"></i>Panel Admin
+                                                </Dropdown.Item>
+                                            )}
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item onClick={handleLogout}>
+                                                <i className="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </>
+                            ) : (
+                                <Link 
+                                    to="/login" 
+                                    className="btn btn-sm text-decoration-none"
+                                    style={{ 
+                                        borderColor: 'rgba(255, 255, 255, 0.4)',
+                                        color: 'white',
+                                        backgroundColor: 'transparent',
+                                        borderWidth: '1px',
+                                        borderStyle: 'solid'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                    }}
+                                >
+                                    <i className="bi bi-box-arrow-in-right me-1"></i>Login
+                                </Link>
+                            )}
                             
                             <Button 
                                 className="position-relative btn-sm"

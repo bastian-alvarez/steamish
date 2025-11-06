@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ProductProvider } from './context/ProductContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { NotificationProvider } from './components/NotificationToast/NotificationToast';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
@@ -16,6 +17,7 @@ import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Admin from './pages/Admin/Admin';
+import Library from './pages/Library/Library';
 
 // Interfaces para rutas
 interface RouteConfig {
@@ -40,34 +42,45 @@ const App: React.FC = () => {
         <AuthProvider>
             <ProductProvider>
                 <CartProvider>
-                    <Router>
-                        <div className="d-flex flex-column min-vh-100">
-                            <Header />
-                        <main className="flex-grow-1">
-                            <Routes>
-                                {routes
-                                    .filter(route => route.path !== '/admin') // Filtrar admin de rutas públicas
-                                    .map(({ path, component: Component }) => (
-                                        <Route key={path} path={path} element={<Component />} />
-                                    ))}
+                    <NotificationProvider>
+                        <Router>
+                            <div className="d-flex flex-column min-vh-100">
+                                <Header />
+                            <main className="flex-grow-1">
+                                <Routes>
+                                    {routes
+                                        .filter(route => route.path !== '/admin') // Filtrar admin de rutas públicas
+                                        .map(({ path, component: Component }) => (
+                                            <Route key={path} path={path} element={<Component />} />
+                                        ))}
                                 {/* Ruta para detalle de blog */}
                                 <Route path="/blogs/:id" element={<BlogDetail />} />
                                 {/* Ruta para detalle de producto */}
                                 <Route path="/productos/:id" element={<ProductDetail />} />
-                                {/* Ruta protegida para Admin - solo accesible con credenciales de admin */}
+                                {/* Ruta protegida para Biblioteca */}
                                 <Route 
-                                    path="/admin" 
+                                    path="/biblioteca" 
                                     element={
-                                        <ProtectedRoute requireAdmin={true}>
-                                            <Admin />
+                                        <ProtectedRoute>
+                                            <Library />
                                         </ProtectedRoute>
                                     } 
                                 />
-                            </Routes>
-                        </main>
-                            <Footer />
-                        </div>
-                    </Router>
+                                {/* Ruta protegida para Admin - solo accesible con credenciales de admin */}
+                                    <Route 
+                                        path="/admin" 
+                                        element={
+                                            <ProtectedRoute requireAdmin={true}>
+                                                <Admin />
+                                            </ProtectedRoute>
+                                        } 
+                                    />
+                                </Routes>
+                            </main>
+                                <Footer />
+                            </div>
+                        </Router>
+                    </NotificationProvider>
                 </CartProvider>
             </ProductProvider>
         </AuthProvider>

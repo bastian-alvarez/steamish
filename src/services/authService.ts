@@ -36,7 +36,7 @@ class AuthService {
         }
 
         if (!user.isActive) {
-            throw new Error('Usuario inactivo');
+            throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador para más información.');
         }
 
         // Guardar usuario actual
@@ -95,6 +95,24 @@ class AuthService {
         return this.getStoredUsers();
     }
 
+    // Actualizar estado de un usuario (bloquear/desbloquear)
+    updateUserStatus(userId: string, isActive: boolean): void {
+        const users = this.getStoredUsers();
+        const userIndex = users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            users[userIndex].isActive = isActive;
+            users[userIndex].updatedAt = new Date();
+            localStorage.setItem('steamish_users', JSON.stringify(users));
+            
+            // Si el usuario está bloqueado y está logueado, cerrar su sesión
+            const currentUser = this.getCurrentUser();
+            if (currentUser && currentUser.id === userId && !isActive) {
+                localStorage.removeItem(this.STORAGE_KEY);
+            }
+        }
+    }
+
     // Obtener usuarios almacenados
     private getStoredUsers(): User[] {
         const usersJson = localStorage.getItem('steamish_users');
@@ -116,6 +134,16 @@ class AuthService {
                     username: 'demo',
                     email: 'demo@steamish.com',
                     password: 'demo123',
+                    role: UserRole.USER,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'user_2',
+                    username: 'testuser',
+                    email: 'test@steamish.com',
+                    password: 'test123',
                     role: UserRole.USER,
                     isActive: true,
                     createdAt: new Date(),

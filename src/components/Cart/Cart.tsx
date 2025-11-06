@@ -1,6 +1,11 @@
-import React from 'react';
-import { Modal, Button, ListGroup, Badge, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, ListGroup, Badge, Row, Col, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { CartProps } from '../../types/Component';
+import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../NotificationToast/NotificationToast';
+import { useCart } from '../../context/CartContext';
+import libraryService from '../../services/libraryService';
 import { COLORS } from '../../utils/constants';
 
 // Cart con props usando interfaces
@@ -14,6 +19,62 @@ const Cart: React.FC<CartProps> = ({
     onRemove, 
     onClear 
 }) => {
+    const { isAuthenticated, user } = useAuth();
+    const navigate = useNavigate();
+    const { showWarning, showSuccess } = useNotification();
+    const cart = useCart();
+    const [showAuthAlert, setShowAuthAlert] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleProceedToCheckout = async () => {
+        if (!isAuthenticated || !user) {
+            showWarning('Debes iniciar sesión para proceder con el pago');
+            setShowAuthAlert(true);
+            setTimeout(() => {
+                onClose();
+                navigate('/login');
+            }, 2000);
+            return;
+        }
+
+        if (items.length === 0) {
+            showWarning('Tu carrito está vacío');
+            return;
+        }
+
+        setIsProcessing(true);
+        
+        try {
+            // Simular proceso de pago
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Agregar todos los juegos a la biblioteca del usuario
+            const productsToAdd = items.map(item => {
+                const { quantity, ...product } = item;
+                return product;
+            });
+            
+            libraryService.addMultipleToLibrary(user.id, productsToAdd);
+            
+            // Limpiar el carrito
+            cart.clear();
+            
+            // Cerrar el modal
+            onClose();
+            
+            // Mostrar mensaje de éxito
+            showSuccess(`¡Compra exitosa! ${items.length} ${items.length === 1 ? 'juego agregado' : 'juegos agregados'} a tu biblioteca.`);
+            
+            // Redirigir a la biblioteca después de 1 segundo
+            setTimeout(() => {
+                navigate('/biblioteca');
+            }, 1500);
+        } catch (error) {
+            showWarning('Error al procesar el pago. Intenta nuevamente.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     return (
         <Modal show={isOpen} onHide={onClose} centered size="lg">
@@ -24,6 +85,19 @@ const Cart: React.FC<CartProps> = ({
             </Modal.Header>
 
             <Modal.Body className="p-4">
+                {/* Alerta de autenticación requerida */}
+                {showAuthAlert && (
+                    <Alert 
+                        variant="warning" 
+                        className="mb-3 animate__animated animate__fadeIn"
+                        onClose={() => setShowAuthAlert(false)} 
+                        dismissible
+                    >
+                        <i className="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Inicia sesión para comprar</strong> Debes iniciar sesión para proceder con el pago. Redirigiendo...
+                    </Alert>
+                )}
+
                 {items.length === 0 ? (
                     <div className="text-center py-5">
                         <i className="bi bi-cart-x text-muted" style={{ fontSize: '4rem' }}></i>
@@ -98,8 +172,19 @@ const Cart: React.FC<CartProps> = ({
                     <Button variant="outline-danger" onClick={onClear}>
                         <i className="bi bi-trash me-2"></i>Vaciar Carrito
                     </Button>
-                    <Button variant="primary" size="lg">
-                        <i className="bi bi-credit-card me-2"></i>Proceder al Pago
+                    <Button 
+                        variant="primary" 
+                        size="lg"
+                        onClick={handleProceedToCheckout}
+                        disabled={isProcessing}
+                    >
+                        <i className="bi bi-credit-card me-2"></i>
+                        {isProcessing 
+                            ? 'Procesando...' 
+                            : isAuthenticated 
+                                ? 'Proceder al Pago' 
+                                : 'Inicia sesión para comprar'
+                        }
                     </Button>
                 </Modal.Footer>
             )}

@@ -4,23 +4,39 @@ import authService from './authService';
 
 // Servicio para manejar órdenes conectado al microservicio order-service
 class OrderService {
+    // Obtener headers con autenticación
+    private getAuthHeaders(): HeadersInit {
+        const token = authService.getToken();
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
+    }
+
     // Crear nueva orden
     async createOrder(request: CreateOrderRequest): Promise<Order> {
         try {
-            const response = await fetch(`${API.orderService}/api/orders`, {
+            const url = `${API.orderService}/api/orders`;
+            const headers = this.getAuthHeaders();
+            const body = JSON.stringify({
+                userId: request.userId,
+                items: request.items.map(item => ({
+                    juegoId: item.juegoId,
+                    cantidad: item.cantidad
+                })),
+                metodoPago: request.metodoPago || 'Tarjeta',
+                direccionEnvio: request.direccionEnvio
+            });
+            
+            console.log('Creating order:', { url, hasToken: !!authService.getToken(), body });
+            
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: request.userId,
-                    items: request.items.map(item => ({
-                        juegoId: item.juegoId,
-                        cantidad: item.cantidad
-                    })),
-                    metodoPago: request.metodoPago || 'Tarjeta',
-                    direccionEnvio: request.direccionEnvio
-                })
+                headers,
+                body
             });
 
             if (!response.ok) {
@@ -57,7 +73,9 @@ class OrderService {
     // Obtener órdenes por usuario
     async getOrdersByUserId(userId: number): Promise<Order[]> {
         try {
-            const response = await fetch(`${API.orderService}/api/orders/user/${userId}`);
+            const response = await fetch(`${API.orderService}/api/orders/user/${userId}`, {
+                headers: this.getAuthHeaders()
+            });
 
             if (!response.ok) {
                 throw new Error('Error al obtener las órdenes');
@@ -84,7 +102,9 @@ class OrderService {
     // Obtener orden por ID
     async getOrderById(orderId: number): Promise<Order | null> {
         try {
-            const response = await fetch(`${API.orderService}/api/orders/${orderId}`);
+            const response = await fetch(`${API.orderService}/api/orders/${orderId}`, {
+                headers: this.getAuthHeaders()
+            });
 
             if (!response.ok) {
                 if (response.status === 404) {
@@ -106,7 +126,9 @@ class OrderService {
     // Obtener todas las órdenes (para admin)
     async getAllOrders(): Promise<Order[]> {
         try {
-            const response = await fetch(`${API.orderService}/api/orders`);
+            const response = await fetch(`${API.orderService}/api/orders`, {
+                headers: this.getAuthHeaders()
+            });
 
             if (!response.ok) {
                 throw new Error('Error al obtener las órdenes');

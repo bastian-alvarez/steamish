@@ -34,14 +34,20 @@ export const COLORS = {
     gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
 } as const;
 
+// Detectar si estamos en modo desarrollo con proxy o en producción/ngrok
+// El proxy está activo por defecto en desarrollo, a menos que se especifiquen URLs explícitas
+const useProxy = process.env.REACT_APP_USE_PROXY !== 'false' && 
+                 (process.env.NODE_ENV === 'development' && !process.env.REACT_APP_AUTH_SERVICE_URL);
+
 export const API = {
-    baseUrl: process.env.REACT_APP_API_URL || "http://localhost:3001",
+    baseUrl: process.env.REACT_APP_API_URL || (useProxy ? "" : "http://localhost:3001"),
     timeout: 10000,
-    // Microservicios
-    authService: process.env.REACT_APP_AUTH_SERVICE_URL || "http://localhost:3001",
-    gameCatalogService: process.env.REACT_APP_GAME_CATALOG_SERVICE_URL || "http://localhost:3002",
-    orderService: process.env.REACT_APP_ORDER_SERVICE_URL || "http://localhost:3003",
-    libraryService: process.env.REACT_APP_LIBRARY_SERVICE_URL || "http://localhost:3004"
+    // Microservicios - Usar rutas relativas (vacío) si el proxy está activo, sino usar URLs completas
+    // Los servicios ya incluyen /api/... en sus endpoints, así que solo necesitamos la base
+    authService: useProxy ? "" : (process.env.REACT_APP_AUTH_SERVICE_URL || "http://localhost:3001"),
+    gameCatalogService: useProxy ? "" : (process.env.REACT_APP_GAME_CATALOG_SERVICE_URL || "http://localhost:3002"),
+    orderService: useProxy ? "" : (process.env.REACT_APP_ORDER_SERVICE_URL || "http://localhost:3003"),
+    libraryService: useProxy ? "" : (process.env.REACT_APP_LIBRARY_SERVICE_URL || "http://localhost:3004")
 } as const;
 
 export const ROUTES = {

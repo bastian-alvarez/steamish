@@ -1,0 +1,11 @@
+/* 🎨 Estilos Globales Mínimos - Solo lo esencial */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Clases utility adicionales */
+.min-vh-75 { min-height: 75vh; }
+.hover-effect { transition: transform 0.3s ease; }
+.hover-effect:hover { transform: translateY(-5px); }

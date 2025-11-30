@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Badge, Button, InputGroup, Form, Nav } from 'react-bootstrap';
-import { blogs } from '../../mock-data/blogsMocks';
-import { COLORS } from '../../utils/constants';
+import { blogs } from '../../fixtures/blogsMocks';
+import { COLORS } from '../../config/constants';
 
 // Blog con Mock Data - Estructura similar a juegos
 const Blogs: React.FC = () => {

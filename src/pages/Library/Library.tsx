@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Badge, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Alert, Spinner } from 'react-bootstrap';
 import libraryService from '../../services/libraryService';
+import productService from '../../services/productService';
 import { Product } from '../../types/Product';
-import { COLORS } from '../../utils/constants';
+import { LibraryItem } from '../../types/Library';
+import { COLORS } from '../../config/constants';
 
 const Library: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [library, setLibrary] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (!isAuthenticated || !user) {
@@ -17,8 +20,53 @@ const Library: React.FC = () => {
             return;
         }
 
-        const userLibrary = libraryService.getLibrary(user.id);
-        setLibrary(userLibrary);
+        const loadLibrary = async () => {
+            try {
+                setLoading(true);
+                const userId = typeof user.id === 'string' ? parseInt(user.id) : user.id;
+                const libraryItems = await libraryService.getLibrary(userId);
+                
+                // Convertir LibraryItem a Product obteniendo detalles del juego
+                const products: Product[] = [];
+                for (const item of libraryItems) {
+                    try {
+                        const juegoId = typeof item.juegoId === 'string' ? parseInt(item.juegoId) : item.juegoId;
+                        const game = await productService.getProductById(juegoId);
+                        if (game) {
+                            products.push(game);
+                        } else {
+                            // Si no se encuentra el juego, crear un producto básico desde LibraryItem
+                            products.push({
+                                id: item.juegoId,
+                                name: item.name,
+                                price: item.price,
+                                image: '',
+                                rating: 0,
+                                discount: 0,
+                                category: item.genre || 'Sin categoría',
+                                description: '',
+                                tags: []
+                            });
+                        }
+                    } catch (error) {
+                        console.error(`Error al cargar juego ${item.juegoId}:`, error);
+                    }
+                }
+                
+                setLibrary(products);
+            } catch (error) {
+                console.error('Error al cargar biblioteca:', error);
+                // Fallback a método sincrónico si está disponible
+                if (user.id) {
+                    const syncLibrary = libraryService.getLibrarySync(user.id.toString());
+                    setLibrary(syncLibrary);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadLibrary();
     }, [user, isAuthenticated, navigate]);
 
     const getCategoryColor = (category: string): string => {
@@ -52,7 +100,12 @@ const Library: React.FC = () => {
             </div>
 
             <Container className="py-5">
-                {library.length === 0 ? (
+                {loading ? (
+                    <div className="text-center py-5">
+                        <Spinner animation="border" variant="primary" />
+                        <p className="mt-3 text-muted">Cargando tu biblioteca...</p>
+                    </div>
+                ) : library.length === 0 ? (
                     <Alert variant="info" className="text-center">
                         <i className="bi bi-info-circle me-2"></i>
                         <strong>Tu biblioteca está vacía</strong>

@@ -4,60 +4,21 @@ import { Container, Row, Col, Card, Badge, Button, Alert, Toast, ToastContainer 
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNotification } from '../../components/NotificationToast/NotificationToast';
+import { useNotification } from '../../components/ui/NotificationToast/NotificationToast';
 import { Product } from '../../types/Product';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 // Home con diseño mejorado
 const Home: React.FC = () => {
-    const { featuredProducts } = useProducts();
+    const { products } = useProducts();
     const cart = useCart();
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const { showSuccess, showWarning } = useNotification();
     const [showAuthToast, setShowAuthToast] = useState(false);
 
-    // Si no hay productos destacados, usar datos de ejemplo
-    const featuredGames: Product[] = featuredProducts.length > 0 
-        ? featuredProducts.slice(0, 3)
-        : [
-            {
-                id: '1',
-                name: 'Cyber Adventure 2077',
-                price: 59.99,
-                rating: 4.9,
-                category: 'Acción',
-                image: 'https://via.placeholder.com/300x200/0d6efd/ffffff?text=Cyber+Adventure',
-                discount: 20,
-                description: 'Aventura cyberpunk épica',
-                tags: ['Acción', 'Futurista'],
-                featured: true
-            },
-            {
-                id: '2',
-                name: 'Mystic Realms',
-                price: 49.99,
-                rating: 4.8,
-                category: 'Aventura',
-                image: 'https://via.placeholder.com/300x200/6610f2/ffffff?text=Mystic+Realms',
-                discount: 10,
-                description: 'Mundo de fantasía mística',
-                tags: ['Aventura', 'Fantasía'],
-                featured: true
-            },
-            {
-                id: '3',
-                name: 'Space Odyssey',
-                price: 39.99,
-                rating: 4.7,
-                category: 'Simulación',
-                image: 'https://via.placeholder.com/300x200/0dcaf0/ffffff?text=Space+Odyssey',
-                discount: 0,
-                description: 'Exploración espacial',
-                tags: ['Simulación', 'Espacio'],
-                featured: true
-            }
-        ];
+    // Mostrar los primeros 3 productos de la página
+    const featuredGames: Product[] = products.slice(0, 3);
 
     const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>, game: Product): void => {
         e.stopPropagation();
@@ -219,14 +180,25 @@ const Home: React.FC = () => {
                         <Col>
                             <h2 className="display-5 fw-bold mb-3" style={{ color: COLORS.color1 }}>
                                 <i className="bi bi-fire me-3" style={{ color: COLORS.color4 }}></i>
-                                Juegos Destacados
+                                Juegos Populares
                             </h2>
-                            <p className="lead text-muted mb-0">Los títulos más populares de la temporada</p>
+                            <p className="lead text-muted mb-0">Explora nuestra selección de juegos</p>
                         </Col>
                     </Row>
 
-                    <Row className="g-4">
-                        {featuredGames.map(game => (
+                    {featuredGames.length === 0 ? (
+                        <Row>
+                            <Col>
+                                <Alert variant="info" className="text-center py-5">
+                                    <i className="bi bi-info-circle me-2"></i>
+                                    No hay juegos destacados disponibles en este momento. 
+                                    <Link to="/productos" className="ms-2">Explorar todos los juegos</Link>
+                                </Alert>
+                            </Col>
+                        </Row>
+                    ) : (
+                        <Row className="g-4">
+                            {featuredGames.map(game => (
                             <Col key={game.id} lg={4} md={6}>
                                 <Card 
                                     className="h-100 border-0 shadow-sm position-relative" 
@@ -333,20 +305,30 @@ const Home: React.FC = () => {
                                         <div className="mt-auto">
                                             {/* Precio */}
                                             <div className="mb-3">
-                                                {game.discount > 0 ? (
-                                                    <div className="d-flex align-items-baseline gap-2">
-                                                        <span className="text-muted text-decoration-line-through" style={{ fontSize: '1rem' }}>
-                                                            ${game.price.toFixed(2)}
-                                                        </span>
-                                                        <span className="h4 text-success mb-0 fw-bold">
-                                                            ${(game.price * (1 - game.discount / 100)).toFixed(2)}
-                                                        </span>
-                                                    </div>
-                                                ) : (
-                                                    <span className="h4 text-success mb-0 fw-bold">
-                                                        ${game.price.toFixed(2)}
-                                                    </span>
-                                                )}
+                                                {(() => {
+                                                    const price = game.price ?? game.precio ?? 0;
+                                                    const discount = game.discount ?? 0;
+                                                    
+                                                    if (discount > 0 && price > 0) {
+                                                        const discountedPrice = price * (1 - discount / 100);
+                                                        return (
+                                                            <div className="d-flex align-items-baseline gap-2">
+                                                                <span className="text-muted text-decoration-line-through" style={{ fontSize: '1rem' }}>
+                                                                    ${price.toFixed(2)}
+                                                                </span>
+                                                                <span className="h4 text-success mb-0 fw-bold">
+                                                                    ${discountedPrice.toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <span className="h4 text-success mb-0 fw-bold">
+                                                                {price === 0 ? 'Gratis' : `$${price.toFixed(2)}`}
+                                                            </span>
+                                                        );
+                                                    }
+                                                })()}
                                             </div>
                                             
                                             {/* Botón */}
@@ -377,7 +359,8 @@ const Home: React.FC = () => {
                                 </Card>
                             </Col>
                         ))}
-                    </Row>
+                        </Row>
+                    )}
                 </Container>
             </section>
 

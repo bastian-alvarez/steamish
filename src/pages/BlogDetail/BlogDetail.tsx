@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
-import { getBlogPorId } from '../../mock-data/blogsMocks';
-import { COLORS } from '../../utils/constants';
+import { getBlogPorId } from '../../fixtures/blogsMocks';
+import { COLORS } from '../../config/constants';
 
 const BlogDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();

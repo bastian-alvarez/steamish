@@ -8,7 +8,7 @@ export interface AuthContextType {
     loading: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<User>;
-    register: (username: string, email: string, password: string) => Promise<User>;
+    register: (username: string, email: string, password: string, phone?: string) => Promise<User>;
     logout: () => Promise<void>;
     isAuthenticated: boolean;
     isAdmin: boolean;
@@ -41,11 +41,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
-    const login = useCallback(async (email: string, password: string): Promise<User> => {
+    const login = useCallback(async (email: string, password: string, isAdmin: boolean = false): Promise<User> => {
         try {
             setLoading(true);
             setError(null);
-            const userData = await authService.login({ email, password });
+            const userData = await authService.login({ email, password }, isAdmin);
             setUser(userData);
             return userData;
         } catch (err) {
@@ -57,11 +57,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }, []);
 
-    const register = useCallback(async (username: string, email: string, password: string): Promise<User> => {
+    const register = useCallback(async (username: string, email: string, password: string, phone?: string): Promise<User> => {
         try {
             setLoading(true);
             setError(null);
-            const userData = await authService.register({ username, email, password });
+            const userData = await authService.register({ username, email, password, phone });
             setUser(userData);
             return userData;
         } catch (err) {
@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         register,
         logout,
         isAuthenticated: user !== null,
-        isAdmin: user?.role === UserRole.ADMIN,
+        isAdmin: user?.role === UserRole.ADMIN || user?.role === 'admin',
         clearError
     };
 

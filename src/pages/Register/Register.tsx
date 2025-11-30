@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import { useAuth } from '../../context/AuthContext';
 import { RegisterData } from '../../types/User';
 import { FormField } from '../../types/Component';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 // Register con interfaces y useContext mejorado
 interface RegisterForm extends RegisterData {
@@ -18,7 +18,8 @@ const Register: React.FC = () => {
         username: '', 
         email: '', 
         password: '', 
-        confirmPassword: '' 
+        confirmPassword: '',
+        phone: ''
     });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -40,7 +41,7 @@ const Register: React.FC = () => {
         try {
             setLoading(true);
             const { confirmPassword, ...registerData } = form;
-            await register(registerData.username, registerData.email, registerData.password);
+            await register(registerData.username, registerData.email, registerData.password, registerData.phone);
             navigate('/');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error al registrar usuario');
@@ -52,6 +53,7 @@ const Register: React.FC = () => {
     const formFields: FormField[] = [
         { field: 'username', icon: 'person', label: 'Usuario', type: 'text', placeholder: 'GamerPro123' },
         { field: 'email', icon: 'envelope', label: 'Email', type: 'email', placeholder: 'tu@email.com' },
+        { field: 'phone', icon: 'telephone', label: 'Teléfono', type: 'tel', placeholder: '1234567890' },
         { field: 'password', icon: 'lock', label: 'Contraseña', type: 'password', placeholder: '••••••••' },
         { field: 'confirmPassword', icon: 'shield-check', label: 'Confirmar', type: 'password', placeholder: '••••••••' }
     ];
@@ -82,7 +84,7 @@ const Register: React.FC = () => {
                                 <Form onSubmit={handleSubmit}>
                                     <Row>
                                         {formFields.map(({ field, icon, label, type, placeholder }) => (
-                                            <Col key={field} md={field === 'username' || field === 'email' ? 6 : 6} className="mb-3">
+                                            <Col key={field} md={field === 'phone' ? 12 : 6} className="mb-3">
                                                 <Form.Label className="fw-bold text-primary">
                                                     <i className={`bi bi-${icon} me-2`}></i>{label}
                                                 </Form.Label>

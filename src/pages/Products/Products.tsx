@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNotification } from '../../components/NotificationToast/NotificationToast';
+import { useNotification } from '../../components/ui/NotificationToast/NotificationToast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Toast, ToastContainer } from 'react-bootstrap';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import GameResults from '../../components/GameResults/GameResults';
+import SearchBar from '../../components/ui/SearchBar/SearchBar';
+import GameResults from '../../components/ui/GameResults/GameResults';
 import { Product, SearchResult } from '../../types/Product';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 // Products con useState para el carrito y mejor uso de interfaces
 const Products: React.FC = () => {
-    const { products } = useProducts();
+    const { products, loading, error } = useProducts();
     const cart = useCart();
     const { isAuthenticated } = useAuth();
     const { showSuccess, showWarning } = useNotification();
@@ -92,11 +92,33 @@ const Products: React.FC = () => {
             />
 
             <Container className="py-4">
-                <GameResults 
-                    products={searchResult.products.length > 0 ? searchResult.products : products}
-                    searchTerm={searchResult.searchTerm}
-                    onGameSelect={handleGameSelect}
-                />
+                {loading ? (
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Cargando juegos...</span>
+                        </div>
+                        <p className="mt-3 text-muted">Cargando juegos desde la base de datos...</p>
+                    </div>
+                ) : error ? (
+                    <div className="alert alert-warning" role="alert">
+                        <i className="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Advertencia:</strong> {error}
+                        <br />
+                        <small>Verifica que el microservicio game-catalog-service esté corriendo en el puerto 3002.</small>
+                    </div>
+                ) : products.length === 0 ? (
+                    <div className="text-center py-5">
+                        <i className="bi bi-inbox display-1 text-muted"></i>
+                        <h3 className="mt-3 text-muted">No hay juegos disponibles</h3>
+                        <p className="text-muted">No se encontraron juegos en la base de datos.</p>
+                    </div>
+                ) : (
+                    <GameResults 
+                        products={searchResult.products.length > 0 ? searchResult.products : products}
+                        searchTerm={searchResult.searchTerm}
+                        onGameSelect={handleGameSelect}
+                    />
+                )}
             </Container>
 
             {/* Toast para mostrar mensaje de autenticación requerida */}

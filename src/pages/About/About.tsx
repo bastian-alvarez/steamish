@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 const About: React.FC = () => {
     // Valores principales

@@ -8,11 +8,20 @@ export interface ProductContextType {
     loading: boolean;
     error: string | null;
     featuredProducts: Product[];
-    getProductById: (id: string) => Product | undefined;
+    getProductById: (id: string | number) => Product | undefined;
+    getProductByIdAsync: (id: string | number) => Promise<Product | undefined>;
     getProductsByCategory: (category: string) => Product[];
-    refreshProducts: () => void;
-    addProduct: (product: Omit<Product, 'id'>) => Product;
-    deleteProduct: (id: string) => boolean;
+    refreshProducts: (filters?: {
+        categoria?: number;
+        genero?: number;
+        descuento?: boolean;
+        search?: string;
+    }) => Promise<void>;
+    addProduct: (product: Omit<Product, 'id'>) => Promise<Product>;
+    updateProduct: (id: string | number, product: Partial<Product>) => Promise<Product>;
+    deleteProduct: (id: string) => Promise<boolean>;
+    getCategories: () => Promise<any[]>;
+    getGenres: () => Promise<any[]>;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -28,14 +37,25 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         loadProducts();
     }, []);
 
-    const loadProducts = () => {
+    const loadProducts = async (filters?: {
+        categoria?: number;
+        genero?: number;
+        descuento?: boolean;
+        search?: string;
+    }) => {
         try {
             setLoading(true);
             setError(null);
-            const loadedProducts = productService.getAllProducts();
+            const loadedProducts = await productService.getAllProducts(filters);
             setProducts(loadedProducts);
+            if (loadedProducts.length === 0) {
+                setError('No se encontraron juegos en la base de datos. Asegúrate de que el microservicio esté corriendo y tenga juegos registrados.');
+            }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Error al cargar productos');
+            const errorMessage = err instanceof Error ? err.message : 'Error al cargar productos';
+            setError(errorMessage);
+            setProducts([]); // Limpiar productos en caso de error
+            console.error('Error al cargar productos desde el microservicio:', err);
         } finally {
             setLoading(false);
         }
@@ -44,9 +64,19 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     // Productos destacados
     const featuredProducts = products.filter(p => p.featured);
 
-    // Obtener producto por ID
-    const getProductById = (id: string): Product | undefined => {
-        return products.find(p => p.id === id);
+    // Obtener producto por ID (sincrónico desde estado o asíncrono desde API)
+    const getProductById = (id: string | number): Product | undefined => {
+        return products.find(p => p.id === id || p.id?.toString() === id?.toString());
+    };
+
+    // Obtener producto por ID desde API
+    const getProductByIdAsync = async (id: string | number): Promise<Product | undefined> => {
+        try {
+            return await productService.getProductById(id);
+        } catch (err) {
+            console.error('Error al obtener producto:', err);
+            return undefined;
+        }
     };
 
     // Obtener productos por categoría
@@ -60,19 +90,41 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         error,
         featuredProducts,
         getProductById,
+        getProductByIdAsync,
         getProductsByCategory,
         refreshProducts: loadProducts,
-        addProduct: (product: Omit<Product, 'id'>) => {
-            const newProduct = productService.addProduct(product);
-            loadProducts();
+        addProduct: async (product: Omit<Product, 'id'>) => {
+            const newProduct = await productService.addProduct(product);
+            await loadProducts();
             return newProduct;
         },
-        deleteProduct: (id: string) => {
-            const deleted = productService.deleteProduct(id);
+        updateProduct: async (id: string | number, product: Partial<Product>) => {
+            const updatedProduct = await productService.updateProduct(id, product);
+            await loadProducts();
+            return updatedProduct;
+        },
+        deleteProduct: async (id: string) => {
+            const deleted = await productService.deleteProduct(id);
             if (deleted) {
-                loadProducts();
+                await loadProducts();
             }
             return deleted;
+        },
+        getCategories: async () => {
+            try {
+                return await productService.getCategories();
+            } catch (err) {
+                console.error('Error al obtener categorías:', err);
+                return [];
+            }
+        },
+        getGenres: async () => {
+            try {
+                return await productService.getGenres();
+            } catch (err) {
+                console.error('Error al obtener géneros:', err);
+                return [];
+            }
         }
     };
 

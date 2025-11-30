@@ -4,14 +4,19 @@ import { Container, Row, Col, Button, Badge, Spinner, Alert } from 'react-bootst
 import { useProducts } from '../../context/ProductContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNotification } from '../../components/NotificationToast/NotificationToast';
+import { useNotification } from '../../components/ui/NotificationToast/NotificationToast';
 import libraryService from '../../services/libraryService';
-import { COLORS } from '../../utils/constants';
+import productService from '../../services/productService';
+import Rating from '../../components/ui/Rating/Rating';
+import Comments from '../../components/ui/Comments/Comments';
+import { Product } from '../../types/Product';
+import { GameRatingInfo } from '../../services/ratingService';
+import { COLORS } from '../../config/constants';
 
 const ProductDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { getProductById } = useProducts();
+    const { getProductById, getProductByIdAsync } = useProducts();
     const cart = useCart();
     const { isAuthenticated, user } = useAuth();
     const { showSuccess, showWarning } = useNotification();
@@ -19,15 +24,57 @@ const ProductDetail: React.FC = () => {
     const [showAddedAlert, setShowAddedAlert] = useState<boolean>(false);
     const [showAuthAlert, setShowAuthAlert] = useState<boolean>(false);
     const [isOwned, setIsOwned] = useState<boolean>(false);
+    const [product, setProduct] = useState<Product | undefined>(undefined);
+    const [ratingInfo, setRatingInfo] = useState<GameRatingInfo | null>(null);
     
-    const product = id ? getProductById(id) : undefined;
+    // Cargar producto desde contexto o API
+    useEffect(() => {
+        const loadProduct = async () => {
+            if (!id) return;
+            
+            setIsLoading(true);
+            try {
+                // Intentar obtener desde el contexto primero
+                let loadedProduct = getProductById(id);
+                
+                // Si no está en el contexto, obtener desde la API
+                if (!loadedProduct) {
+                    loadedProduct = await getProductByIdAsync(id);
+                }
+                
+                // Si aún no está, intentar directamente desde el servicio
+                if (!loadedProduct) {
+                    loadedProduct = await productService.getProductById(id);
+                }
+                
+                setProduct(loadedProduct);
+            } catch (error) {
+                console.error('Error al cargar producto:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        loadProduct();
+    }, [id, getProductById, getProductByIdAsync]);
 
     // Verificar si el juego ya está en la biblioteca
     useEffect(() => {
-        if (user && product) {
-            const owned = libraryService.isInLibrary(user.id, product.id);
-            setIsOwned(owned);
-        }
+        const checkOwnership = async () => {
+            if (user && product) {
+                try {
+                    const userId = typeof user.id === 'string' ? parseInt(user.id) : user.id;
+                    const juegoId = typeof product.id === 'string' ? parseInt(product.id) : product.id;
+                    const owned = await libraryService.isInLibrary(userId, juegoId);
+                    setIsOwned(owned);
+                } catch (error) {
+                    console.error('Error al verificar propiedad:', error);
+                    setIsOwned(false);
+                }
+            }
+        };
+        
+        checkOwnership();
     }, [user, product]);
 
     // Loader de carga por 1 segundo
@@ -56,7 +103,7 @@ const ProductDetail: React.FC = () => {
         return colors[category] || 'dark';
     };
 
-    // Función para renderizar estrellas
+    // Función para renderizar estrellas (para uso en otras partes si es necesario)
     const renderStars = (rating: number): JSX.Element[] => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -82,6 +129,20 @@ const ProductDetail: React.FC = () => {
         }
 
         return stars;
+    };
+
+    // Handler para actualizar el rating cuando cambie
+    const handleRatingUpdate = (info: GameRatingInfo) => {
+        setRatingInfo(info);
+        // Actualizar el producto con el nuevo rating
+        if (product) {
+            setProduct({
+                ...product,
+                rating: info.averageRating,
+                averageRating: info.averageRating,
+                ratingCount: info.ratingCount
+            });
+        }
     };
 
     const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -173,9 +234,12 @@ const ProductDetail: React.FC = () => {
         );
     }
 
-    const finalPrice = product.discount > 0 
-        ? product.price * (1 - product.discount / 100)
-        : product.price;
+    // Calcular precio final de forma segura
+    const price = product.price ?? product.precio ?? 0;
+    const discount = product.discount ?? 0;
+    const finalPrice = discount > 0 && price > 0 
+        ? price * (1 - discount / 100)
+        : price;
 
     return (
         <div 
@@ -243,14 +307,19 @@ const ProductDetail: React.FC = () => {
                                 </h1>
                             </div>
 
-                            {/* Rating */}
+                            {/* Rating - Mostrar rating básico en la parte superior */}
                             <div className="d-flex align-items-center mb-4">
                                 <div className="me-3">
-                                    {renderStars(product.rating)}
+                                    {renderStars(ratingInfo?.averageRating || product.rating || 0)}
                                 </div>
                                 <span className="fw-bold fs-5" style={{ color: COLORS.color4 }}>
-                                    {product.rating}
+                                    {ratingInfo?.averageRating || product.rating || 0}
                                 </span>
+                                {ratingInfo && ratingInfo.ratingCount > 0 && (
+                                    <span className="ms-2 text-muted">
+                                        ({ratingInfo.ratingCount} {ratingInfo.ratingCount === 1 ? 'calificación' : 'calificaciones'})
+                                    </span>
+                                )}
                             </div>
 
                             {/* Tags */}
@@ -278,25 +347,36 @@ const ProductDetail: React.FC = () => {
                             {/* Precio y Botones */}
                             <div className="border-top pt-4 mt-auto">
                                 <div className="mb-4">
-                                    {product.discount > 0 ? (
-                                        <div>
-                                            <span className="text-muted text-decoration-line-through me-3 fs-5">
-                                                ${product.price.toFixed(2)}
-                                            </span>
-                                            <span className="fw-bold text-danger display-6">
-                                                ${finalPrice.toFixed(2)}
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <span className="fw-bold text-primary display-6">
-                                            ${product.price.toFixed(2)}
-                                        </span>
-                                    )}
-                                    {product.price === 0 && (
-                                        <span className="fw-bold text-success display-6">
-                                            Gratis
-                                        </span>
-                                    )}
+                                    {(() => {
+                                        const price = product.price ?? product.precio ?? 0;
+                                        const discount = product.discount ?? 0;
+                                        
+                                        if (discount > 0 && price > 0) {
+                                            const finalPrice = price * (1 - discount / 100);
+                                            return (
+                                                <div>
+                                                    <span className="text-muted text-decoration-line-through me-3 fs-5">
+                                                        ${price.toFixed(2)}
+                                                    </span>
+                                                    <span className="fw-bold text-danger display-6">
+                                                        ${finalPrice.toFixed(2)}
+                                                    </span>
+                                                </div>
+                                            );
+                                        } else if (price === 0) {
+                                            return (
+                                                <span className="fw-bold text-success display-6">
+                                                    Gratis
+                                                </span>
+                                            );
+                                        } else {
+                                            return (
+                                                <span className="fw-bold text-primary display-6">
+                                                    ${price.toFixed(2)}
+                                                </span>
+                                            );
+                                        }
+                                    })()}
                                 </div>
 
                                 {/* Alerta de confirmación */}
@@ -357,10 +437,10 @@ const ProductDetail: React.FC = () => {
                                             onClick={handleAddToCart}
                                             className="fw-bold px-4"
                                             style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
-                                            disabled={product.price === 0}
+                                            disabled={price === 0}
                                         >
                                             <i className="bi bi-cart-plus me-2"></i>
-                                            {product.price === 0 ? 'Gratis' : 'Agregar al Carrito'}
+                                            {price === 0 ? 'Gratis' : 'Agregar al Carrito'}
                                         </Button>
                                     )}
                                     <Button 
@@ -374,6 +454,34 @@ const ProductDetail: React.FC = () => {
                                     </Button>
                                 </div>
                             </div>
+                        </div>
+                    </Col>
+                </Row>
+
+                {/* Sección de Rating y Comentarios */}
+                <Row className="mt-5">
+                    <Col lg={12}>
+                        <div className="bg-white rounded p-4 shadow-sm">
+                            {/* Componente de Rating Interactivo */}
+                            {product && (
+                                <Rating 
+                                    juegoId={typeof product.id === 'string' ? parseInt(product.id) : product.id}
+                                    onRatingUpdate={handleRatingUpdate}
+                                />
+                            )}
+                        </div>
+                    </Col>
+                </Row>
+
+                <Row className="mt-4">
+                    <Col lg={12}>
+                        <div className="bg-white rounded p-4 shadow-sm">
+                            {/* Componente de Comentarios */}
+                            {product && (
+                                <Comments 
+                                    juegoId={typeof product.id === 'string' ? parseInt(product.id) : product.id}
+                                />
+                            )}
                         </div>
                     </Col>
                 </Row>

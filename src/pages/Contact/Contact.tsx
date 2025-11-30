@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 // Contact - Diseño Moderno Mejorado
 const Contact: React.FC = () => {

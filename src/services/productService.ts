@@ -56,7 +56,14 @@ const productService = {
             url += `?${params.toString()}`;
         }
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // No incluir credentials para evitar problemas con CORS
+            credentials: 'omit',
+        });
         
         if (!response.ok) {
             const errorText = await response.text().catch(() => 'Error desconocido');

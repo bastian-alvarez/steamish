@@ -6,6 +6,7 @@ export interface Product {
     image: string; // imagenUrl en el microservicio
     rating: number; // averageRating en el microservicio
     discount: number; // descuento en el microservicio (0-100)
+    descuento?: number; // Alias para discount (compatibilidad con microservicio)
     category: string; // categoriaNombre en el microservicio
     description: string; // descripcion en el microservicio
     tags?: string[]; // No está en el microservicio, se mantiene para compatibilidad

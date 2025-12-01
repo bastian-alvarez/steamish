@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Table, Badge, Button, Alert, Modal, Toast, T
 import { useAuth } from '../../context/AuthContext';
 import contactService from '../../services/contactService';
 import { ContactMessage } from '../../types/Contact';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 const Moderator: React.FC = () => {
     const { user } = useAuth();

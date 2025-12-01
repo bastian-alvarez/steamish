@@ -1,4 +1,4 @@
-import { User } from '../types/User';
+import { User, UserRole } from '../types/User';
 import { API } from '../config/constants';
 import authService from './authService';
 
@@ -211,7 +211,7 @@ class AdminService {
             isBlocked: userData.isBlocked || false,
             isActive: !userData.isBlocked,
             gender: userData.gender,
-            role: userData.role === 'ADMIN' ? 'ADMIN' : 'USER',
+            role: userData.role === 'ADMIN' ? UserRole.ADMIN : UserRole.USER,
             createdAt: userData.createdAt ? new Date(userData.createdAt) : undefined,
             updatedAt: userData.updatedAt ? new Date(userData.updatedAt) : undefined
         };

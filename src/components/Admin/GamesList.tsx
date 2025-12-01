@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Table, Badge, Alert } from 'react-bootstrap';
 import { Product } from '../../types/Product';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 import { getImagePlaceholder, handleImageError } from '../../utils/helpers';
 
 interface GamesListProps {
@@ -58,9 +58,9 @@ const GamesList: React.FC<GamesListProps> = ({ show, onHide, games, onDelete }) 
                                         {game.discount > 0 && <small className="text-danger ms-1">(-{game.discount}%)</small>}
                                     </td>
                                     <td><span className="fw-bold">{game.rating}</span> <i className="bi bi-star-fill text-warning ms-1"></i></td>
-                                    <td>{game.id.startsWith('custom_') ? <Badge bg="success">Personalizado</Badge> : <Badge bg="primary">Inicial</Badge>}</td>
+                                    <td>{String(game.id).startsWith('custom_') ? <Badge bg="success">Personalizado</Badge> : <Badge bg="primary">Inicial</Badge>}</td>
                                     <td>
-                                        <Button variant="danger" size="sm" onClick={() => onDelete(game.id)}>
+                                        <Button variant="danger" size="sm" onClick={() => onDelete(String(game.id))}>
                                             <i className="bi bi-trash me-1"></i>Eliminar
                                         </Button>
                                     </td>

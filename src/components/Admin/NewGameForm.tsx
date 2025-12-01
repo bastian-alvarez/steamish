@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form, Button, Alert, Row, Col } from 'react-bootstrap';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 interface AdminFormData {
     name: string;

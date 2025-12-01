@@ -194,7 +194,7 @@ const Header: React.FC = () => {
                                             <Dropdown.Item as={Link} to="/biblioteca">
                                                 <i className="bi bi-collection me-2"></i>Mi Biblioteca
                                             </Dropdown.Item>
-                                            {(isAdmin || localIsAdmin || user.role === UserRole.ADMIN || user.role === 'admin' || user.role === 'ADMIN') && (
+                                            {(isAdmin || localIsAdmin || user.role === UserRole.ADMIN || String(user.role).toUpperCase() === 'ADMIN') && (
                                                 <Dropdown.Item as={Link} to="/admin">
                                                     <i className="bi bi-shield-check me-2"></i>Panel Admin
                                                 </Dropdown.Item>

@@ -265,7 +265,7 @@ const Cart: React.FC<CartProps> = ({
                                                         <Button
                                                             variant="outline-secondary"
                                                             size="sm"
-                                                            onClick={() => handleDecreaseQuantity(item.id, item.quantity)}
+                                                            onClick={() => handleDecreaseQuantity(String(item.id), item.quantity)}
                                                             style={{
                                                                 width: '35px',
                                                                 height: '35px',
@@ -291,7 +291,7 @@ const Cart: React.FC<CartProps> = ({
                                                         <Button
                                                             variant="outline-primary"
                                                             size="sm"
-                                                            onClick={() => handleIncreaseQuantity(item.id, item.quantity)}
+                                                            onClick={() => handleIncreaseQuantity(String(item.id), item.quantity)}
                                                             style={{
                                                                 width: '35px',
                                                                 height: '35px',
@@ -313,7 +313,7 @@ const Cart: React.FC<CartProps> = ({
                                                     <Button 
                                                         variant="outline-danger"
                                                         size="sm"
-                                                        onClick={() => onRemove(item.id)}
+                                                        onClick={() => onRemove(String(item.id))}
                                                         className="w-100 w-sm-auto"
                                                     >
                                                         <i className="bi bi-trash me-1"></i>

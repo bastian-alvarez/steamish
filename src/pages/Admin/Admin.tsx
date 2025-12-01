@@ -476,8 +476,8 @@ const Admin: React.FC = () => {
                         <Row className="g-3">
                             {formFields.map(({ field, icon, label, type, placeholder, required, cols }) => {
                                 // El rating solo es requerido al crear un nuevo juego
-                                const isFieldRequired = field === 'rating' ? (required && !editingGame) : required;
-                                const isFieldDisabled = field === 'rating' && editingGame;
+                                const isFieldRequired: boolean = field === 'rating' ? (required && !editingGame) : required;
+                                const isFieldDisabled: boolean = field === 'rating' && !!editingGame;
                                 return (
                                     <Col key={field} md={cols}>
                                         <Form.Group>

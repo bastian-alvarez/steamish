@@ -26,7 +26,7 @@ const Login: React.FC = () => {
         try {
             setLoading(true);
             // El login ahora obtiene el rol real desde la base de datos
-            await login(form.email, form.password, false);
+            await login(form.email, form.password);
             
             // Esperar un momento para asegurar que el contexto se actualice
             await new Promise(resolve => setTimeout(resolve, 200));

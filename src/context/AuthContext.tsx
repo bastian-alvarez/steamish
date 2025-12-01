@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         register,
         logout,
         isAuthenticated: user !== null,
-        isAdmin: user?.role === UserRole.ADMIN || user?.role === 'admin',
+        isAdmin: user?.role === UserRole.ADMIN || (user?.role ? String(user.role).toUpperCase() === 'ADMIN' : false),
         clearError
     };
 

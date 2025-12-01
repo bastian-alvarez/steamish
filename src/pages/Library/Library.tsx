@@ -57,11 +57,7 @@ const Library: React.FC = () => {
                 setLibrary(products);
             } catch (error) {
                 console.error('Error al cargar biblioteca:', error);
-                // Fallback a método sincrónico si está disponible
-                if (user.id) {
-                    const syncLibrary = libraryService.getLibrarySync(user.id.toString());
-                    setLibrary(syncLibrary);
-                }
+                // No hay fallback sincrónico disponible
             } finally {
                 setLoading(false);
             }

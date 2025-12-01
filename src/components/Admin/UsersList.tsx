@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, Table, Badge, Alert } from 'react-bootstrap';
 import { User } from '../../types/User';
 import { UserRole } from '../../types/User';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../config/constants';
 
 interface UsersListProps {
     show: boolean;
@@ -61,14 +61,14 @@ const UsersList: React.FC<UsersListProps> = ({ show, onHide, users, onToggleUser
                                         )}
                                     </td>
                                     <td>
-                                        <small>{new Date(user.createdAt).toLocaleDateString('es-ES')}</small>
+                                        <small>{user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES') : 'N/A'}</small>
                                     </td>
                                     <td>
                                         {user.role !== UserRole.ADMIN && (
                                             <Button 
                                                 variant={user.isActive ? "danger" : "success"} 
                                                 size="sm" 
-                                                onClick={() => onToggleUserStatus(user.id)}
+                                                onClick={() => onToggleUserStatus(String(user.id))}
                                             >
                                                 <i className={`bi bi-${user.isActive ? 'lock' : 'unlock'} me-1`}></i>
                                                 {user.isActive ? 'Bloquear' : 'Desbloquear'}

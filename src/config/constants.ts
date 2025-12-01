@@ -34,39 +34,53 @@ export const COLORS = {
     gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
 } as const;
 
+// Importar configuración de APIs públicas (Dev Tunnels)
+import { API_URLS, API_CONFIG } from '../services/apis';
+
 // Detectar si estamos en producción (Vercel) o desarrollo
 const isProduction = process.env.NODE_ENV === 'production';
 
-// URL del API Gateway (prioridad en producción)
-const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL;
+// URL del API Gateway (prioridad: variable de entorno > Dev Tunnels > localhost)
+const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL || API_URLS.apiGateway;
 
 // Si hay API Gateway configurado, usarlo para todos los servicios
 const useApiGateway = !!apiGatewayUrl && apiGatewayUrl.trim() !== '';
 
-// Detectar si estamos en modo desarrollo con proxy (solo si no hay API Gateway)
+// Detectar si estamos en modo desarrollo con proxy (solo si no hay API Gateway ni Dev Tunnels)
 const useProxy = !useApiGateway && 
                  process.env.REACT_APP_USE_PROXY !== 'false' && 
                  (process.env.NODE_ENV === 'development' && !process.env.REACT_APP_AUTH_SERVICE_URL);
 
+// URLs de microservicios (prioridad: variables de entorno > Dev Tunnels > localhost)
+const getServiceUrl = (devTunnelUrl: string, localPort: number, envVar?: string): string => {
+    if (envVar && process.env[envVar]) {
+        return process.env[envVar]!;
+    }
+    if (useApiGateway) {
+        return apiGatewayUrl;
+    }
+    if (useProxy) {
+        return ""; // Usar proxy
+    }
+    // Usar Dev Tunnels en producción o si están configurados
+    if (isProduction || process.env.REACT_APP_USE_DEV_TUNNELS === 'true') {
+        return devTunnelUrl;
+    }
+    return `http://localhost:${localPort}`;
+};
+
 export const API = {
     baseUrl: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? '' : "http://localhost:3001"))),
-    timeout: 10000,
-    // Microservicios - Si hay API Gateway, todos usan la misma URL
-    // Si no, usar proxy en desarrollo o URLs directas
-    authService: useApiGateway 
-        ? apiGatewayUrl 
-        : (useProxy ? "" : (process.env.REACT_APP_AUTH_SERVICE_URL || (isProduction ? '' : "http://localhost:3001"))),
-    gameCatalogService: useApiGateway 
-        ? apiGatewayUrl 
-        : (useProxy ? "" : (process.env.REACT_APP_GAME_CATALOG_SERVICE_URL || (isProduction ? '' : "http://localhost:3002"))),
-    orderService: useApiGateway 
-        ? apiGatewayUrl 
-        : (useProxy ? "" : (process.env.REACT_APP_ORDER_SERVICE_URL || (isProduction ? '' : "http://localhost:3003"))),
-    libraryService: useApiGateway 
-        ? apiGatewayUrl 
-        : (useProxy ? "" : (process.env.REACT_APP_LIBRARY_SERVICE_URL || (isProduction ? '' : "http://localhost:3004")))
+        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? API_URLS.apiGateway : "http://localhost:3001"))),
+    timeout: API_CONFIG.timeout,
+    // Microservicios - Usar API Gateway si está disponible, sino usar URLs directas
+    authService: getServiceUrl(API_URLS.authService, 3001, 'REACT_APP_AUTH_SERVICE_URL'),
+    gameCatalogService: getServiceUrl(API_URLS.gameCatalogService, 3002, 'REACT_APP_GAME_CATALOG_SERVICE_URL'),
+    orderService: getServiceUrl(API_URLS.orderService, 3003, 'REACT_APP_ORDER_SERVICE_URL'),
+    libraryService: getServiceUrl(API_URLS.libraryService, 3004, 'REACT_APP_LIBRARY_SERVICE_URL'),
+    // API Gateway URL (para referencia)
+    apiGateway: apiGatewayUrl,
 } as const;
 
 export const ROUTES = {

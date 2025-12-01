@@ -46,7 +46,7 @@ interface QuickAction {
 
 const Admin: React.FC = () => {
     const { products, addProduct, updateProduct, deleteProduct, refreshProducts, getCategories, getGenres } = useProducts();
-    const { isAdmin, isAuthenticated, loading: authLoading } = useAuth();
+    const { isAdmin, isAuthenticated, loading: authLoading, user } = useAuth();
     const navigate = useNavigate();
     const [modals, setModals] = useState({ newGame: false, gamesList: false, usersList: false, ordersList: false, editGame: false });
     const [users, setUsers] = useState<any[]>([]);
@@ -115,15 +115,26 @@ const Admin: React.FC = () => {
     // Verificar que el usuario sea administrador - redirigir inmediatamente si no es admin
     useEffect(() => {
         if (!authLoading) {
+            // Debug log para diagnosticar problemas de acceso
+            console.log('Admin Panel - Verificación de acceso:', {
+                isAuthenticated,
+                isAdmin,
+                userRole: user?.role,
+                authLoading
+            });
+            
             if (!isAuthenticated) {
+                console.log('Admin Panel - No autenticado, redirigiendo a login');
                 navigate('/login', { replace: true });
                 return;
             }
             // Redirigir automáticamente al home si no es admin
             if (!isAdmin) {
+                console.log('Admin Panel - No es admin, redirigiendo a home. Rol actual:', user?.role);
                 navigate('/', { replace: true });
                 return;
             }
+            console.log('Admin Panel - Acceso permitido');
         }
     }, [isAdmin, isAuthenticated, authLoading, navigate]);
 

@@ -48,18 +48,50 @@ const Header: React.FC = () => {
             if (userJson) {
                 const storedUser = JSON.parse(userJson);
                 const role = storedUser?.role;
-                const isAdminFromStorage = role === 'admin' || role === UserRole.ADMIN || role === 'ADMIN';
+                const email = storedUser?.email?.toLowerCase();
+                const roleStr = String(role || '').toUpperCase();
+                
+                // Si el email es admin@steamish.com pero el rol no es admin, corregirlo
+                if (email === 'admin@steamish.com' && roleStr !== 'ADMIN' && role !== UserRole.ADMIN) {
+                    console.warn('Header - Corrigiendo rol de admin@steamish.com en localStorage');
+                    storedUser.role = 'admin';
+                    localStorage.setItem('steamish_user', JSON.stringify(storedUser));
+                    // Forzar recarga del contexto
+                    window.location.reload();
+                    return;
+                }
+                
+                // Verificación más exhaustiva del rol
+                const isAdminFromStorage = (
+                    role === 'admin' || 
+                    role === 'administrator' ||
+                    role === UserRole.ADMIN || 
+                    role === 'ADMIN' ||
+                    role === 'ADMINISTRATOR' ||
+                    roleStr === 'ADMIN' ||
+                    roleStr === 'ADMINISTRATOR' ||
+                    roleStr === 'ROLE_ADMIN' ||
+                    roleStr === 'ROLE_ADMINISTRATOR' ||
+                    roleStr.includes('ADMIN') ||
+                    email === 'admin@steamish.com'
+                );
                 setLocalIsAdmin(isAdminFromStorage);
                 
-                // Debug log (temporal)
-                console.log('Header - Verificación de rol:', {
+                // Debug log detallado
+                console.log('Header - Verificación de rol COMPLETA:', {
                     email: user?.email,
+                    emailFromStorage: email,
                     roleFromContext: user?.role,
                     roleFromStorage: role,
+                    roleType: typeof role,
+                    roleStr,
                     isAdminFromContext: isAdmin,
                     isAdminFromStorage: isAdminFromStorage,
-                    finalIsAdmin: isAdmin || isAdminFromStorage
+                    finalIsAdmin: isAdmin || isAdminFromStorage,
+                    storedUserComplete: storedUser
                 });
+            } else {
+                console.log('Header - No hay usuario en localStorage');
             }
         } catch (error) {
             console.error('Error al leer localStorage:', error);
@@ -194,11 +226,52 @@ const Header: React.FC = () => {
                                             <Dropdown.Item as={Link} to="/biblioteca">
                                                 <i className="bi bi-collection me-2"></i>Mi Biblioteca
                                             </Dropdown.Item>
-                                            {(isAdmin || localIsAdmin || user.role === UserRole.ADMIN || String(user.role).toUpperCase() === 'ADMIN') && (
+                                            {(() => {
+                                                // Verificación más robusta del rol de admin
+                                                const roleStr = user?.role ? String(user.role).toUpperCase() : '';
+                                                const emailStr = user?.email ? String(user.email).toLowerCase() : '';
+                                                
+                                                // Verificar por rol
+                                                const isUserAdminByRole = (
+                                                    isAdmin || 
+                                                    localIsAdmin || 
+                                                    user?.role === UserRole.ADMIN ||
+                                                    roleStr === 'ADMIN' ||
+                                                    roleStr === 'ADMINISTRATOR' ||
+                                                    roleStr === 'ROLE_ADMIN' ||
+                                                    roleStr === 'ROLE_ADMINISTRATOR' ||
+                                                    roleStr.includes('ADMIN')
+                                                );
+                                                
+                                                // Verificar por email (fallback para admin@steamish.com)
+                                                const isUserAdminByEmail = (
+                                                    emailStr === 'admin@steamish.com' ||
+                                                    emailStr.includes('admin@steamish.com') ||
+                                                    emailStr.startsWith('admin@')
+                                                );
+                                                
+                                                const isUserAdmin = isUserAdminByRole || isUserAdminByEmail;
+                                                
+                                                // Debug log
+                                                console.log('Header - Mostrar Panel Admin:', {
+                                                    isAdmin,
+                                                    localIsAdmin,
+                                                    userRole: user?.role,
+                                                    roleStr,
+                                                    email: user?.email,
+                                                    emailStr,
+                                                    isUserAdminByRole,
+                                                    isUserAdminByEmail,
+                                                    isUserAdmin,
+                                                    willShow: isUserAdmin
+                                                });
+                                                
+                                                return isUserAdmin;
+                                            })() ? (
                                                 <Dropdown.Item as={Link} to="/admin">
                                                     <i className="bi bi-shield-check me-2"></i>Panel Admin
                                                 </Dropdown.Item>
-                                            )}
+                                            ) : null}
                                             <Dropdown.Divider />
                                             <Dropdown.Item onClick={handleLogout}>
                                                 <i className="bi bi-box-arrow-right me-2"></i>Cerrar Sesión

@@ -105,7 +105,17 @@ class AuthService {
                 // Si el rol es una cadena, convertirla al enum
                 if (typeof user.role === 'string') {
                     const roleLower = user.role.toLowerCase();
-                    if (roleLower === 'admin' || roleLower === UserRole.ADMIN) {
+                    const roleUpper = user.role.toUpperCase();
+                    // Reconocer múltiples variantes de admin
+                    if (
+                        roleLower === 'admin' || 
+                        roleLower === 'administrator' ||
+                        roleUpper === 'ADMIN' ||
+                        roleUpper === 'ADMINISTRATOR' ||
+                        roleUpper === 'ROLE_ADMIN' ||
+                        roleUpper === 'ROLE_ADMINISTRATOR' ||
+                        user.role === UserRole.ADMIN
+                    ) {
                         parsedRole = UserRole.ADMIN;
                     } else if (roleLower === 'moderator' || roleLower === UserRole.MODERATOR) {
                         parsedRole = UserRole.MODERATOR;
@@ -115,6 +125,12 @@ class AuthService {
                 } else {
                     parsedRole = user.role;
                 }
+            }
+            
+            // Fallback: Si el email es admin@steamish.com, forzar rol de admin
+            if (user.email && user.email.toLowerCase() === 'admin@steamish.com' && parsedRole !== UserRole.ADMIN) {
+                console.warn('getCurrentUser: Usuario admin@steamish.com detectado pero rol no es ADMIN. Forzando rol ADMIN.');
+                parsedRole = UserRole.ADMIN;
             }
             
             // Debug log (temporal)
@@ -184,7 +200,13 @@ class AuthService {
             }
 
             // Obtener el rol real desde la base de datos (userData.role) o desde el JWT token
-            const userRole = this.getUserRole(userData, token);
+            let userRole = this.getUserRole(userData, token);
+            
+            // Fallback: Si el email es admin@steamish.com, forzar rol de admin
+            if (userData.email && userData.email.toLowerCase() === 'admin@steamish.com' && userRole !== UserRole.ADMIN) {
+                console.warn('Usuario admin@steamish.com detectado pero rol no es ADMIN. Forzando rol ADMIN.');
+                userRole = UserRole.ADMIN;
+            }
 
             // Mapear UserResponse a User
             const user: User = {
@@ -200,7 +222,7 @@ class AuthService {
                 token: token,
                 tokenType: authResponse.tokenType || 'Bearer',
                 expiresIn: authResponse.expiresIn,
-                // Usar el rol real desde la base de datos
+                // Usar el rol real desde la base de datos (o forzado si es admin@steamish.com)
                 role: userRole
             };
 

@@ -90,6 +90,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setError(null);
     }, []);
 
+    // Función para verificar si el usuario es admin (soporta múltiples variantes)
+    const checkIsAdmin = (userRole: UserRole | string | undefined): boolean => {
+        if (!userRole) return false;
+        
+        const roleStr = String(userRole).toUpperCase();
+        return (
+            userRole === UserRole.ADMIN ||
+            roleStr === 'ADMIN' ||
+            roleStr === 'ADMINISTRATOR' ||
+            roleStr === 'ROLE_ADMIN' ||
+            roleStr === 'ROLE_ADMINISTRATOR'
+        );
+    };
+
     const value: AuthContextType = {
         user,
         loading,
@@ -98,7 +112,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         register,
         logout,
         isAuthenticated: user !== null,
-        isAdmin: user?.role === UserRole.ADMIN || (user?.role ? String(user.role).toUpperCase() === 'ADMIN' : false),
+        isAdmin: checkIsAdmin(user?.role),
         clearError
     };
 

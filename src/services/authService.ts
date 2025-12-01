@@ -29,9 +29,24 @@ class AuthService {
         // Primero intentar obtener el rol desde userData (viene de la base de datos)
         if (userData.role) {
             const role = userData.role.toString().toUpperCase();
-            if (role === 'ADMIN' || role === UserRole.ADMIN.toUpperCase()) {
+
+            // Soportar diferentes variantes del rol de administrador que pueda enviar el microservicio
+            if (
+                role === 'ADMIN' ||
+                role === 'ADMINISTRATOR' ||
+                role === 'ROLE_ADMIN' ||
+                role === 'ROLE_ADMINISTRATOR' ||
+                role === UserRole.ADMIN.toUpperCase()
+            ) {
                 return UserRole.ADMIN;
-            } else if (role === 'MODERATOR' || role === UserRole.MODERATOR.toUpperCase()) {
+            }
+
+            // Variantes para moderador
+            if (
+                role === 'MODERATOR' ||
+                role === 'ROLE_MODERATOR' ||
+                role === UserRole.MODERATOR.toUpperCase()
+            ) {
                 return UserRole.MODERATOR;
             }
         }
@@ -43,9 +58,20 @@ class AuthService {
                 const role = decoded.role || decoded.authorities?.[0] || decoded.authority;
                 if (role) {
                     const roleUpper = role.toString().toUpperCase();
-                    if (roleUpper === 'ADMIN' || roleUpper === 'ROLE_ADMIN') {
+
+                    if (
+                        roleUpper === 'ADMIN' ||
+                        roleUpper === 'ADMINISTRATOR' ||
+                        roleUpper === 'ROLE_ADMIN' ||
+                        roleUpper === 'ROLE_ADMINISTRATOR'
+                    ) {
                         return UserRole.ADMIN;
-                    } else if (roleUpper === 'MODERATOR' || roleUpper === 'ROLE_MODERATOR') {
+                    }
+
+                    if (
+                        roleUpper === 'MODERATOR' ||
+                        roleUpper === 'ROLE_MODERATOR'
+                    ) {
                         return UserRole.MODERATOR;
                     }
                 }

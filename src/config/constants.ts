@@ -44,50 +44,36 @@ const DEV_TUNNEL_URLS = {
     libraryService: 'https://13wfn3bx-3004.brs.devtunnels.ms',
 } as const;
 
+// SIMPLIFICACIÓN: Conectar directamente a microservicios sin API Gateway
+// Esto evita problemas de CORS y Eureka
+
 // Detectar si estamos en producción (Vercel) o desarrollo
 const isProduction = process.env.NODE_ENV === 'production';
 
-// URL del API Gateway (prioridad: variable de entorno > Dev Tunnels > localhost)
-const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL || DEV_TUNNEL_URLS.apiGateway;
-
-// Si hay API Gateway configurado, usarlo para todos los servicios
-const useApiGateway = !!apiGatewayUrl && apiGatewayUrl.trim() !== '';
-
-// Detectar si estamos en modo desarrollo con proxy (solo si no hay API Gateway ni Dev Tunnels)
-const useProxy = !useApiGateway && 
-                 process.env.REACT_APP_USE_PROXY !== 'false' && 
-                 (process.env.NODE_ENV === 'development' && !process.env.REACT_APP_AUTH_SERVICE_URL);
-
-// URLs de microservicios (prioridad: variables de entorno > Dev Tunnels > localhost)
+// Función simple para obtener URL del servicio
 const getServiceUrl = (devTunnelUrl: string, localPort: number, envVar?: string): string => {
+    // Prioridad 1: Variable de entorno
     if (envVar && process.env[envVar]) {
         return process.env[envVar]!;
     }
-    if (useApiGateway) {
-        return apiGatewayUrl;
-    }
-    if (useProxy) {
-        return ""; // Usar proxy
-    }
-    // Usar Dev Tunnels en producción o si están configurados
+    // Prioridad 2: Dev Tunnels (siempre en producción o si está configurado)
     if (isProduction || process.env.REACT_APP_USE_DEV_TUNNELS === 'true') {
         return devTunnelUrl;
     }
+    // Prioridad 3: Localhost en desarrollo
     return `http://localhost:${localPort}`;
 };
 
 export const API = {
-    baseUrl: useApiGateway 
-        ? apiGatewayUrl 
-        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? DEV_TUNNEL_URLS.apiGateway : "http://localhost:3001"))),
-    timeout: 30000, // 30 segundos (aumentado para Dev Tunnels)
-    // Microservicios - Usar API Gateway si está disponible, sino usar URLs directas
+    baseUrl: process.env.REACT_APP_API_URL || getServiceUrl(DEV_TUNNEL_URLS.authService, 3001),
+    timeout: 30000, // 30 segundos
+    // Conectar directamente a microservicios (sin API Gateway)
     authService: getServiceUrl(DEV_TUNNEL_URLS.authService, 3001, 'REACT_APP_AUTH_SERVICE_URL'),
     gameCatalogService: getServiceUrl(DEV_TUNNEL_URLS.gameCatalogService, 3002, 'REACT_APP_GAME_CATALOG_SERVICE_URL'),
     orderService: getServiceUrl(DEV_TUNNEL_URLS.orderService, 3003, 'REACT_APP_ORDER_SERVICE_URL'),
     libraryService: getServiceUrl(DEV_TUNNEL_URLS.libraryService, 3004, 'REACT_APP_LIBRARY_SERVICE_URL'),
-    // API Gateway URL (para referencia)
-    apiGateway: apiGatewayUrl,
+    // API Gateway URL (mantenido para referencia futura, pero no se usa)
+    apiGateway: process.env.REACT_APP_API_GATEWAY_URL || DEV_TUNNEL_URLS.apiGateway,
 } as const;
 
 export const ROUTES = {

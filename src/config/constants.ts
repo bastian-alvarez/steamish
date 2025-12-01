@@ -34,14 +34,21 @@ export const COLORS = {
     gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
 } as const;
 
-// Importar configuración de APIs públicas (Dev Tunnels)
-import { API_URLS, API_CONFIG } from '../services/apis';
+// URLs públicas de los microservicios (Dev Tunnels)
+const DEV_TUNNEL_URLS = {
+    eurekaServer: 'https://13wfn3bx-8761.brs.devtunnels.ms',
+    apiGateway: 'https://13wfn3bx-8080.brs.devtunnels.ms',
+    authService: 'https://13wfn3bx-3001.brs.devtunnels.ms',
+    gameCatalogService: 'https://13wfn3bx-3002.brs.devtunnels.ms',
+    orderService: 'https://13wfn3bx-3003.brs.devtunnels.ms',
+    libraryService: 'https://13wfn3bx-3004.brs.devtunnels.ms',
+} as const;
 
 // Detectar si estamos en producción (Vercel) o desarrollo
 const isProduction = process.env.NODE_ENV === 'production';
 
 // URL del API Gateway (prioridad: variable de entorno > Dev Tunnels > localhost)
-const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL || API_URLS.apiGateway;
+const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL || DEV_TUNNEL_URLS.apiGateway;
 
 // Si hay API Gateway configurado, usarlo para todos los servicios
 const useApiGateway = !!apiGatewayUrl && apiGatewayUrl.trim() !== '';
@@ -72,13 +79,13 @@ const getServiceUrl = (devTunnelUrl: string, localPort: number, envVar?: string)
 export const API = {
     baseUrl: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? API_URLS.apiGateway : "http://localhost:3001"))),
-    timeout: API_CONFIG.timeout,
+        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? DEV_TUNNEL_URLS.apiGateway : "http://localhost:3001"))),
+    timeout: 30000, // 30 segundos (aumentado para Dev Tunnels)
     // Microservicios - Usar API Gateway si está disponible, sino usar URLs directas
-    authService: getServiceUrl(API_URLS.authService, 3001, 'REACT_APP_AUTH_SERVICE_URL'),
-    gameCatalogService: getServiceUrl(API_URLS.gameCatalogService, 3002, 'REACT_APP_GAME_CATALOG_SERVICE_URL'),
-    orderService: getServiceUrl(API_URLS.orderService, 3003, 'REACT_APP_ORDER_SERVICE_URL'),
-    libraryService: getServiceUrl(API_URLS.libraryService, 3004, 'REACT_APP_LIBRARY_SERVICE_URL'),
+    authService: getServiceUrl(DEV_TUNNEL_URLS.authService, 3001, 'REACT_APP_AUTH_SERVICE_URL'),
+    gameCatalogService: getServiceUrl(DEV_TUNNEL_URLS.gameCatalogService, 3002, 'REACT_APP_GAME_CATALOG_SERVICE_URL'),
+    orderService: getServiceUrl(DEV_TUNNEL_URLS.orderService, 3003, 'REACT_APP_ORDER_SERVICE_URL'),
+    libraryService: getServiceUrl(DEV_TUNNEL_URLS.libraryService, 3004, 'REACT_APP_LIBRARY_SERVICE_URL'),
     // API Gateway URL (para referencia)
     apiGateway: apiGatewayUrl,
 } as const;

@@ -6,6 +6,56 @@ class AuthService {
     private readonly STORAGE_KEY = 'steamish_user';
     private readonly STORAGE_TOKEN_KEY = 'steamish_token';
 
+    // Decodificar JWT token para obtener el rol del usuario
+    private decodeJWT(token: string): any {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                    .join('')
+            );
+            return JSON.parse(jsonPayload);
+        } catch (error) {
+            console.error('Error al decodificar JWT:', error);
+            return null;
+        }
+    }
+
+    // Obtener rol del usuario desde el token JWT o desde los datos del usuario
+    private getUserRole(userData: any, token?: string): UserRole {
+        // Primero intentar obtener el rol desde userData (viene de la base de datos)
+        if (userData.role) {
+            const role = userData.role.toString().toUpperCase();
+            if (role === 'ADMIN' || role === UserRole.ADMIN.toUpperCase()) {
+                return UserRole.ADMIN;
+            } else if (role === 'MODERATOR' || role === UserRole.MODERATOR.toUpperCase()) {
+                return UserRole.MODERATOR;
+            }
+        }
+
+        // Si no está en userData, intentar obtenerlo del JWT token
+        if (token) {
+            const decoded = this.decodeJWT(token);
+            if (decoded) {
+                const role = decoded.role || decoded.authorities?.[0] || decoded.authority;
+                if (role) {
+                    const roleUpper = role.toString().toUpperCase();
+                    if (roleUpper === 'ADMIN' || roleUpper === 'ROLE_ADMIN') {
+                        return UserRole.ADMIN;
+                    } else if (roleUpper === 'MODERATOR' || roleUpper === 'ROLE_MODERATOR') {
+                        return UserRole.MODERATOR;
+                    }
+                }
+            }
+        }
+
+        // Por defecto, retornar USER
+        return UserRole.USER;
+    }
+
     // Obtener token JWT del localStorage
     getToken(): string | null {
         return localStorage.getItem(this.STORAGE_TOKEN_KEY);
@@ -59,11 +109,13 @@ class AuthService {
         }
     }
 
-    // Login conectado al microservicio
+    // Login conectado al microservicio - obtiene el rol real desde la base de datos
     async login(credentials: LoginCredentials, isAdmin: boolean = false): Promise<User> {
         try {
-            const endpoint = isAdmin ? '/api/auth/admin/login' : '/api/auth/login';
-            const response = await fetch(`${API.authService}${endpoint}`, {
+            // Intentar primero con el endpoint normal (funciona para usuarios y admins)
+            // El servidor debe retornar el rol real del usuario desde la base de datos
+            let endpoint = '/api/auth/login';
+            let response = await fetch(`${API.authService}${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,6 +125,21 @@ class AuthService {
                     password: credentials.password
                 })
             });
+
+            // Si falla con el endpoint normal y se especificó isAdmin, intentar con el endpoint de admin
+            if (!response.ok && isAdmin) {
+                endpoint = '/api/auth/admin/login';
+                response = await fetch(`${API.authService}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: credentials.email,
+                        password: credentials.password
+                    })
+                });
+            }
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: 'Error en el login' }));
@@ -90,6 +157,9 @@ class AuthService {
                 this.setToken(token);
             }
 
+            // Obtener el rol real desde la base de datos (userData.role) o desde el JWT token
+            const userRole = this.getUserRole(userData, token);
+
             // Mapear UserResponse a User
             const user: User = {
                 id: userData.id,
@@ -104,16 +174,25 @@ class AuthService {
                 token: token,
                 tokenType: authResponse.tokenType || 'Bearer',
                 expiresIn: authResponse.expiresIn,
-                // Inferir rol basado en el endpoint usado
-                role: isAdmin ? UserRole.ADMIN : UserRole.USER
+                // Usar el rol real desde la base de datos
+                role: userRole
             };
 
-            // Guardar usuario actual (asegurar que el rol se guarde como string para compatibilidad)
+            // Guardar usuario actual con el rol real
             const userToStore = {
                 ...user,
-                role: isAdmin ? 'admin' : 'user' // Guardar como string para compatibilidad
+                role: userRole === UserRole.ADMIN ? 'admin' : 
+                      userRole === UserRole.MODERATOR ? 'moderator' : 'user'
             };
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
+            
+            // Log para debugging
+            console.log('Login exitoso - Rol obtenido desde la base de datos:', {
+                email: user.email,
+                role: userRole,
+                roleFromUserData: userData.role,
+                tokenDecoded: token ? this.decodeJWT(token) : null
+            });
             
             // Retornar con el enum correcto
             return user;
@@ -220,6 +299,10 @@ class AuthService {
 
             const data = await response.json();
             const userData = data._embedded || data;
+            const token = this.getToken();
+            
+            // Obtener el rol real desde la base de datos
+            const userRole = this.getUserRole(userData, token || undefined);
             
             const user: User = {
                 id: userData.id,
@@ -231,11 +314,16 @@ class AuthService {
                 isBlocked: userData.isBlocked,
                 isActive: !userData.isBlocked,
                 gender: userData.gender,
-                role: userData.role === 'ADMIN' ? UserRole.ADMIN : UserRole.USER
+                role: userRole
             };
 
-            // Actualizar usuario en localStorage
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+            // Actualizar usuario en localStorage con el rol real
+            const userToStore = {
+                ...user,
+                role: userRole === UserRole.ADMIN ? 'admin' : 
+                      userRole === UserRole.MODERATOR ? 'moderator' : 'user'
+            };
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
             return user;
         } catch (error) {
             if (error instanceof Error) {
@@ -260,6 +348,10 @@ class AuthService {
 
             const data = await response.json();
             const userData = data._embedded || data;
+            const token = this.getToken();
+            
+            // Obtener el rol real desde la base de datos
+            const userRole = this.getUserRole(userData, token || undefined);
             
             const user: User = {
                 id: userData.id,
@@ -271,11 +363,16 @@ class AuthService {
                 isBlocked: userData.isBlocked,
                 isActive: !userData.isBlocked,
                 gender: userData.gender,
-                role: userData.role === 'ADMIN' ? UserRole.ADMIN : UserRole.USER
+                role: userRole
             };
 
-            // Actualizar usuario en localStorage
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+            // Actualizar usuario en localStorage con el rol real
+            const userToStore = {
+                ...user,
+                role: userRole === UserRole.ADMIN ? 'admin' : 
+                      userRole === UserRole.MODERATOR ? 'moderator' : 'user'
+            };
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
             return user;
         } catch (error) {
             if (error instanceof Error) {
@@ -312,6 +409,9 @@ class AuthService {
             const data = await response.json();
             const userData = data._embedded || data;
             
+            // Obtener el rol real desde la base de datos
+            const userRole = this.getUserRole(userData, token || undefined);
+            
             const user: User = {
                 id: userData.id,
                 name: userData.name,
@@ -322,11 +422,16 @@ class AuthService {
                 isBlocked: userData.isBlocked,
                 isActive: !userData.isBlocked,
                 gender: userData.gender,
-                role: userData.role === 'ADMIN' ? UserRole.ADMIN : UserRole.USER
+                role: userRole
             };
 
-            // Actualizar usuario en localStorage
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+            // Actualizar usuario en localStorage con el rol real
+            const userToStore = {
+                ...user,
+                role: userRole === UserRole.ADMIN ? 'admin' : 
+                      userRole === UserRole.MODERATOR ? 'moderator' : 'user'
+            };
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(userToStore));
             return user;
         } catch (error) {
             if (error instanceof Error) {

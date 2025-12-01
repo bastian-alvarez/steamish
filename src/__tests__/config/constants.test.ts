@@ -56,7 +56,7 @@ describe('Constants', () => {
         });
 
         test('debe tener timeout definido', () => {
-            expect(API.timeout).toBe(10000);
+            expect(API.timeout).toBe(30000);
             expect(typeof API.timeout).toBe('number');
         });
 

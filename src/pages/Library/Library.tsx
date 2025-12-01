@@ -7,6 +7,7 @@ import productService from '../../services/productService';
 import { Product } from '../../types/Product';
 import { LibraryItem } from '../../types/Library';
 import { COLORS } from '../../config/constants';
+import { getImagePlaceholder, handleImageError } from '../../utils/helpers';
 
 const Library: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
@@ -154,13 +155,11 @@ const Library: React.FC = () => {
                                                 </Badge>
                                             )}
                                             <img 
-                                                src={game.image || 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=Game'} 
+                                                src={game.image || getImagePlaceholder(300, 200, 'Juego')} 
                                                 alt={game.name}
                                                 className="img-fluid w-100 h-100"
                                                 style={{ objectFit: 'cover' }}
-                                                onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=' + encodeURIComponent(game.name);
-                                                }}
+                                                onError={(e) => handleImageError(e, game.name)}
                                             />
                                         </div>
                                         <Card.Body className="d-flex flex-column">

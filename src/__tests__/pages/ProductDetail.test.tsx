@@ -9,11 +9,14 @@ import { AuthProvider } from '../../context/AuthContext';
 import { NotificationProvider } from '../../components/ui/NotificationToast/NotificationToast';
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-    ...vi.importActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-    useParams: () => ({ id: '1' }),
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('react-router-dom')>();
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+        useParams: () => ({ id: '1' }),
+    };
+});
 
 vi.mock('../../services/productService', () => ({
     __esModule: true,

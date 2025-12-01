@@ -25,37 +25,14 @@ const Login: React.FC = () => {
 
         try {
             setLoading(true);
-            // Intentar login como admin primero (para detectar administradores)
-            let user;
-            let isAdminUser = false;
-            
-            try {
-                // Intentar primero como admin
-                user = await login(form.email, form.password, true);
-                isAdminUser = true;
-            } catch (adminErr) {
-                // Si falla como admin, intentar como usuario normal
-                try {
-                    user = await login(form.email, form.password, false);
-                    isAdminUser = false;
-                } catch (userErr) {
-                    // Si ambos fallan, lanzar el error del admin (más descriptivo)
-                    throw adminErr;
-                }
-            }
+            // El login ahora obtiene el rol real desde la base de datos
+            await login(form.email, form.password, false);
             
             // Esperar un momento para asegurar que el contexto se actualice
             await new Promise(resolve => setTimeout(resolve, 200));
             
-            // Redirigir según el rol del usuario
-            // Verificar si es admin por el rol o por el intento de login como admin
-            if (isAdminUser || user?.role === UserRole.ADMIN) {
-                // Redirigir al panel de administración
-                navigate('/admin', { replace: true });
-            } else {
-                // Redirigir al inicio para usuarios normales
-                navigate('/', { replace: true });
-            }
+            // Redirigir a todos los usuarios al home
+            navigate('/', { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
         } finally {

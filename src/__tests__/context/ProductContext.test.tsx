@@ -21,7 +21,18 @@ vi.mock('../../services/productService', () => ({
                 featured: true
             }
         ]),
-        getProductById: vi.fn(),
+        getProductById: vi.fn().mockResolvedValue({
+            id: '1',
+            name: 'Test Game',
+            price: 59.99,
+            category: 'Action',
+            rating: 4.5,
+            discount: 0,
+            image: 'test.jpg',
+            description: 'Test description',
+            tags: ['Action'],
+            featured: true
+        }),
         getCategories: vi.fn().mockResolvedValue([]),
         getGenres: vi.fn().mockResolvedValue([]),
         addProduct: vi.fn(),
@@ -57,8 +68,12 @@ describe('ProductContext', () => {
         expect(result.current.products.length).toBeGreaterThan(0);
     });
 
-    test('debe obtener producto por ID', () => {
+    test('debe obtener producto por ID', async () => {
         const { result } = renderHook(() => useProducts(), { wrapper });
+
+        await waitFor(() => {
+            expect(result.current.loading).toBe(false);
+        });
 
         const product = result.current.getProductById('1');
 

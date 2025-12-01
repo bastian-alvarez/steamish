@@ -5,11 +5,16 @@ import { BrowserRouter } from 'react-router-dom';
 import BlogDetail from '../../pages/BlogDetail/BlogDetail';
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-    ...vi.importActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-    useParams: () => ({ id: '1' }),
-}));
+const mockUseParams = vi.fn(() => ({ id: '1' }));
+
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('react-router-dom')>();
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+        useParams: () => mockUseParams(),
+    };
+});
 
 const renderWithRouter = (component: React.ReactElement) => {
     return render(
@@ -27,10 +32,7 @@ describe('BlogDetail Component', () => {
     });
 
     test('debe mostrar mensaje cuando el blog no existe', () => {
-        vi.mock('react-router-dom', () => ({
-            ...vi.importActual('react-router-dom'),
-            useParams: () => ({ id: '999' }),
-        }));
+        mockUseParams.mockReturnValueOnce({ id: '999' });
 
         renderWithRouter(<BlogDetail />);
 

@@ -246,7 +246,12 @@ export const getBlogsPorCategoria = (category: string): BlogPropiedades[] => {
 // Helper function para obtener imagen por título
 export const getImagenPorTitulo = (title: string): string => {
     const blog = blogs.find(b => b.title.toLowerCase() === title.toLowerCase());
-    return blog?.image || 'https://via.placeholder.com/400x200/4d4d80/ffffff?text=Blog';
+    // Usar placeholder local en lugar de servicio externo
+    if (!blog?.image) {
+        const { getImagePlaceholder } = require('../utils/helpers');
+        return getImagePlaceholder(400, 200, 'Blog');
+    }
+    return blog.image;
 };
 
 // Helper function para obtener blogs destacados

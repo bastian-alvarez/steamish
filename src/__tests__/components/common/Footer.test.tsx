@@ -16,7 +16,9 @@ describe('Footer Component', () => {
     test('debe renderizar el nombre de la marca', () => {
         renderWithRouter(<Footer />);
 
-        expect(screen.getByText(/Steamish Gaming/i)).toBeInTheDocument();
+        const brandElements = screen.getAllByText(/Steamish Gaming/i);
+        expect(brandElements.length).toBeGreaterThan(0);
+        expect(brandElements[0]).toBeInTheDocument();
     });
 
     test('debe renderizar los enlaces de navegación', () => {

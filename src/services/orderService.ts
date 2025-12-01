@@ -19,7 +19,28 @@ class OrderService {
     // Crear nueva orden
     async createOrder(request: CreateOrderRequest): Promise<Order> {
         try {
+            // Validaciones previas
+            if (!request.userId || request.userId <= 0) {
+                throw new Error('ID de usuario inválido');
+            }
+
+            if (!request.items || request.items.length === 0) {
+                throw new Error('No hay items en la orden');
+            }
+
+            // Validar que todos los items tengan juegoId y cantidad válidos
+            const invalidItems = request.items.filter(item => !item.juegoId || item.cantidad <= 0);
+            if (invalidItems.length > 0) {
+                throw new Error('Algunos items tienen datos inválidos');
+            }
+
             const url = `${API.orderService}/api/orders`;
+            const token = authService.getToken();
+            
+            if (!token) {
+                throw new Error('No estás autenticado. Por favor, inicia sesión nuevamente.');
+            }
+
             const headers = this.getAuthHeaders();
             const body = JSON.stringify({
                 userId: request.userId,
@@ -31,13 +52,41 @@ class OrderService {
                 direccionEnvio: request.direccionEnvio
             });
             
-            console.log('Creating order:', { url, hasToken: !!authService.getToken(), body });
-            
-            const response = await fetch(url, {
-                method: 'POST',
-                headers,
-                body
+            console.log('Creating order:', { 
+                url, 
+                hasToken: !!token,
+                userId: request.userId,
+                itemsCount: request.items.length,
+                orderServiceUrl: API.orderService
             });
+            
+            // Agregar timeout y mejor manejo de errores de red
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), API.timeout);
+
+            let response: Response;
+            try {
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers,
+                    body,
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                
+                if (fetchError instanceof Error) {
+                    if (fetchError.name === 'AbortError') {
+                        throw new Error('La solicitud tardó demasiado. Verifica tu conexión a internet.');
+                    }
+                    if (fetchError.message.includes('Failed to fetch')) {
+                        throw new Error(`No se pudo conectar con el servidor de órdenes. Verifica que el servicio esté disponible en: ${API.orderService}`);
+                    }
+                    throw new Error(`Error de red: ${fetchError.message}`);
+                }
+                throw new Error('Error desconocido al intentar conectar con el servidor');
+            }
 
             if (!response.ok) {
                 let errorMessage = 'Error al crear la orden';
@@ -54,6 +103,18 @@ class OrderService {
                 } catch {
                     errorMessage = `Error ${response.status}: ${response.statusText}`;
                 }
+                
+                // Mensajes más específicos según el código de estado
+                if (response.status === 401) {
+                    throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+                } else if (response.status === 403) {
+                    throw new Error('No tienes permisos para realizar esta acción.');
+                } else if (response.status === 404) {
+                    throw new Error('El servicio de órdenes no está disponible.');
+                } else if (response.status >= 500) {
+                    throw new Error('Error en el servidor. Por favor, intenta más tarde.');
+                }
+                
                 throw new Error(errorMessage);
             }
 
@@ -64,6 +125,12 @@ class OrderService {
             return this.mapOrderResponseToOrder(orderData);
         } catch (error) {
             if (error instanceof Error) {
+                console.error('Error en createOrder:', {
+                    message: error.message,
+                    stack: error.stack,
+                    userId: request.userId,
+                    itemsCount: request.items?.length
+                });
                 throw error;
             }
             throw new Error('Error al conectar con el servidor de órdenes');

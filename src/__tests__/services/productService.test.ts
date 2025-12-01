@@ -53,10 +53,8 @@ describe('productService', () => {
     test('debe usar datos por defecto si falla la API', async () => {
         vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
 
-        const products = await productService.getAllProducts();
-
-        // Debe usar datos por defecto del mock
-        expect(Array.isArray(products)).toBe(true);
+        // El servicio lanza errores, no tiene fallback
+        await expect(productService.getAllProducts()).rejects.toThrow();
     });
 
     test('debe obtener categorías', async () => {
@@ -67,7 +65,7 @@ describe('productService', () => {
 
         vi.mocked(fetch).mockResolvedValueOnce({
             ok: true,
-            json: async () => ({ _embedded: { categoryResponseList: mockCategories } })
+            json: async () => ({ _embedded: { categoryList: mockCategories } })
         } as Response);
 
         const categories = await productService.getCategories();
@@ -84,7 +82,7 @@ describe('productService', () => {
 
         vi.mocked(fetch).mockResolvedValueOnce({
             ok: true,
-            json: async () => ({ _embedded: { genreResponseList: mockGenres } })
+            json: async () => ({ _embedded: { genreList: mockGenres } })
         } as Response);
 
         const genres = await productService.getGenres();

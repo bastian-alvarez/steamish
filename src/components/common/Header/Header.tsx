@@ -143,14 +143,6 @@ const Header: React.FC = () => {
                         {/* Search */}
                         <Form onSubmit={handleQuickSearch} className="d-none d-lg-flex me-3">
                             <InputGroup size="sm">
-                                <InputGroup.Text style={{ 
-                                    background: 'rgba(255, 255, 255, 0.15)',
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                                    color: 'white',
-                                    borderRight: 'none'
-                                }}>
-                                    <i className="bi bi-search"></i>
-                                </InputGroup.Text>
                                 <Form.Control
                                     type="text"
                                     placeholder="Buscar juegos..."
@@ -159,7 +151,6 @@ const Header: React.FC = () => {
                                     style={{ 
                                         borderColor: 'rgba(255, 255, 255, 0.3)',
                                         backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                                        borderLeft: 'none',
                                         borderRight: 'none',
                                         minWidth: '260px'
                                     }}
@@ -167,12 +158,12 @@ const Header: React.FC = () => {
                                 <Button 
                                     type="submit" 
                                     size="sm"
-                                style={{ 
-                                    background: 'rgba(255, 255, 255, 0.2)',
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                                    color: 'white',
-                                    borderLeft: 'none'
-                                }}
+                                    style={{ 
+                                        background: 'rgba(255, 255, 255, 0.2)',
+                                        borderColor: 'rgba(255, 255, 255, 0.3)',
+                                        color: 'white',
+                                        borderLeft: 'none'
+                                    }}
                                 >
                                     <i className="bi bi-search"></i>
                                 </Button>

@@ -5,10 +5,13 @@ import { BrowserRouter } from 'react-router-dom';
 import Blogs from '../../pages/Blogs/Blogs';
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-    ...vi.importActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('react-router-dom')>();
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
 
 const renderWithRouter = (component: React.ReactElement) => {
     return render(

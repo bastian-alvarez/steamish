@@ -12,6 +12,7 @@ import Comments from '../../components/ui/Comments/Comments';
 import { Product } from '../../types/Product';
 import { GameRatingInfo } from '../../services/ratingService';
 import { COLORS } from '../../config/constants';
+import { getImagePlaceholder, handleImageError } from '../../utils/helpers';
 
 const ProductDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -277,7 +278,7 @@ const ProductDetail: React.FC = () => {
                                 </Badge>
                             )}
                             <img 
-                                src={product.image || 'https://via.placeholder.com/600x400/4d4d80/ffffff?text=Game'} 
+                                src={product.image || getImagePlaceholder(600, 400, 'Juego')} 
                                 alt={product.name}
                                 className="img-fluid w-100"
                                 style={{ 
@@ -286,10 +287,7 @@ const ProductDetail: React.FC = () => {
                                     objectFit: 'cover',
                                     backgroundColor: '#e9ecef'
                                 }}
-                                onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = 'https://via.placeholder.com/600x400/4d4d80/ffffff?text=' + encodeURIComponent(product.name);
-                                }}
+                                onError={(e) => handleImageError(e, product.name)}
                             />
                         </div>
                     </Col>

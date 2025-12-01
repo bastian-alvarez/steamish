@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Alert, Form, Table, Badge } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../../context/ProductContext';
+import { useAuth } from '../../context/AuthContext';
 import { COLORS } from '../../config/constants';
 import authService from '../../services/authService';
 import adminService from '../../services/adminService';
@@ -8,6 +10,7 @@ import orderService from '../../services/orderService';
 import { Product } from '../../types/Product';
 import { UserRole } from '../../types/User';
 import { Order } from '../../types/Order';
+import { getImagePlaceholder, handleImageError } from '../../utils/helpers';
 
 interface AdminFormData {
     name: string;
@@ -43,6 +46,8 @@ interface QuickAction {
 
 const Admin: React.FC = () => {
     const { products, addProduct, updateProduct, deleteProduct, refreshProducts, getCategories, getGenres } = useProducts();
+    const { isAdmin, isAuthenticated, loading: authLoading } = useAuth();
+    const navigate = useNavigate();
     const [modals, setModals] = useState({ newGame: false, gamesList: false, usersList: false, ordersList: false, editGame: false });
     const [users, setUsers] = useState<any[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
@@ -107,12 +112,29 @@ const Admin: React.FC = () => {
         }
     };
 
-    // Cargar datos iniciales al montar el componente
+    // Verificar que el usuario sea administrador - redirigir inmediatamente si no es admin
     useEffect(() => {
-        loadUsers();
-        loadOrders();
-        refreshProducts();
-    }, []);
+        if (!authLoading) {
+            if (!isAuthenticated) {
+                navigate('/login', { replace: true });
+                return;
+            }
+            // Redirigir automáticamente al home si no es admin
+            if (!isAdmin) {
+                navigate('/', { replace: true });
+                return;
+            }
+        }
+    }, [isAdmin, isAuthenticated, authLoading, navigate]);
+
+    // Cargar datos iniciales al montar el componente (solo si es admin)
+    useEffect(() => {
+        if (isAdmin && !authLoading) {
+            loadUsers();
+            loadOrders();
+            refreshProducts();
+        }
+    }, [isAdmin, authLoading]);
 
     // Cargar usuarios cuando se abre el modal
     useEffect(() => {
@@ -345,6 +367,33 @@ const Admin: React.FC = () => {
         { field: 'tags' as keyof AdminFormData, icon: 'tags', label: 'Tags (separados por comas)', type: 'text', placeholder: 'Ej: Acción, RPG, Multijugador', required: false, cols: 12 }
     ];
 
+    // Mostrar spinner mientras se verifica la autenticación
+    if (authLoading) {
+        return (
+            <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: COLORS.gradientPrimary }}>
+                <Container>
+                    <Row className="justify-content-center">
+                        <Col md={6}>
+                            <Card className="border-0 shadow-lg text-center">
+                                <Card.Body className="p-5">
+                                    <div className="spinner-border text-primary mb-3" role="status">
+                                        <span className="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p className="mb-0">Verificando permisos de administrador...</p>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        );
+    }
+
+    // Si no está autenticado o no es admin, no mostrar el contenido (ya se redirige en useEffect)
+    if (!isAuthenticated || !isAdmin) {
+        return null;
+    }
+
     return (
         <div className="min-vh-100 bg-light">
             <div className="bg-primary text-white py-4" style={{ background: COLORS.gradientPrimary }}>
@@ -509,9 +558,13 @@ const Admin: React.FC = () => {
                                 {allGames.map(game => (
                                     <tr key={String(game.id)}>
                                         <td>
-                                            <img src={game.image} alt={game.name} className="img-fluid"
+                                            <img 
+                                                src={game.image || getImagePlaceholder(60, 40, 'Juego')} 
+                                                alt={game.name} 
+                                                className="img-fluid"
                                                 style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
-                                                onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/60x40/4d4d80/ffffff?text=Game'; }} />
+                                                onError={(e) => handleImageError(e, game.name)} 
+                                            />
                                         </td>
                                         <td>
                                             <strong>{game.name}</strong>

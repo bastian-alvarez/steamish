@@ -6,10 +6,13 @@ import ProtectedRoute from '../../../components/layout/ProtectedRoute/ProtectedR
 import { AuthProvider } from '../../../context/AuthContext';
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-    ...vi.importActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('react-router-dom')>();
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
 
 const renderWithProviders = (component: React.ReactElement) => {
     return render(

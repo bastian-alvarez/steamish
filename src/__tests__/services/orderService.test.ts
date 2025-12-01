@@ -59,7 +59,14 @@ describe('orderService', () => {
 
         const orders = await orderService.getOrdersByUserId(1);
 
-        expect(fetch).toHaveBeenCalledWith(`${API.orderService}/api/orders/user/1`);
+        expect(fetch).toHaveBeenCalledWith(
+            `${API.orderService}/api/orders/user/1`,
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    'Content-Type': 'application/json',
+                })
+            })
+        );
         expect(Array.isArray(orders)).toBe(true);
     });
 
@@ -78,7 +85,14 @@ describe('orderService', () => {
 
         const order = await orderService.getOrderById(1);
 
-        expect(fetch).toHaveBeenCalledWith(`${API.orderService}/api/orders/1`);
+        expect(fetch).toHaveBeenCalledWith(
+            `${API.orderService}/api/orders/1`,
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    'Content-Type': 'application/json',
+                })
+            })
+        );
         expect(order).toBeDefined();
     });
 
@@ -99,7 +113,14 @@ describe('orderService', () => {
 
         const orders = await orderService.getAllOrders();
 
-        expect(fetch).toHaveBeenCalledWith(`${API.orderService}/api/orders`);
+        expect(fetch).toHaveBeenCalledWith(
+            `${API.orderService}/api/orders`,
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    'Content-Type': 'application/json',
+                })
+            })
+        );
         expect(Array.isArray(orders)).toBe(true);
     });
 

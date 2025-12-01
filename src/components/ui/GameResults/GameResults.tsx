@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, Badge, Button, ButtonGroup } from 'react-bootstrap';
 import { Product } from '../../../types/Product';
 import { COLORS } from '../../../config/constants';
+import { getImagePlaceholder, handleImageError } from '../../../utils/helpers';
 
 // INTERFACE PARA PROPS DEL COMPONENTE
 interface GameResultsProps {
@@ -152,7 +153,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                         {/* IMAGEN DEL JUEGO */}
                         <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
                             <img 
-                                src={product.image || 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=Game'} 
+                                src={product.image || getImagePlaceholder(300, 200, 'Juego')} 
                                 alt={product.name}
                                 className="img-fluid w-100 h-100"
                                 style={{ 
@@ -166,11 +167,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.transform = 'scale(1)';
                                 }}
-                                onError={(e) => {
-                                    // Fallback si la imagen no carga
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = 'https://via.placeholder.com/300x200/4d4d80/ffffff?text=' + encodeURIComponent(product.name);
-                                }}
+                                onError={(e) => handleImageError(e, product.name)}
                                 loading="lazy"
                             />
                         </div>

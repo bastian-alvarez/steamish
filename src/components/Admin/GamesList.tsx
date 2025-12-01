@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button, Table, Badge, Alert } from 'react-bootstrap';
 import { Product } from '../../types/Product';
 import { COLORS } from '../../utils/constants';
+import { getImagePlaceholder, handleImageError } from '../../utils/helpers';
 
 interface GamesListProps {
     show: boolean;
@@ -39,9 +40,13 @@ const GamesList: React.FC<GamesListProps> = ({ show, onHide, games, onDelete }) 
                             {games.map(game => (
                                 <tr key={game.id}>
                                     <td>
-                                        <img src={game.image} alt={game.name} className="img-fluid"
+                                        <img 
+                                            src={game.image || getImagePlaceholder(60, 40, 'Juego')} 
+                                            alt={game.name} 
+                                            className="img-fluid"
                                             style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
-                                            onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/60x40/4d4d80/ffffff?text=Game'; }} />
+                                            onError={(e) => handleImageError(e, game.name)} 
+                                        />
                                     </td>
                                     <td>
                                         <strong>{game.name}</strong>

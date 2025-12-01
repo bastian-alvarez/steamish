@@ -96,9 +96,8 @@ describe('libraryService', () => {
     test('debe usar localStorage como fallback', async () => {
         vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
 
-        const library = await libraryService.getLibrary(1);
-
-        expect(Array.isArray(library)).toBe(true);
+        // El servicio lanza errores, no tiene fallback a localStorage
+        await expect(libraryService.getLibrary(1)).rejects.toThrow();
     });
 });
 

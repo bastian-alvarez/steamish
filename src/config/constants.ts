@@ -1,13 +1,13 @@
 // Constants Simplificados
-export const APP = {
+export const APP = Object.freeze({
     name: "Steamish",
     version: "1.0.0",
     currency: "$"
-} as const;
+});
 
 // Paleta de Colores Steamish - Sin CSS, solo TypeScript
 // Estos son los colores oficiales de la paleta del tema
-export const COLORS = {
+export const COLORS = Object.freeze({
     // Colores base de la paleta
     color1: '#1c1f3b',
     color2: '#282c4d',
@@ -32,7 +32,7 @@ export const COLORS = {
     gradientPrimary: 'linear-gradient(135deg, #4d4d80 0%, #1c1f3b 100%)', // color4 -> color1
     gradientLight: 'linear-gradient(135deg, #282c4d 0%, #3c3f68 100%)',   // color2 -> color3
     gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
-} as const;
+});
 
 // URLs públicas de los microservicios (Dev Tunnels)
 const DEV_TUNNEL_URLS = {
@@ -64,7 +64,7 @@ const getServiceUrl = (devTunnelUrl: string, localPort: number, envVar?: string)
     return `http://localhost:${localPort}`;
 };
 
-export const API = {
+export const API = Object.freeze({
     baseUrl: process.env.REACT_APP_API_URL || getServiceUrl(DEV_TUNNEL_URLS.authService, 3001),
     timeout: 30000, // 30 segundos
     // Conectar directamente a microservicios (sin API Gateway)
@@ -74,9 +74,9 @@ export const API = {
     libraryService: getServiceUrl(DEV_TUNNEL_URLS.libraryService, 3004, 'REACT_APP_LIBRARY_SERVICE_URL'),
     // API Gateway URL (mantenido para referencia futura, pero no se usa)
     apiGateway: process.env.REACT_APP_API_GATEWAY_URL || DEV_TUNNEL_URLS.apiGateway,
-} as const;
+});
 
-export const ROUTES = {
+export const ROUTES = Object.freeze({
     home: "/",
     products: "/productos",
     blogs: "/blogs",
@@ -85,4 +85,4 @@ export const ROUTES = {
     login: "/login",
     register: "/registro",
     admin: "/admin"
-} as const;
+});

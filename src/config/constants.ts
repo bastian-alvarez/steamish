@@ -34,7 +34,7 @@ export const COLORS = {
     gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
 } as const;
 
-// Detectar si estamos en producción (Vercel)
+// Detectar si estamos en producción (Vercel) o desarrollo
 const isProduction = process.env.NODE_ENV === 'production';
 
 // URL del API Gateway (prioridad en producción)
@@ -43,24 +43,30 @@ const apiGatewayUrl = process.env.REACT_APP_API_GATEWAY_URL;
 // Si hay API Gateway configurado, usarlo para todos los servicios
 const useApiGateway = !!apiGatewayUrl && apiGatewayUrl.trim() !== '';
 
+// Detectar si estamos en modo desarrollo con proxy (solo si no hay API Gateway)
+const useProxy = !useApiGateway && 
+                 process.env.REACT_APP_USE_PROXY !== 'false' && 
+                 (process.env.NODE_ENV === 'development' && !process.env.REACT_APP_AUTH_SERVICE_URL);
+
 export const API = {
     baseUrl: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_API_URL || (isProduction ? '' : "http://localhost:3001")),
+        : (process.env.REACT_APP_API_URL || (useProxy ? "" : (isProduction ? '' : "http://localhost:3001"))),
     timeout: 10000,
     // Microservicios - Si hay API Gateway, todos usan la misma URL
+    // Si no, usar proxy en desarrollo o URLs directas
     authService: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_AUTH_SERVICE_URL || (isProduction ? '' : "http://localhost:3001")),
+        : (useProxy ? "" : (process.env.REACT_APP_AUTH_SERVICE_URL || (isProduction ? '' : "http://localhost:3001"))),
     gameCatalogService: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_GAME_CATALOG_SERVICE_URL || (isProduction ? '' : "http://localhost:3002")),
+        : (useProxy ? "" : (process.env.REACT_APP_GAME_CATALOG_SERVICE_URL || (isProduction ? '' : "http://localhost:3002"))),
     orderService: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_ORDER_SERVICE_URL || (isProduction ? '' : "http://localhost:3003")),
+        : (useProxy ? "" : (process.env.REACT_APP_ORDER_SERVICE_URL || (isProduction ? '' : "http://localhost:3003"))),
     libraryService: useApiGateway 
         ? apiGatewayUrl 
-        : (process.env.REACT_APP_LIBRARY_SERVICE_URL || (isProduction ? '' : "http://localhost:3004"))
+        : (useProxy ? "" : (process.env.REACT_APP_LIBRARY_SERVICE_URL || (isProduction ? '' : "http://localhost:3004")))
 } as const;
 
 export const ROUTES = {

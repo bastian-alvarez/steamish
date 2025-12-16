@@ -19,7 +19,7 @@ describe('Constants', () => {
             expect(COLORS.color1).toBe('#1c1f3b');
             expect(COLORS.color2).toBe('#282c4d');
             expect(COLORS.color3).toBe('#3c3f68');
-            expect(COLORS.color4).toBe('#3856c7');
+            expect(COLORS.color4).toBe('#4d4d80');
             expect(COLORS.color5).toBe('#606271');
         });
 

@@ -16,10 +16,10 @@ describe('Constants', () => {
 
     describe('COLORS', () => {
         test('debe tener todos los colores base definidos', () => {
-        expect(COLORS.color1).toBe('#0B0E1A');
-        expect(COLORS.color2).toBe('#12162A');
-        expect(COLORS.color3).toBe('#181E36');
-        expect(COLORS.color4).toBe('#232A4D');
+        expect(COLORS.color1).toBe('#080B18');
+        expect(COLORS.color2).toBe('#101428');
+        expect(COLORS.color3).toBe('#161C34');
+        expect(COLORS.color4).toBe('#252E52');
         expect(COLORS.color5).toBe('#7C7CFF');
         });
 

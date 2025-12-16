@@ -8,30 +8,30 @@ export const APP = Object.freeze({
 // Paleta de Colores Steamish - Sin CSS, solo TypeScript
 // Estos son los colores oficiales de la paleta del tema
 export const COLORS = Object.freeze({
-    // Colores base (Midnight Aurora Gaming)
-    color1: '#0B0E1A', // fondo principal
-    color2: '#12162A', // fondo secundario
-    color3: '#181E36', // cards / paneles
-    color4: '#232A4D', // bordes suaves
+    // Colores base (Midnight Aurora mejor balanceado)
+    color1: '#080B18', // fondo principal un poco más neutro
+    color2: '#101428', // fondo secundario
+    color3: '#161C34', // cards / paneles
+    color4: '#252E52', // bordes suaves
     color5: '#7C7CFF', // identidad aurora
     
     // Colores semánticos
     primary: '#7C7CFF',       // Aurora Violet
-    primaryDark: '#12162A',   // Fondo secundario
+    primaryDark: '#101428',   // Fondo secundario
     primaryLight: '#9A9AFF',  // Hover aurora
-    secondary: '#181E36',     // Superficies
-    accent: '#232A4D',        // Bordes / acento
+    secondary: '#161C34',     // Superficies
+    accent: '#3FA9F5',        // Acentos fríos (links, detalles)
     
     // Colores de texto
-    textPrimary: '#E8EBFF',
-    textSecondary: '#A6ADD9',
-    textLight: '#E8EBFF',
-    textMuted: '#6E75A8',
+    textPrimary: '#F2F4FF',
+    textSecondary: '#C0C5EC',
+    textLight: '#F2F4FF',
+    textMuted: '#8087B8',
     
-    // Gradientes (oscuros con profundidad)
-    gradientPrimary: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)',
-    gradientLight: 'linear-gradient(135deg, #181E36 0%, #12162A 100%)',
-    gradientAccent: 'linear-gradient(135deg, #232A4D 0%, #181E36 100%)'
+    // Gradientes (más contraste y “aurora”)
+    gradientPrimary: 'linear-gradient(135deg, #171D3A 0%, #050814 100%)',
+    gradientLight: 'linear-gradient(135deg, #1B2547 0%, #0B1124 100%)',
+    gradientAccent: 'linear-gradient(135deg, #7C7CFF 0%, #2EE6A6 100%)'
 });
 
 // URLs públicas de los microservicios (Dev Tunnels)

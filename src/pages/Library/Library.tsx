@@ -143,7 +143,7 @@ const Library: React.FC = () => {
                                         }}
                                         onClick={() => navigate(`/productos/${game.id}`)}
                                     >
-                                        <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
+                                        <div className="game-image-wrapper game-image-wrapper--no-radius">
                                             {game.featured && (
                                                 <Badge 
                                                     bg="info" 
@@ -155,8 +155,7 @@ const Library: React.FC = () => {
                                             <img 
                                                 src={game.image || getImagePlaceholder(300, 200, 'Juego')} 
                                                 alt={game.name}
-                                                className="img-fluid w-100 h-100"
-                                                style={{ objectFit: 'cover' }}
+                                                className="game-image"
                                                 onError={(e) => handleImageError(e, game.name)}
                                             />
                                         </div>

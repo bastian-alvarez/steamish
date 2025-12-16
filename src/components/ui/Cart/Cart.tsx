@@ -147,7 +147,7 @@ const Cart: React.FC<CartProps> = ({
                 </Modal.Title>
             </Modal.Header>
 
-            <Modal.Body className="p-0" style={{ maxHeight: '70vh', overflowY: 'auto', background: COLORS.color2, color: COLORS.textPrimary }}>
+            <Modal.Body className="p-0" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                 {/* Alerta de autenticación requerida */}
                 {showAuthAlert && (
                     <Alert 
@@ -163,9 +163,9 @@ const Cart: React.FC<CartProps> = ({
 
                 {items.length === 0 ? (
                     <div className="text-center py-5 px-4">
-                        <i className="bi bi-cart-x" style={{ fontSize: '5rem', opacity: 0.5, color: COLORS.textMuted }}></i>
-                        <h4 className="mt-4 mb-2" style={{ color: COLORS.textPrimary }}>Tu carrito está vacío</h4>
-                        <p className="mb-4" style={{ color: COLORS.textSecondary }}>¡Agrega algunos juegos increíbles a tu carrito!</p>
+                        <i className="bi bi-cart-x text-muted" style={{ fontSize: '5rem', opacity: 0.5 }}></i>
+                        <h4 className="mt-4 mb-2" style={{ color: COLORS.color4 }}>Tu carrito está vacío</h4>
+                        <p className="text-muted mb-4">¡Agrega algunos juegos increíbles a tu carrito!</p>
                         <Button 
                             variant="primary" 
                             onClick={onClose}
@@ -189,8 +189,8 @@ const Cart: React.FC<CartProps> = ({
                                     return (
                                         <ListGroup.Item 
                                             key={item.id} 
-                                        className="border-bottom px-0 py-3"
-                                        style={{ borderColor: 'rgba(35,42,77,0.4)' }}
+                                            className="border-bottom px-0 py-3"
+                                            style={{ borderColor: 'rgba(0,0,0,0.1)' }}
                                         >
                                             <Row className="align-items-center g-3">
                                                 {/* Imagen del producto */}
@@ -204,8 +204,7 @@ const Cart: React.FC<CartProps> = ({
                                                                 width: '100px', 
                                                                 height: '100px', 
                                                                 objectFit: 'cover',
-                                                                border: '2px solid rgba(35,42,77,0.5)',
-                                                                background: COLORS.color3
+                                                                border: '2px solid rgba(0,0,0,0.1)'
                                                             }}
                                                             onError={(e) => {
                                                                 (e.target as HTMLImageElement).src = '/placeholder-game.jpg';
@@ -225,36 +224,36 @@ const Cart: React.FC<CartProps> = ({
 
                                                 {/* Información del producto */}
                                                 <Col xs={12} sm={5}>
-                                                    <h6 className="mb-2 fw-bold" style={{ color: COLORS.textPrimary }}>
+                                                    <h6 className="mb-2 fw-bold" style={{ color: COLORS.color1 }}>
                                                         {item.name}
                                                     </h6>
                                                     <div className="mb-2">
                                                         {itemDiscount > 0 && itemPrice > 0 ? (
                                                             <div className="d-flex align-items-center gap-2 flex-wrap">
-                                                                <span className="text-decoration-line-through small" style={{ color: COLORS.textMuted }}>
+                                                                <span className="text-decoration-line-through text-muted small">
                                                                     ${itemPrice.toFixed(2)}
                                                                 </span>
-                                                                <span className="fw-bold fs-6" style={{ color: '#2EE6A6' }}>
+                                                                <span className="text-success fw-bold fs-6">
                                                                     ${unitPrice.toFixed(2)}
                                                                 </span>
-                                                                <small style={{ color: COLORS.textSecondary }}>c/u</small>
+                                                                <small className="text-muted">c/u</small>
                                                             </div>
                                                         ) : (
                                                             <div className="d-flex align-items-center gap-2">
-                                                                <span className="fw-bold fs-6" style={{ color: '#2EE6A6' }}>
+                                                                <span className="text-success fw-bold fs-6">
                                                                     ${unitPrice.toFixed(2)}
                                                                 </span>
-                                                                <small style={{ color: COLORS.textSecondary }}>c/u</small>
+                                                                <small className="text-muted">c/u</small>
                                                             </div>
                                                         )}
                                                     </div>
                                                     {item.rating && item.rating > 0 && (
                                                         <div className="d-flex align-items-center gap-1 mb-2">
                                                             <i className="bi bi-star-fill text-warning" style={{ fontSize: '0.85rem' }}></i>
-                                                            <small style={{ color: COLORS.textSecondary }}>{item.rating.toFixed(1)}/5</small>
+                                                            <small className="text-muted">{item.rating.toFixed(1)}/5</small>
                                                         </div>
                                                     )}
-                                                    <div className="fw-semibold" style={{ color: '#7C7CFF' }}>
+                                                    <div className="text-primary fw-semibold">
                                                         Subtotal: ${subtotal.toFixed(2)}
                                                     </div>
                                                 </Col>
@@ -284,7 +283,7 @@ const Cart: React.FC<CartProps> = ({
                                                             style={{ 
                                                                 minWidth: '50px',
                                                                 fontSize: '1.1rem',
-                                                                color: COLORS.textPrimary
+                                                                color: COLORS.color4
                                                             }}
                                                         >
                                                             {item.quantity}
@@ -301,8 +300,8 @@ const Cart: React.FC<CartProps> = ({
                                                                 alignItems: 'center',
                                                                 justifyContent: 'center',
                                                                 borderRadius: '50%',
-                                                                background: COLORS.primary,
-                                                                borderColor: COLORS.primary,
+                                                                background: COLORS.color4,
+                                                                borderColor: COLORS.color4,
                                                                 color: 'white'
                                                             }}
                                                         >
@@ -332,13 +331,13 @@ const Cart: React.FC<CartProps> = ({
                         <div 
                             className="border-top p-4 sticky-bottom"
                             style={{ 
-                                background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)',
-                                borderTop: '2px solid rgba(35,42,77,0.6)'
+                                background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+                                borderTop: '2px solid rgba(0,0,0,0.1)'
                             }}
                         >
                             <Row className="mb-3">
                                 <Col xs={6}>
-                                    <div style={{ color: COLORS.textSecondary }}>Subtotal ({count} {count === 1 ? 'artículo' : 'artículos'}):</div>
+                                    <div className="text-muted">Subtotal ({count} {count === 1 ? 'artículo' : 'artículos'}):</div>
                                 </Col>
                                 <Col xs={6} className="text-end">
                                     <div className="fw-bold">${(totalPrice ?? 0).toFixed(2)}</div>
@@ -346,12 +345,12 @@ const Cart: React.FC<CartProps> = ({
                             </Row>
                             <Row>
                                 <Col xs={6}>
-                                    <div className="fs-5 fw-bold" style={{ color: COLORS.textPrimary }}>
+                                    <div className="fs-5 fw-bold" style={{ color: COLORS.color1 }}>
                                         Total:
                                     </div>
                                 </Col>
                                 <Col xs={6} className="text-end">
-                                    <div className="fs-4 fw-bold" style={{ color: '#2EE6A6' }}>
+                                    <div className="fs-4 fw-bold text-success">
                                         ${(totalPrice ?? 0).toFixed(2)}
                                     </div>
                                 </Col>
@@ -362,7 +361,7 @@ const Cart: React.FC<CartProps> = ({
             </Modal.Body>
 
             {items.length > 0 && (
-                <Modal.Footer className="border-0 p-3" style={{ background: '#12162A' }}>
+                <Modal.Footer className="border-0 p-3" style={{ background: '#f8f9fa' }}>
                     <div className="d-flex gap-2 w-100 flex-column flex-sm-row">
                         <Button 
                             variant="outline-danger" 

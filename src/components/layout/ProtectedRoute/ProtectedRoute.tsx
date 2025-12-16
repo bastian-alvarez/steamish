@@ -54,12 +54,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={6}>
-                            <Card className="border-0 shadow-lg" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
+                            <Card className="border-0 shadow-lg">
                                 <Card.Body className="p-5 text-center">
                                     <div className="mb-4">
                                         <i className="bi bi-shield-exclamation display-1 text-danger"></i>
                                     </div>
-                                    <Card.Title className="h3 mb-3" style={{ color: COLORS.textPrimary }}>
+                                    <Card.Title className="h3 mb-3" style={{ color: COLORS.color4 }}>
                                         Acceso Denegado
                                     </Card.Title>
                                     <Alert variant="danger" className="mb-4">
@@ -85,8 +85,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin 
                                             to="/login" 
                                             className="btn text-decoration-none"
                                             style={{ 
-                                                borderColor: COLORS.primary,
-                                                color: COLORS.primary,
+                                                borderColor: COLORS.color4,
+                                                color: COLORS.color4,
                                                 backgroundColor: 'transparent',
                                                 borderWidth: '1px',
                                                 borderStyle: 'solid'

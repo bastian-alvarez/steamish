@@ -16,11 +16,11 @@ describe('Constants', () => {
 
     describe('COLORS', () => {
         test('debe tener todos los colores base definidos', () => {
-        expect(COLORS.color1).toBe('#0B0E1A');
-        expect(COLORS.color2).toBe('#12162A');
-        expect(COLORS.color3).toBe('#181E36');
-        expect(COLORS.color4).toBe('#232A4D');
-        expect(COLORS.color5).toBe('#7C7CFF');
+            expect(COLORS.color1).toBe('#1c1f3b');
+            expect(COLORS.color2).toBe('#282c4d');
+            expect(COLORS.color3).toBe('#3c3f68');
+            expect(COLORS.color4).toBe('#4d4d80');
+            expect(COLORS.color5).toBe('#606271');
         });
 
         test('debe tener colores semánticos definidos', () => {

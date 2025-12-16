@@ -12,7 +12,7 @@ export const getImagePlaceholder = (width: number = 300, height: number = 200, t
     const fontSize = Math.min(width, height) / 12;
     // Escapar caracteres especiales en el texto para el SVG
     const escapedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"><rect width="${width}" height="${height}" fill="#12162A"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${fontSize}" fill="#E8EBFF" text-anchor="middle" dy=".3em">${escapedText}</text></svg>`;
+    const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"><rect width="${width}" height="${height}" fill="#4d4d80"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${fontSize}" fill="#ffffff" text-anchor="middle" dy=".3em">${escapedText}</text></svg>`;
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 };
 

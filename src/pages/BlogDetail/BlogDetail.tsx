@@ -17,7 +17,7 @@ const BlogDetail: React.FC = () => {
 
     if (!blog) {
         return (
-            <div style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
                 <Container className="py-5 text-center">
                     <h2 className="text-muted mb-4">Artículo no encontrado</h2>
                     <Button variant="primary" onClick={() => navigate('/blogs')}>
@@ -29,7 +29,7 @@ const BlogDetail: React.FC = () => {
     }
 
     return (
-        <div style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}>
+        <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
             {/* Hero Section */}
             <div className="bg-primary text-white py-4" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
@@ -52,17 +52,17 @@ const BlogDetail: React.FC = () => {
                             <div className="d-flex align-items-center mb-3 flex-wrap gap-2">
                                 <Badge bg={getCategoryVariant(blog.category)} className="me-2">{blog.category}</Badge>
                                 {blog.featured && <Badge bg="danger">DESTACADO</Badge>}
-                                <small className="text-muted ms-auto" style={{ color: COLORS.textSecondary }}>
+                                <small className="text-muted ms-auto">
                                     <i className="bi bi-calendar me-1"></i>{blog.date}
                                 </small>
-                                <small className="text-muted" style={{ color: COLORS.textSecondary }}>
+                                <small className="text-muted">
                                     <i className="bi bi-clock me-1"></i>{blog.readTime}
                                 </small>
                             </div>
-                            <h1 className="display-4 fw-bold mb-3" style={{ color: COLORS.textPrimary }}>
+                            <h1 className="display-4 fw-bold mb-3" style={{ color: COLORS.color4 }}>
                                 {blog.title}
                             </h1>
-                            <p className="lead" style={{ color: COLORS.textSecondary }}>{blog.excerpt}</p>
+                            <p className="lead text-muted">{blog.excerpt}</p>
                         </div>
 
                         {/* Featured Image */}
@@ -81,7 +81,7 @@ const BlogDetail: React.FC = () => {
                             style={{ 
                                 fontSize: '1.1rem', 
                                 lineHeight: '1.8',
-                                color: COLORS.textPrimary
+                                color: '#333'
                             }}
                             dangerouslySetInnerHTML={{ __html: blog.content || `<p>${blog.excerpt}</p><p>Contenido completo próximamente...</p>` }}
                         />
@@ -94,7 +94,7 @@ const BlogDetail: React.FC = () => {
                             >
                                 <i className="bi bi-arrow-left me-2"></i>Volver al Blog
                             </Button>
-                            <div className="text-muted" style={{ color: COLORS.textSecondary }}>
+                            <div className="text-muted">
                                 <small>
                                     <i className="bi bi-tag me-1"></i>{blog.category} • 
                                     <i className="bi bi-clock ms-2 me-1"></i>{blog.readTime}
@@ -108,7 +108,7 @@ const BlogDetail: React.FC = () => {
             {/* Estilos para el contenido del artículo */}
             <style>{`
                 .article-content h3 {
-                    color: ${COLORS.textPrimary};
+                    color: ${COLORS.color4};
                     margin-top: 2rem;
                     margin-bottom: 1rem;
                     font-weight: 600;

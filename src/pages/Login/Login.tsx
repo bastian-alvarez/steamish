@@ -78,7 +78,7 @@ const Login: React.FC = () => {
                                                 value={form[field as keyof typeof form]}
                                                 onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
                                                 className="border-2"
-                                                style={{ borderColor: '#7C7CFF' }}
+                                                style={{ borderColor: '#0d6efd' }}
                                                 required
                                             />
                                         </div>

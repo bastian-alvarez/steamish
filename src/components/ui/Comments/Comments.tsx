@@ -110,18 +110,18 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
 
     return (
         <div>
-            <h5 className="mb-4" style={{ color: COLORS.textPrimary }}>
+            <h5 className="mb-4" style={{ color: COLORS.color4 }}>
                 <i className="bi bi-chat-dots me-2"></i>
                 Comentarios ({comments.length})
             </h5>
 
             {/* Formulario de nuevo comentario */}
             {isAuthenticated && user && (
-                <Card className="mb-4 border-0 shadow-sm" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
+                <Card className="mb-4 border-0 shadow-sm">
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label className="fw-bold" style={{ color: COLORS.textPrimary }}>
+                                <Form.Label className="fw-bold" style={{ color: COLORS.color4 }}>
                                     Escribe un comentario:
                                 </Form.Label>
                                 <Form.Control
@@ -136,9 +136,7 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
                                     disabled={submitting}
                                     style={{
                                         resize: 'none',
-                                        borderColor: error ? '#FF5A6E' : undefined,
-                                        background: COLORS.color2,
-                                        color: COLORS.textPrimary
+                                        borderColor: error ? '#dc3545' : undefined
                                     }}
                                 />
                                 {error && (
@@ -151,7 +149,7 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
                                 type="submit"
                                 variant="primary"
                                 disabled={submitting || !newComment.trim()}
-                                style={{ background: COLORS.gradientPrimary, borderColor: COLORS.primary }}
+                                style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4 }}
                             >
                                 {submitting ? (
                                     <>
@@ -171,7 +169,7 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
             )}
 
             {!isAuthenticated && (
-                <Alert variant="info" className="mb-4" style={{ background: COLORS.color3, color: COLORS.textPrimary, borderColor: COLORS.color4 }}>
+                <Alert variant="info" className="mb-4">
                     <i className="bi bi-info-circle me-2"></i>
                     <a href="/login" style={{ color: 'inherit', textDecoration: 'underline' }}>
                         Inicia sesión
@@ -183,17 +181,17 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
             {loading ? (
                 <div className="text-center py-5">
                     <Spinner animation="border" variant="primary" />
-                    <p className="mt-3" style={{ color: COLORS.textSecondary }}>Cargando comentarios...</p>
+                    <p className="mt-3 text-muted">Cargando comentarios...</p>
                 </div>
             ) : comments.length === 0 ? (
-                <Alert variant="dark" className="text-center" style={{ background: COLORS.color3, color: COLORS.textPrimary, borderColor: COLORS.color4 }}>
+                <Alert variant="secondary" className="text-center">
                     <i className="bi bi-chat-left-text me-2"></i>
                     Aún no hay comentarios. ¡Sé el primero en comentar!
                 </Alert>
             ) : (
                 <div className="d-flex flex-column gap-3">
                     {comments.map((comment) => (
-                        <Card key={comment.id} className="border-0 shadow-sm" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
+                        <Card key={comment.id} className="border-0 shadow-sm">
                             <Card.Body>
                                 <div className="d-flex justify-content-between align-items-start mb-2">
                                     <div className="d-flex align-items-center gap-2">
@@ -201,10 +199,10 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
                                             {comment.usuarioNombre.charAt(0).toUpperCase()}
                                         </Badge>
                                         <div>
-                                            <strong style={{ color: COLORS.textPrimary }}>
+                                            <strong style={{ color: COLORS.color4 }}>
                                                 {comment.usuarioNombre}
                                             </strong>
-                                            <div className="text-muted small" style={{ color: COLORS.textSecondary }}>
+                                            <div className="text-muted small">
                                                 {formatDate(comment.fechaCreacion)}
                                             </div>
                                         </div>
@@ -221,7 +219,7 @@ const Comments: React.FC<CommentsProps> = ({ juegoId }) => {
                                         )
                                     )}
                                 </div>
-                                <p className="mb-0" style={{ lineHeight: '1.6', color: COLORS.textSecondary }}>
+                                <p className="mb-0" style={{ lineHeight: '1.6', color: '#495057' }}>
                                     {comment.contenido}
                                 </p>
                             </Card.Body>

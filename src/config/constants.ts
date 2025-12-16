@@ -8,30 +8,30 @@ export const APP = Object.freeze({
 // Paleta de Colores Steamish - Sin CSS, solo TypeScript
 // Estos son los colores oficiales de la paleta del tema
 export const COLORS = Object.freeze({
-    // Colores base (Midnight Aurora Gaming)
-    color1: '#0B0E1A', // fondo principal
-    color2: '#12162A', // fondo secundario
-    color3: '#181E36', // cards / paneles
-    color4: '#232A4D', // bordes suaves
-    color5: '#7C7CFF', // identidad aurora
+    // Colores base de la paleta
+    color1: '#1c1f3b',
+    color2: '#282c4d',
+    color3: '#3c3f68',
+    color4: '#4d4d80',
+    color5: '#606271',
     
-    // Colores semánticos
-    primary: '#7C7CFF',       // Aurora Violet
-    primaryDark: '#12162A',   // Fondo secundario
-    primaryLight: '#9A9AFF',  // Hover aurora
-    secondary: '#181E36',     // Superficies
-    accent: '#232A4D',        // Bordes / acento
+    // Colores semánticos (basados en la paleta base)
+    primary: '#4d4d80',      // color4 - Color principal
+    primaryDark: '#1c1f3b',  // color1 - Color oscuro
+    primaryLight: '#3c3f68', // color3 - Color claro
+    secondary: '#282c4d',    // color2 - Color secundario
+    accent: '#606271',        // color5 - Color de acento
     
     // Colores de texto
-    textPrimary: '#E8EBFF',
-    textSecondary: '#A6ADD9',
-    textLight: '#E8EBFF',
-    textMuted: '#6E75A8',
+    textPrimary: '#ffffff',
+    textSecondary: 'rgba(255, 255, 255, 0.9)',
+    textLight: 'rgba(255, 255, 255, 0.85)',
+    textMuted: 'rgba(255, 255, 255, 0.7)',
     
-    // Gradientes (oscuros con profundidad)
-    gradientPrimary: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)',
-    gradientLight: 'linear-gradient(135deg, #181E36 0%, #12162A 100%)',
-    gradientAccent: 'linear-gradient(135deg, #232A4D 0%, #181E36 100%)'
+    // Gradientes (usando los colores de la paleta)
+    gradientPrimary: 'linear-gradient(135deg, #4d4d80 0%, #1c1f3b 100%)', // color4 -> color1
+    gradientLight: 'linear-gradient(135deg, #282c4d 0%, #3c3f68 100%)',   // color2 -> color3
+    gradientAccent: 'linear-gradient(135deg, #3c3f68 0%, #4d4d80 100%)'   // color3 -> color4
 });
 
 // URLs públicas de los microservicios (Dev Tunnels)

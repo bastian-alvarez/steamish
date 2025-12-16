@@ -37,7 +37,7 @@ const Blogs: React.FC = () => {
     const resetFilters = () => { setSearchTerm(''); setActiveCategory('Todos'); };
 
     return (
-        <div style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}>
+        <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
             {/* Hero Section Compacto */}
             <div className="bg-primary text-white py-5 text-center" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
@@ -53,15 +53,14 @@ const Blogs: React.FC = () => {
                 <Row className="mb-5 justify-content-center">
                     <Col lg={8}>
                         <InputGroup className="mb-4">
-                            <InputGroup.Text className="text-white border-0" style={{ background: COLORS.primary }}>
+                            <InputGroup.Text className="text-white border-primary" style={{ background: COLORS.color4 }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control
                                 placeholder="Buscar artículos..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="border-0"
-                                style={{ background: COLORS.color3, color: COLORS.textPrimary }}
+                                className="border-primary"
                             />
                         </InputGroup>
 
@@ -73,8 +72,8 @@ const Blogs: React.FC = () => {
                                     onClick={() => setActiveCategory(category)}
                                     className={activeCategory === category ? '' : ''}
                                     style={activeCategory === category 
-                                        ? { background: COLORS.primary, color: '#050712' }
-                                        : { color: COLORS.textPrimary }}
+                                        ? { background: COLORS.color4, color: 'white' }
+                                        : { color: COLORS.color4 }}
                                 >
                                     {category}
                                 </Nav.Link>
@@ -85,7 +84,7 @@ const Blogs: React.FC = () => {
 
                 {/* Featured Article */}
                 {featuredPost && (
-                    <Card className="border-0 shadow-lg overflow-hidden mb-5" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
+                    <Card className="border-0 shadow-lg overflow-hidden mb-5">
                         <Row className="g-0">
                             <Col md={5}>
                                 <Card.Img src={featuredPost.image} alt={featuredPost.title} style={{ height: '300px', objectFit: 'cover' }} />
@@ -95,12 +94,12 @@ const Blogs: React.FC = () => {
                                     <div className="d-flex align-items-center mb-3">
                                         <Badge bg="danger" className="me-2">DESTACADO</Badge>
                                         <Badge bg={getCategoryVariant(featuredPost.category)} className="me-2">{featuredPost.category}</Badge>
-                                        <small className="text-muted" style={{ color: COLORS.textSecondary }}>{featuredPost.date}</small>
+                                        <small className="text-muted">{featuredPost.date}</small>
                                     </div>
-                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: COLORS.textPrimary }}>{featuredPost.title}</Card.Title>
-                                    <Card.Text className="mb-4 flex-grow-1" style={{ color: COLORS.textSecondary }}>{featuredPost.excerpt}</Card.Text>
+                                    <Card.Title className="h3 fw-bold mb-3" style={{ color: COLORS.color4 }}>{featuredPost.title}</Card.Title>
+                                    <Card.Text className="text-muted mb-4 flex-grow-1">{featuredPost.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <small className="text-muted" style={{ color: COLORS.textSecondary }}><i className="bi bi-clock me-1"></i>{featuredPost.readTime}</small>
+                                        <small className="text-muted"><i className="bi bi-clock me-1"></i>{featuredPost.readTime}</small>
                                         <Button 
                                             variant="primary"
                                             onClick={() => navigate(`/blogs/${featuredPost.id}`)}
@@ -117,7 +116,7 @@ const Blogs: React.FC = () => {
                 {/* Articles Grid */}
                 <Row className="mb-4">
                     <Col>
-                        <h2 className="fw-bold" style={{ color: COLORS.textPrimary }}>
+                        <h2 className="fw-bold" style={{ color: COLORS.color4 }}>
                             <i className="bi bi-fire me-2"></i>Últimos Artículos
                             <Badge bg="info" className="ms-2">{regularPosts.length}</Badge>
                         </h2>
@@ -127,17 +126,17 @@ const Blogs: React.FC = () => {
                 <Row className="g-4">
                     {regularPosts.map(post => (
                         <Col key={post.id} lg={4} md={6}>
-                            <Card className="h-100 border-0 shadow hover-shadow-lg transition-all" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
+                            <Card className="h-100 border-0 shadow hover-shadow-lg transition-all">
                                 <Card.Img variant="top" src={post.image} alt={post.title} style={{ height: '200px', objectFit: 'cover' }} />
                                 <Card.Body className="d-flex flex-column">
                                     <div className="d-flex align-items-center mb-2">
                                         <Badge bg={getCategoryVariant(post.category)} className="me-2">{post.category}</Badge>
-                                        <small className="text-muted" style={{ color: COLORS.textSecondary }}>{post.date}</small>
+                                        <small className="text-muted">{post.date}</small>
                                     </div>
-                                    <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.textPrimary }}>{post.title}</Card.Title>
-                                    <Card.Text className="mb-3 flex-grow-1" style={{ color: COLORS.textSecondary }}>{post.excerpt}</Card.Text>
+                                    <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.color4 }}>{post.title}</Card.Title>
+                                    <Card.Text className="text-muted mb-3 flex-grow-1">{post.excerpt}</Card.Text>
                                     <div className="d-flex justify-content-between align-items-center mt-auto">
-                                        <small className="text-muted" style={{ color: COLORS.textSecondary }}><i className="bi bi-clock me-1"></i>{post.readTime}</small>
+                                        <small className="text-muted"><i className="bi bi-clock me-1"></i>{post.readTime}</small>
                                         <Button 
                                             variant="outline-primary" 
                                             size="sm"

@@ -143,7 +143,7 @@ const Rating: React.FC<RatingProps> = ({ juegoId, onRatingUpdate }) => {
         <div>
             {/* Rating Promedio */}
             <div className="mb-4">
-                <h5 className="mb-3" style={{ color: COLORS.color4 }}>
+                <h5 className="mb-3" style={{ color: COLORS.textPrimary }}>
                     <i className="bi bi-star-fill me-2 text-warning"></i>
                     Calificación
                 </h5>
@@ -154,7 +154,7 @@ const Rating: React.FC<RatingProps> = ({ juegoId, onRatingUpdate }) => {
                         ) : (
                             <>
                                 {renderStars(ratingInfo.averageRating)}
-                                <span className="ms-3 fw-bold fs-5" style={{ color: COLORS.color4 }}>
+                                <span className="ms-3 fw-bold fs-5" style={{ color: COLORS.textPrimary }}>
                                     {ratingInfo.averageRating > 0 ? ratingInfo.averageRating.toFixed(1) : 'Sin calificaciones'}
                                 </span>
                                 {ratingInfo.ratingCount > 0 && (
@@ -170,8 +170,8 @@ const Rating: React.FC<RatingProps> = ({ juegoId, onRatingUpdate }) => {
 
             {/* Calificar (solo si está autenticado) */}
             {isAuthenticated && user && (
-                <div className="mb-4 p-3 border rounded" style={{ backgroundColor: '#f8f9fa' }}>
-                    <h6 className="mb-3" style={{ color: COLORS.color4 }}>
+                <div className="mb-4 p-3 border rounded" style={{ backgroundColor: '#181E36' }}>
+                    <h6 className="mb-3" style={{ color: COLORS.textPrimary }}>
                         {userRating ? 'Tu Calificación:' : 'Califica este juego:'}
                     </h6>
                     <div className="d-flex align-items-center gap-2">

@@ -174,12 +174,12 @@ const Home: React.FC = () => {
             </section>
 
             {/* Featured Games Section - Mejorado */}
-            <section className="py-5" style={{ background: '#f8f9fa' }}>
+            <section className="py-5" style={{ background: '#12162A' }}>
                 <Container>
                     <Row className="mb-5 text-center">
                         <Col>
                             <h2 className="display-5 fw-bold mb-3" style={{ color: COLORS.color1 }}>
-                                <i className="bi bi-fire me-3" style={{ color: COLORS.color4 }}></i>
+                                <i className="bi bi-fire me-3" style={{ color: COLORS.primary }}></i>
                                 Juegos Populares
                             </h2>
                             <p className="lead text-muted mb-0">Explora nuestra selección de juegos</p>
@@ -223,7 +223,7 @@ const Home: React.FC = () => {
                                     <div style={{ 
                                         position: 'relative', 
                                         overflow: 'hidden',
-                                        backgroundColor: '#f8f9fa',
+                                        backgroundColor: '#12162A',
                                         height: '280px'
                                     }}>
                                         <img 
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
                                             style={{ 
                                                 objectFit: 'cover',
                                                 transition: 'transform 0.4s ease',
-                                                backgroundColor: '#e9ecef'
+                                                backgroundColor: '#181E36'
                                             }}
                                             onMouseEnter={(e) => {
                                                 e.currentTarget.style.transform = 'scale(1.08)';

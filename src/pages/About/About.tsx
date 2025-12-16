@@ -9,22 +9,22 @@ const About: React.FC = () => {
             icon: 'shield-check',
             title: 'Calidad Premium',
             desc: 'Seleccionamos solo los mejores títulos y servicios para garantizar una experiencia excepcional',
-            color: '#4d4d80',
-            gradient: 'linear-gradient(135deg, #4d4d80 0%, #1c1f3b 100%)'
+            color: '#7C7CFF',
+            gradient: 'linear-gradient(135deg, #7C7CFF 0%, #12162A 100%)'
         },
         {
             icon: 'people-fill',
             title: 'Comunidad Global',
             desc: 'Conectamos a millones de gamers alrededor del mundo en una comunidad inclusiva y colaborativa',
-            color: '#3c3f68',
-            gradient: 'linear-gradient(135deg, #3c3f68 0%, #282c4d 100%)'
+            color: '#A6ADD9',
+            gradient: 'linear-gradient(135deg, #181E36 0%, #0B0E1A 100%)'
         },
         {
             icon: 'rocket-takeoff',
             title: 'Innovación Constante',
             desc: 'Utilizamos tecnología de vanguardia para crear experiencias únicas e inmersivas',
-            color: '#606271',
-            gradient: 'linear-gradient(135deg, #606271 0%, #4d4d80 100%)'
+            color: '#6E75A8',
+            gradient: 'linear-gradient(135deg, #232A4D 0%, #12162A 100%)'
         }
     ];
 
@@ -85,7 +85,7 @@ const About: React.FC = () => {
             </section>
 
             {/* Estadísticas */}
-            <section className="py-5" style={{ background: '#f8f9fa' }}>
+            <section className="py-5" style={{ background: '#12162A' }}>
                 <Container>
                     <Row className="g-4">
                         {stats.map((stat, index) => (
@@ -187,7 +187,7 @@ const About: React.FC = () => {
             </section>
 
             {/* Misión y Visión */}
-            <section className="py-5" style={{ background: '#f8f9fa' }}>
+            <section className="py-5" style={{ background: '#12162A' }}>
                 <Container>
                     <Row className="g-4">
                         <Col lg={6}>

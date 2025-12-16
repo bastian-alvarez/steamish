@@ -95,13 +95,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }, [searchResult, onSearchResult]);
 
     return (
-        <Container fluid className="py-4" style={{ backgroundColor: '#f8f9fa' }}>
+        <Container fluid className="py-4" style={{ backgroundColor: '#12162A' }}>
             <Row className="justify-content-center">
                 <Col xl={10} lg={11}>
                     {/* Barra de búsqueda principal */}
                     <div className="mb-4">
                         <InputGroup size="lg" className="shadow-sm">
-                            <InputGroup.Text className="text-white border-primary" style={{ background: COLORS.color4 }}>
+                            <InputGroup.Text className="text-white border-0" style={{ background: COLORS.primary }}>
                                 <i className="bi bi-search"></i>
                             </InputGroup.Text>
                             <Form.Control
@@ -109,8 +109,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
                                 placeholder={placeholder}
                                 value={filters.query}
                                 onChange={(e) => updateFilter({ query: e.target.value })}
-                                className="border-primary"
-                                style={{ fontSize: '1.1rem' }}
+                                className="border-0"
+                                style={{ fontSize: '1.1rem', background: COLORS.color3, color: COLORS.textPrimary }}
                             />
                             {filters.query && (
                                 <Button 

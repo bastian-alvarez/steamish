@@ -440,7 +440,7 @@ const Admin: React.FC = () => {
 
                 <Row>
                     <Col>
-                        <h2 className="mb-4" style={{ color: COLORS.color4 }}>
+                        <h2 className="mb-4" style={{ color: COLORS.textPrimary }}>
                             <i className="bi bi-lightning me-2"></i>Acciones Rápidas
                         </h2>
                         <Row className="g-4 justify-content-center">

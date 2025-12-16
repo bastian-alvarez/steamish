@@ -86,7 +86,7 @@ const Library: React.FC = () => {
     }
 
     return (
-        <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
+        <div style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}>
             <div className="bg-primary text-white py-4" style={{ background: COLORS.gradientPrimary }}>
                 <Container>
                     <h1 className="h3 mb-0">
@@ -103,7 +103,7 @@ const Library: React.FC = () => {
                         <p className="mt-3 text-muted">Cargando tu biblioteca...</p>
                     </div>
                 ) : library.length === 0 ? (
-                    <Alert variant="info" className="text-center">
+                    <Alert variant="dark" className="text-center" style={{ background: COLORS.color3, color: COLORS.textPrimary, borderColor: COLORS.color4 }}>
                         <i className="bi bi-info-circle me-2"></i>
                         <strong>Tu biblioteca está vacía</strong>
                         <p className="mb-0 mt-2">Compra algunos juegos para agregarlos a tu biblioteca.</p>
@@ -131,7 +131,9 @@ const Library: React.FC = () => {
                                             borderRadius: '12px',
                                             overflow: 'hidden',
                                             cursor: 'pointer',
-                                            transition: 'transform 0.2s'
+                                            transition: 'transform 0.2s',
+                                            background: COLORS.color3,
+                                            color: COLORS.textPrimary
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.transform = 'translateY(-5px)';
@@ -162,10 +164,10 @@ const Library: React.FC = () => {
                                             <Badge bg={getCategoryColor(game.category)} className="mb-2 align-self-start">
                                                 {game.category}
                                             </Badge>
-                                            <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.color4 }}>
+                                            <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.textPrimary }}>
                                                 {game.name}
                                             </Card.Title>
-                                            <Card.Text className="text-muted small flex-grow-1">
+                                            <Card.Text className="small flex-grow-1" style={{ color: COLORS.textSecondary }}>
                                                 {game.description.substring(0, 100)}...
                                             </Card.Text>
                                             <div className="d-flex justify-content-between align-items-center mt-auto">

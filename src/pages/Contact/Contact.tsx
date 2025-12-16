@@ -20,19 +20,19 @@ const Contact: React.FC = () => {
             icon: 'envelope-check', 
             title: 'Email', 
             desc: 'hello@steamish.com',
-            color: '#0d6efd'
+            color: '#7C7CFF'
         },
         { 
             icon: 'discord', 
             title: 'Discord', 
             desc: 'Steamish Gaming Community',
-            color: '#5865F2'
+            color: '#3FA9F5'
         },
         { 
             icon: 'lightning-charge', 
             title: 'Respuesta', 
             desc: 'En menos de 24 horas',
-            color: '#FFC107'
+            color: '#FFB703'
         }
     ];
 
@@ -44,7 +44,7 @@ const Contact: React.FC = () => {
                         <Row className="g-4">
                             {/* Panel Izquierdo - Información de Contacto */}
                             <Col lg={5}>
-                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden', background: COLORS.color3 }}>
                                     <Card.Body className="p-5">
                                         <div className="mb-4">
                                             <div className="d-flex align-items-center mb-3">
@@ -58,11 +58,11 @@ const Contact: React.FC = () => {
                                                 >
                                                     <i className="bi bi-chat-dots-fill text-white" style={{ fontSize: '1.5rem' }}></i>
                                                 </div>
-                                                <h2 className="mb-0 fw-bold" style={{ color: COLORS.color1, fontSize: '2rem' }}>
+                                                <h2 className="mb-0 fw-bold" style={{ color: COLORS.textPrimary, fontSize: '2rem' }}>
                                                     Hablemos
                                                 </h2>
                                             </div>
-                                            <p className="text-muted mb-0" style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                            <p className="mb-0" style={{ fontSize: '1.1rem', lineHeight: '1.6', color: COLORS.textSecondary }}>
                                                 Nuestro equipo gaming está aquí para resolver todas tus dudas.
                                             </p>
                                         </div>
@@ -74,14 +74,14 @@ const Contact: React.FC = () => {
                                                     className="d-flex align-items-center p-3 rounded-3"
                                                     style={{ 
                                                         transition: 'all 0.3s ease',
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.02)'
+                                                        backgroundColor: 'rgba(35, 42, 77, 0.35)'
                                                     }}
                                                     onMouseEnter={(e) => {
-                                                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
+                                                        e.currentTarget.style.backgroundColor = 'rgba(35, 42, 77, 0.55)';
                                                         e.currentTarget.style.transform = 'translateX(5px)';
                                                     }}
                                                     onMouseLeave={(e) => {
-                                                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.02)';
+                                                        e.currentTarget.style.backgroundColor = 'rgba(35, 42, 77, 0.35)';
                                                         e.currentTarget.style.transform = 'translateX(0)';
                                                     }}
                                                 >
@@ -91,16 +91,16 @@ const Contact: React.FC = () => {
                                                             width: '60px', 
                                                             height: '60px',
                                                             backgroundColor: item.color,
-                                                            boxShadow: `0 4px 15px rgba(${item.color === '#0d6efd' ? '13, 110, 253' : item.color === '#5865F2' ? '88, 101, 242' : '255, 193, 7'}, 0.3)`
+                                                            boxShadow: `0 4px 15px rgba(${item.color === '#7C7CFF' ? '124, 124, 255' : item.color === '#3FA9F5' ? '63, 169, 245' : '255, 183, 3'}, 0.35)`
                                                         }}
                                                     >
                                                         <i className={`bi bi-${item.icon} text-white`} style={{ fontSize: '1.5rem' }}></i>
                                                     </div>
                                                     <div className="flex-grow-1">
-                                                        <h5 className="mb-1 fw-bold" style={{ color: COLORS.color1, fontSize: '1.1rem' }}>
+                                                        <h5 className="mb-1 fw-bold" style={{ color: COLORS.textPrimary, fontSize: '1.1rem' }}>
                                                             {item.title}
                                                         </h5>
-                                                        <p className="text-muted mb-0" style={{ fontSize: '0.95rem' }}>
+                                                        <p className="mb-0" style={{ fontSize: '0.95rem', color: COLORS.textSecondary }}>
                                                             {item.desc}
                                                         </p>
                                                     </div>
@@ -113,7 +113,7 @@ const Contact: React.FC = () => {
 
                             {/* Panel Derecho - Formulario */}
                             <Col lg={7}>
-                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                                <Card className="border-0 shadow-lg h-100" style={{ borderRadius: '20px', overflow: 'hidden', background: COLORS.color3 }}>
                                     <Card.Body className="p-5">
                                         <div className="d-flex align-items-center mb-4">
                                             <div 
@@ -126,7 +126,7 @@ const Contact: React.FC = () => {
                                             >
                                                 <i className="bi bi-envelope-plus-fill text-white" style={{ fontSize: '1.5rem' }}></i>
                                             </div>
-                                            <h2 className="mb-0 fw-bold" style={{ color: COLORS.color1, fontSize: '2rem' }}>
+                                            <h2 className="mb-0 fw-bold" style={{ color: COLORS.textPrimary, fontSize: '2rem' }}>
                                                 Envíanos un mensaje
                                             </h2>
                                         </div>
@@ -137,8 +137,8 @@ const Contact: React.FC = () => {
                                                 className="d-flex align-items-center mb-4 rounded-3"
                                                 style={{ 
                                                     border: 'none',
-                                                    backgroundColor: '#d1e7dd',
-                                                    color: '#0f5132'
+                                                    backgroundColor: 'rgba(46, 230, 166, 0.15)',
+                                                    color: '#2EE6A6'
                                                 }}
                                             >
                                                 <i className="bi bi-check-circle-fill me-2" style={{ fontSize: '1.2rem' }}></i>
@@ -152,8 +152,8 @@ const Contact: React.FC = () => {
                                                 { field: 'email', icon: 'envelope-fill', label: 'Email', type: 'email', placeholder: 'tu@email.com' }
                                             ].map(({ field, icon, label, type, placeholder }) => (
                                                 <div key={field} className="mb-4">
-                                                    <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.color1, fontSize: '1rem' }}>
-                                                        <i className={`bi bi-${icon} me-2`} style={{ color: COLORS.color4 }}></i>
+                                                    <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.textPrimary, fontSize: '1rem' }}>
+                                                        <i className={`bi bi-${icon} me-2`} style={{ color: COLORS.primary }}></i>
                                                         {label}
                                                     </Form.Label>
                                                     <Form.Control
@@ -164,17 +164,17 @@ const Contact: React.FC = () => {
                                                         onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
                                                         className="border-2 rounded-3"
                                                         style={{ 
-                                                            borderColor: COLORS.color3,
+                                                            borderColor: COLORS.color4,
                                                             padding: '0.75rem 1rem',
                                                             fontSize: '1rem',
                                                             transition: 'all 0.3s ease'
                                                         }}
                                                         onFocus={(e) => {
-                                                            e.currentTarget.style.borderColor = COLORS.color4;
-                                                            e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
+                                                            e.currentTarget.style.borderColor = COLORS.primary;
+                                                            e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(124, 124, 255, 0.2)';
                                                         }}
                                                         onBlur={(e) => {
-                                                            e.currentTarget.style.borderColor = COLORS.color3;
+                                                            e.currentTarget.style.borderColor = COLORS.color4;
                                                             e.currentTarget.style.boxShadow = 'none';
                                                         }}
                                                         required
@@ -183,8 +183,8 @@ const Contact: React.FC = () => {
                                             ))}
                                             
                                             <div className="mb-4">
-                                                <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.color1, fontSize: '1rem' }}>
-                                                    <i className="bi bi-chat-left-text-fill me-2" style={{ color: COLORS.color4 }}></i>
+                                                <Form.Label className="fw-bold mb-2 d-flex align-items-center" style={{ color: COLORS.textPrimary, fontSize: '1rem' }}>
+                                                    <i className="bi bi-chat-left-text-fill me-2" style={{ color: COLORS.primary }}></i>
                                                     Mensaje
                                                 </Form.Label>
                                                 <Form.Control
@@ -196,18 +196,18 @@ const Contact: React.FC = () => {
                                                     onChange={(e) => setForm(prev => ({ ...prev, message: e.target.value }))}
                                                     className="border-2 rounded-3"
                                                     style={{ 
-                                                        borderColor: COLORS.color3,
+                                                        borderColor: COLORS.color4,
                                                         padding: '0.75rem 1rem',
                                                         fontSize: '1rem',
                                                         resize: 'vertical',
                                                         transition: 'all 0.3s ease'
                                                     }}
                                                     onFocus={(e) => {
-                                                        e.currentTarget.style.borderColor = COLORS.color4;
-                                                        e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(77, 77, 128, 0.15)';
+                                                        e.currentTarget.style.borderColor = COLORS.primary;
+                                                        e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(124, 124, 255, 0.2)';
                                                     }}
                                                     onBlur={(e) => {
-                                                        e.currentTarget.style.borderColor = COLORS.color3;
+                                                        e.currentTarget.style.borderColor = COLORS.color4;
                                                         e.currentTarget.style.boxShadow = 'none';
                                                     }}
                                                     required
@@ -223,16 +223,16 @@ const Contact: React.FC = () => {
                                                     border: 'none',
                                                     color: 'white',
                                                     fontSize: '1.1rem',
-                                                    boxShadow: '0 4px 15px rgba(28, 31, 59, 0.3)',
+                                                        boxShadow: '0 4px 15px rgba(124, 124, 255, 0.35)',
                                                     transition: 'all 0.3s ease'
                                                 }}
                                                 onMouseEnter={(e) => {
                                                     e.currentTarget.style.transform = 'translateY(-2px)';
-                                                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(28, 31, 59, 0.4)';
+                                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(154, 154, 255, 0.45)';
                                                 }}
                                                 onMouseLeave={(e) => {
                                                     e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 31, 59, 0.3)';
+                                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(124, 124, 255, 0.35)';
                                                 }}
                                             >
                                                 <i className="bi bi-send-fill me-2"></i>Enviar Mensaje

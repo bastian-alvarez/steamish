@@ -151,7 +151,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                         )}
 
                         {/* IMAGEN DEL JUEGO */}
-                        <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
+                        <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#12162A' }}>
                             <img 
                                 src={product.image || getImagePlaceholder(300, 200, 'Juego')} 
                                 alt={product.name}
@@ -159,7 +159,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 style={{ 
                                     objectFit: 'cover',
                                     transition: 'transform 0.3s ease',
-                                    backgroundColor: '#e9ecef'
+                                    backgroundColor: '#181E36'
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = 'scale(1.05)';
@@ -174,12 +174,12 @@ const GameResults: React.FC<GameResultsProps> = ({
 
                         <Card.Body className="p-4">
                             {/* TÍTULO DEL JUEGO */}
-                            <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.color1 }}>
+                            <Card.Title className="h5 fw-bold mb-2" style={{ color: COLORS.textPrimary }}>
                                 {highlightSearchTerm(product.name, searchTerm)}
                             </Card.Title>
 
                             {/* DESCRIPCIÓN */}
-                            <Card.Text className="text-muted mb-3 small">
+                            <Card.Text className="mb-3 small" style={{ color: COLORS.textSecondary }}>
                                 {highlightSearchTerm(product.description, searchTerm)}
                             </Card.Text>
 
@@ -188,7 +188,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                 <div className="me-2">
                                     {renderStars(product.rating)}
                                 </div>
-                                <span className="fw-bold" style={{ color: COLORS.color1 }}>{product.rating}</span>
+                                <span className="fw-bold" style={{ color: COLORS.textPrimary }}>{product.rating}</span>
                             </div>
 
                             {/* CATEGORÍA Y TAGS */}
@@ -214,23 +214,23 @@ const GameResults: React.FC<GameResultsProps> = ({
                                             const discountedPrice = price * (1 - discount / 100);
                                             return (
                                                 <div>
-                                                    <span className="text-muted text-decoration-line-through me-2">
+                                                    <span className="text-decoration-line-through me-2" style={{ color: COLORS.textMuted }}>
                                                         ${price.toFixed(2)}
                                                     </span>
-                                                    <span className="fw-bold text-danger fs-5">
+                                                    <span className="fw-bold fs-5" style={{ color: '#FF5A6E' }}>
                                                         ${discountedPrice.toFixed(2)}
                                                     </span>
                                                 </div>
                                             );
                                         } else if (price === 0) {
                                             return (
-                                                <span className="fw-bold text-primary fs-5">
+                                                <span className="fw-bold fs-5" style={{ color: '#7C7CFF' }}>
                                                     Gratis
                                                 </span>
                                             );
                                         } else {
                                             return (
-                                                <span className="fw-bold text-primary fs-5">
+                                                <span className="fw-bold fs-5" style={{ color: '#7C7CFF' }}>
                                                     ${price.toFixed(2)}
                                                 </span>
                                             );
@@ -247,7 +247,7 @@ const GameResults: React.FC<GameResultsProps> = ({
                                             onGameSelect?.(product);
                                         }}
                                     className="fw-bold"
-                                        style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
+                                        style={{ background: COLORS.gradientPrimary, borderColor: COLORS.primary, color: 'white' }}
                                         disabled={product.price === 0}
                                 >
                                     <i className="bi bi-cart-plus me-1"></i>

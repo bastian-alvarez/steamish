@@ -180,7 +180,7 @@ const ProductDetail: React.FC = () => {
     const LoadingSpinner = () => (
         <div 
             style={{ 
-                background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', 
                 minHeight: '100vh',
                 display: 'flex',
                 alignItems: 'center',
@@ -203,13 +203,13 @@ const ProductDetail: React.FC = () => {
                             width: '4rem', 
                             height: '4rem',
                             borderWidth: '0.3rem',
-                            color: COLORS.color4
+                            color: COLORS.primary
                         }}
                     >
                         <span className="visually-hidden">Cargando...</span>
                     </Spinner>
                 </div>
-                <h3 className="fw-bold mb-2" style={{ color: COLORS.color4 }}>
+                <h3 className="fw-bold mb-2" style={{ color: COLORS.textPrimary }}>
                     <i className="bi bi-joystick me-2"></i>
                     Cargando juego...
                 </h3>
@@ -224,7 +224,7 @@ const ProductDetail: React.FC = () => {
 
     if (!product) {
         return (
-            <div style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}>
+            <div style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}>
                 <Container className="py-5 text-center">
                     <h2 className="text-muted mb-4">Juego no encontrado</h2>
                     <Button variant="primary" onClick={() => navigate('/productos')}>
@@ -244,7 +244,7 @@ const ProductDetail: React.FC = () => {
 
     return (
         <div 
-            style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', minHeight: '100vh' }}
+            style={{ background: 'linear-gradient(135deg, #12162A 0%, #0B0E1A 100%)', minHeight: '100vh' }}
             className="animate__animated animate__fadeIn"
         >
             {/* Hero Section */}
@@ -285,7 +285,7 @@ const ProductDetail: React.FC = () => {
                                     display: 'block',
                                     height: '500px',
                                     objectFit: 'cover',
-                                    backgroundColor: '#e9ecef'
+                                    backgroundColor: COLORS.color4
                                 }}
                                 onError={(e) => handleImageError(e, product.name)}
                             />
@@ -300,7 +300,7 @@ const ProductDetail: React.FC = () => {
                                 <Badge bg={getCategoryColor(product.category)} className="mb-2 fs-6">
                                     {product.category}
                                 </Badge>
-                                <h1 className="display-5 fw-bold mb-3" style={{ color: COLORS.color4 }}>
+                                <h1 className="display-5 fw-bold mb-3" style={{ color: COLORS.textPrimary }}>
                                     {product.name}
                                 </h1>
                             </div>
@@ -310,7 +310,7 @@ const ProductDetail: React.FC = () => {
                                 <div className="me-3">
                                     {renderStars(ratingInfo?.averageRating || product.rating || 0)}
                                 </div>
-                                <span className="fw-bold fs-5" style={{ color: COLORS.color4 }}>
+                                <span className="fw-bold fs-5" style={{ color: COLORS.textPrimary }}>
                                     {ratingInfo?.averageRating || product.rating || 0}
                                 </span>
                                 {ratingInfo && ratingInfo.ratingCount > 0 && (
@@ -323,7 +323,7 @@ const ProductDetail: React.FC = () => {
                             {/* Tags */}
                             {product.tags && product.tags.length > 0 && (
                                 <div className="mb-4">
-                                    <h5 className="mb-2" style={{ color: COLORS.color4 }}>Etiquetas:</h5>
+                                    <h5 className="mb-2" style={{ color: COLORS.textPrimary }}>Etiquetas:</h5>
                                     <div className="d-flex flex-wrap gap-2">
                                         {product.tags.map(tag => (
                                             <Badge key={tag} bg="outline-secondary" text="dark" className="fs-6 p-2">
@@ -336,7 +336,7 @@ const ProductDetail: React.FC = () => {
 
                             {/* Descripción */}
                             <div className="mb-4 flex-grow-1">
-                                <h5 className="mb-3" style={{ color: COLORS.color4 }}>Descripción:</h5>
+                                <h5 className="mb-3" style={{ color: COLORS.textPrimary }}>Descripción:</h5>
                                 <p className="lead text-muted" style={{ fontSize: '1.1rem', lineHeight: '1.8' }}>
                                     {product.description}
                                 </p>
@@ -353,23 +353,23 @@ const ProductDetail: React.FC = () => {
                                             const finalPrice = price * (1 - discount / 100);
                                             return (
                                                 <div>
-                                                    <span className="text-muted text-decoration-line-through me-3 fs-5">
+                                                    <span className="text-decoration-line-through me-3 fs-5" style={{ color: COLORS.textMuted }}>
                                                         ${price.toFixed(2)}
                                                     </span>
-                                                    <span className="fw-bold text-danger display-6">
+                                                    <span className="fw-bold display-6" style={{ color: '#FF5A6E' }}>
                                                         ${finalPrice.toFixed(2)}
                                                     </span>
                                                 </div>
                                             );
                                         } else if (price === 0) {
                                             return (
-                                                <span className="fw-bold text-success display-6">
+                                                <span className="fw-bold display-6" style={{ color: '#2EE6A6' }}>
                                                     Gratis
                                                 </span>
                                             );
                                         } else {
                                             return (
-                                                <span className="fw-bold text-primary display-6">
+                                                <span className="fw-bold display-6" style={{ color: '#7C7CFF' }}>
                                                     ${price.toFixed(2)}
                                                 </span>
                                             );
@@ -434,7 +434,7 @@ const ProductDetail: React.FC = () => {
                                             size="lg"
                                             onClick={handleAddToCart}
                                             className="fw-bold px-4"
-                                            style={{ background: COLORS.gradientPrimary, borderColor: COLORS.color4, color: 'white' }}
+                                            style={{ background: COLORS.gradientPrimary, borderColor: COLORS.primary, color: 'white' }}
                                             disabled={price === 0}
                                         >
                                             <i className="bi bi-cart-plus me-2"></i>
@@ -459,7 +459,7 @@ const ProductDetail: React.FC = () => {
                 {/* Sección de Rating y Comentarios */}
                 <Row className="mt-5">
                     <Col lg={12}>
-                        <div className="bg-white rounded p-4 shadow-sm">
+                        <div className="rounded p-4 shadow-sm" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
                             {/* Componente de Rating Interactivo */}
                             {product && (
                                 <Rating 
@@ -473,7 +473,7 @@ const ProductDetail: React.FC = () => {
 
                 <Row className="mt-4">
                     <Col lg={12}>
-                        <div className="bg-white rounded p-4 shadow-sm">
+                        <div className="rounded p-4 shadow-sm" style={{ background: COLORS.color3, color: COLORS.textPrimary }}>
                             {/* Componente de Comentarios */}
                             {product && (
                                 <Comments 

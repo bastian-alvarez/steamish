@@ -151,11 +151,22 @@ const GameResults: React.FC<GameResultsProps> = ({
                         )}
 
                         {/* IMAGEN DEL JUEGO */}
-                        <div className="game-image-wrapper game-image-hover">
+                        <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#12162A' }}>
                             <img 
                                 src={product.image || getImagePlaceholder(300, 200, 'Juego')} 
                                 alt={product.name}
-                                className="game-image"
+                                className="img-fluid w-100 h-100"
+                                style={{ 
+                                    objectFit: 'cover',
+                                    transition: 'transform 0.3s ease',
+                                    backgroundColor: '#181E36'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1.05)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1)';
+                                }}
                                 onError={(e) => handleImageError(e, product.name)}
                                 loading="lazy"
                             />

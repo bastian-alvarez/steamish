@@ -49,7 +49,7 @@ const Home: React.FC = () => {
                 }}></div>
                 
                 <Container className="position-relative" style={{ zIndex: 1 }}>
-                    <Row className="align-items-center py-5" style={{ minHeight: '70vh' }}>
+                    <Row className="align-items-center min-vh-75 py-5">
                         <Col lg={6} className="text-center text-lg-start mb-5 mb-lg-0">
                             <div className="mb-4">
                                 <h1 className="display-3 fw-bold mb-3 text-white" style={{ lineHeight: '1.2' }}>
@@ -170,67 +170,6 @@ const Home: React.FC = () => {
                             </Card>
                         </Col>
                     </Row>
-
-                    {/* Franja de métricas para llenar el espacio y dar más vida al hero */}
-                    <Row className="mt-4 gy-3 justify-content-center justify-content-lg-start">
-                        <Col xs={12} md={4}>
-                            <div 
-                                className="d-flex align-items-center gap-3 p-3 rounded-4"
-                                style={{ 
-                                    background: 'rgba(11, 14, 26, 0.55)',
-                                    border: '1px solid rgba(232, 235, 255, 0.08)',
-                                    backdropFilter: 'blur(12px)'
-                                }}
-                            >
-                                <div className="rounded-circle d-flex align-items-center justify-content-center"
-                                     style={{ width: 40, height: 40, background: 'rgba(124, 124, 255, 0.18)' }}>
-                                    <i className="bi bi-controller text-white"></i>
-                                </div>
-                                <div>
-                                    <div className="fw-bold text-white">10K+ juegos</div>
-                                    <small className="text-white-50">Catálogo curado en constante crecimiento</small>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <div 
-                                className="d-flex align-items-center gap-3 p-3 rounded-4"
-                                style={{ 
-                                    background: 'rgba(11, 14, 26, 0.55)',
-                                    border: '1px solid rgba(232, 235, 255, 0.08)',
-                                    backdropFilter: 'blur(12px)'
-                                }}
-                            >
-                                <div className="rounded-circle d-flex align-items-center justify-content-center"
-                                     style={{ width: 40, height: 40, background: 'rgba(46, 230, 166, 0.18)' }}>
-                                    <i className="bi bi-people text-white"></i>
-                                </div>
-                                <div>
-                                    <div className="fw-bold text-white">2M+ gamers</div>
-                                    <small className="text-white-50">Comunidad activa global</small>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <div 
-                                className="d-flex align-items-center gap-3 p-3 rounded-4"
-                                style={{ 
-                                    background: 'rgba(11, 14, 26, 0.55)',
-                                    border: '1px solid rgba(232, 235, 255, 0.08)',
-                                    backdropFilter: 'blur(12px)'
-                                }}
-                            >
-                                <div className="rounded-circle d-flex align-items-center justify-content-center"
-                                     style={{ width: 40, height: 40, background: 'rgba(255, 90, 110, 0.2)' }}>
-                                    <i className="bi bi-star-fill text-white"></i>
-                                </div>
-                                <div>
-                                    <div className="fw-bold text-white">99% rating</div>
-                                    <small className="text-white-50">Experiencia valorada por la comunidad</small>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
                 </Container>
             </section>
 
@@ -281,11 +220,27 @@ const Home: React.FC = () => {
                                 }}
                                 >
                                     {/* Imagen del juego */}
-                                    <div className="game-image-wrapper game-image-hover">
+                                    <div style={{ 
+                                        position: 'relative', 
+                                        overflow: 'hidden',
+                                        backgroundColor: '#12162A',
+                                        height: '280px'
+                                    }}>
                                         <img 
                                             src={game.image} 
                                             alt={game.name}
-                                            className="game-image"
+                                            className="w-100 h-100"
+                                            style={{ 
+                                                objectFit: 'cover',
+                                                transition: 'transform 0.4s ease',
+                                                backgroundColor: '#181E36'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1.08)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                            }}
                                             loading="lazy"
                                         />
                                         

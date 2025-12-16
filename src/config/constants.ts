@@ -12,11 +12,11 @@ export const COLORS = Object.freeze({
     color1: '#1c1f3b',
     color2: '#282c4d',
     color3: '#3c3f68',
-    color4: '#4d4d80',
+    color4: '#3856c7', // azul oscuro suave (reemplaza morado anterior)
     color5: '#606271',
     
     // Colores semánticos (basados en la paleta base)
-    primary: '#4d4d80',      // color4 - Color principal
+    primary: '#3856c7',      // color4 - Color principal (azul)
     primaryDark: '#1c1f3b',  // color1 - Color oscuro
     primaryLight: '#3c3f68', // color3 - Color claro
     secondary: '#282c4d',    // color2 - Color secundario
